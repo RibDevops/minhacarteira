@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+ <!-- Page content -->
+
+
+
+ 
+
+ <div class="container mt-5">
+  <h1 class="mb-4">Bem-vindo ao Sistema de Controle de Gastos</h1>
+  <p>Este sistema foi desenvolvido para ajudar no controle financeiro, permitindo registrar compras com o valor gasto e a data correspondente. O calendário mostra os registros por dia, facilitando a visualização dos seus gastos ao longo do mês. Você pode navegar entre os meses usando os botões "Mês Anterior" e "Próximo Mês".</p>
+  
+  <h3 class="mt-4">Funcionalidades:</h3>
+  <ul>
+    <li><strong>Visualização de Compras:</strong> Veja todos os gastos registrados organizados por dia.</li>
+    <li><strong>Registro de Compras:</strong> Cadastre novos gastos clicando em “Nova Compra”.</li>
+    <li><strong>Responsividade:</strong> A interface é adaptável para dispositivos móveis.</li>
+  </ul>
+
+  <a href="{% url 'cal:calendar' %}" class="btn btn-primary mt-3">Ver Calendário</a>
+</div>
+
+ 
+ 
+{% endblock %}
+
+
+

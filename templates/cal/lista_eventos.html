@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Agendamentos{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Todos os Agendamentos</h2>
+    {% if eventos %}
+        <table class="table table-striped mt-4">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Data</th>
+                    <th>Valor</th>
+                   
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for evento in eventos %}
+                <tr>
+                    <td>{{ evento.title }}</td>
+                    <td>{{ evento.start_time|date:"d/m/Y" }}</td>
+                    <td>{{ evento.valor }}</td>
+                    <td>
+                        <a class="btn btn-warning" href="{% url 'cal:event_edit' evento.id %}" >Editar</a> |
+                        <a class="btn btn-danger"href="{% url 'cal:excluir_evento' evento.id %}" 
+                           onclick="return confirm('Tem certeza que deseja excluir este evento?');">
+                           Excluir
+                        </a>
+                      </td>
+                      
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Nenhum evento cadastrado.</p>
+    {% endif %}
+</div>
+{% endblock %}
