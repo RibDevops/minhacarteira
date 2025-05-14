@@ -15,17 +15,32 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
-                <div class="navbar-nav">
-                   
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
                         <a class="nav-link" href="{% url 'cal:calendar' %}">Calendário</a>
-                        <a class="nav-link" href="{% url 'cal:event_new' %}">Nova compra</a>
-                        <a class="nav-link" href="{% url 'cal:listar_eventos' %}">Lista de valores</a>
-                        
-                    
-                        <!-- <a class="nav-link" href="#">Login</a> -->
-                   
-                </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'cal:transacao_nova' %}">Nova compra</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'cal:listar_transacoes' %}">Lista de valores</a>
+                    </li>
+                </ul>
+
+                <!-- Botão Sair/Login alinhado à direita -->
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        {% if user.is_authenticated %}
+                            <form method="post" action="{% url 'logout' %}" class="d-flex">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-danger">Sair</button>
+                            </form>
+                        {% else %}
+                            <a href="{% url 'login' %}" class="btn btn-outline-success">Login</a>
+                        {% endif %}
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
-  </nav>
+</nav>

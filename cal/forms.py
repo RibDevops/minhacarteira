@@ -1,37 +1,91 @@
-from django.forms import ModelForm, DateInput
-from cal.models import Event
+from django.forms import ModelForm, DateInput, Select
+from .models import Transacao
+from django import forms
+from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
-# class EventForm(ModelForm):
-#   class Meta:
-#     model = Event
-#     # datetime-local is a HTML5 input type, format to make date time show on fields
-#     widgets = {
-#       'start_time': DateInput(attrs={'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
-#       'end_time': DateInput(attrs={'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
-#     }
-#     fields = '__all__'
-
-#   def __init__(self, *args, **kwargs):
-#     super(EventForm, self).__init__(*args, **kwargs)
-#     # input_formats parses HTML5 datetime-local input to datetime field
-#     self.fields['start_time'].input_formats = ('%Y-%m-%dT%H:%M',)
-#     self.fields['end_time'].input_formats = ('%Y-%m-%dT%H:%M',)
-
-
-class EventForm(ModelForm):
+class TransacaoForm(ModelForm):
     class Meta:
-        model = Event
+        model = Transacao
+        fields = ['titulo', 'valor', 'data', 'categoria', 'recorrente']
         widgets = {
-            'start_time': DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),  # Somente data
-            # 'end_time': DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),    # Somente data
+            'data': DateInput(attrs={'type': 'date'}),
+            'categoria': Select(),
         }
-        fields = '__all__'
 
     def __init__(self, *args, **kwargs):
-        super(EventForm, self).__init__(*args, **kwargs)
-        self.fields['title'].widget.attrs['placeholder'] = 'ex: Mercado BigBox'
-        # Remove os input_formats com hora, pois agora só queremos a data
-        self.fields['start_time'].input_formats = ('%Y-%m-%d',)  # Formato ISO para data
-        # self.fields['end_time'].input_formats = ('%Y-%m-%d',)   # Formato ISO para data
-
+        super().__init__(*args, **kwargs)
+        self.fields['titulo'].widget.attrs['placeholder'] = 'ex: Mercado, Salário, Bitcoin'
+        self.fields['titulo'].widget.attrs['class'] = 'form-control'
         self.fields['valor'].widget.attrs['class'] = 'form-control'
+        self.fields['data'].widget.attrs['class'] = 'form-control'
+        self.fields['categoria'].widget.attrs['class'] = 'form-control'
+        
+
+# cal/forms.py
+
+from django import forms
+from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+
+class UserRegisterForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput, label='Senha')
+    password2 = forms.CharField(widget=forms.PasswordInput, label='Confirme a Senha')
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name']
+
+    def clean_password2(self):
+        password = self.cleaned_data.get('password')
+        password2 = self.cleaned_data.get('password2')
+        if password and password2 and password != password2:
+            raise ValidationError("As senhas não coincidem.")
+        return password2
+
+
+
+
+# from django.forms import ModelForm, DateInput
+# from cal.models import Event
+
+# # class EventForm(ModelForm):
+# #   class Meta:
+# #     model = Event
+# #     # datetime-local is a HTML5 input type, format to make date time show on fields
+# #     widgets = {
+# #       'start_time': DateInput(attrs={'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
+# #       'end_time': DateInput(attrs={'type': 'datetime-local'}, format='%Y-%m-%dT%H:%M'),
+# #     }
+# #     fields = '__all__'
+
+# #   def __init__(self, *args, **kwargs):
+# #     super(EventForm, self).__init__(*args, **kwargs)
+# #     # input_formats parses HTML5 datetime-local input to datetime field
+# #     self.fields['start_time'].input_formats = ('%Y-%m-%dT%H:%M',)
+# #     self.fields['end_time'].input_formats = ('%Y-%m-%dT%H:%M',)
+
+
+# class EventForm(ModelForm):
+#     class Meta:
+#         model = Event
+#         widgets = {
+#             'start_time': DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),  # Somente data
+#             # 'end_time': DateInput(attrs={'type': 'date'}, format='%Y-%m-%d'),    # Somente data
+#         }
+#         fields = '__all__'
+
+#     def __init__(self, *args, **kwargs):
+#         super(EventForm, self).__init__(*args, **kwargs)
+#         self.fields['title'].widget.attrs['placeholder'] = 'ex: Mercado BigBox'
+#         # Remove os input_formats com hora, pois agora só queremos a data
+#         self.fields['start_time'].input_formats = ('%Y-%m-%d',)  # Formato ISO para data
+#         # self.fields['end_time'].input_formats = ('%Y-%m-%d',)   # Formato ISO para data
+
+#         self.fields['valor'].widget.attrs['class'] = 'form-control'
+
+
+
+# forms.py
+
+

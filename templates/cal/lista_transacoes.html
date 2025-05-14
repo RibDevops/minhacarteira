@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Lista de Transações</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Título</th>
+        <th>Valor</th>
+        <th>Data</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for transacao in transacoes %}
+        <tr>
+          <td>{{ transacao.id }}</td>
+          <td>{{ transacao.titulo }}</td>
+          <td>{{ transacao.valor }}</td>
+          <td>{{ transacao.data }}</td>
+          <td>
+            <a href="{% url 'cal:transacao_editar' transacao.id %}" class="btn btn-primary">Editar</a> | 
+            <a href="{% url 'cal:transacao_excluir' transacao.id %}" class="btn btn-danger">Excluir</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
