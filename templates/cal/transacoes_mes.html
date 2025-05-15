@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load l10n %}
+{% block content %}
+
+<h2>Transações - {{ mes_atual|date:"F \d\e Y" }}</h2>
+
+<div class="mb-3">
+  <a href="?mes={{ mes_anterior.month }}&ano={{ mes_anterior.year }}" class="btn btn-secondary">← Mês anterior</a>
+  <a href="?mes={{ mes_proximo.month }}&ano={{ mes_proximo.year }}" class="btn btn-secondary">Próximo mês →</a>
+</div>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Título</th>
+      <th>Valor</th>
+      <th>Data</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for transacao in transacoes %}
+    <tr>
+      <td>{{ transacao.id }}</td>
+      <td>{{ transacao.titulo }}</td>
+      <td>
+        {% if transacao.tipo.nome|lower == "débito" %}
+          -R$ {{ transacao.valor|floatformat:2|localize }}
+        {% else %}
+          R$ {{ transacao.valor|floatformat:2|localize }}
+        {% endif %}
+      </td>
+      <td>{{ transacao.data|date:"d \d\e F \d\e Y" }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="4">Nenhuma transação este mês.</td></tr>
+    {% endfor %}
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="2"><strong>Total:</strong></td>
+      <td colspan="2">
+        <strong>R$ {{ total|floatformat:2|localize }}</strong>
+      </td>
+    </tr>
+  </tfoot>
+</table>
+
+{% endblock %}

@@ -1,23 +1,14 @@
 import calendar
 from datetime import datetime, timedelta, date
-from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
 from django.views import generic
 from django.utils.safestring import mark_safe
-from django.urls import reverse
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from ..models import Transacao
 from ..utils import Calendar
-from ..forms import TransacaoForm
-from django.contrib.auth.decorators import login_required
 
-# def home(request):
-#     return render(request, 'home.html')
 
-def home(request):
-    return render(request, 'home.html', {})
-
-def index(request):
-    return HttpResponse('Bem-vindo ao sistema de carteira pessoal!')
 
 def get_date(req_month):
     if req_month:
@@ -36,31 +27,17 @@ def next_month(d):
     next_month = last + timedelta(days=1)
     return f'month={next_month.year}-{next_month.month}'
 
+@method_decorator(login_required, name='dispatch')
 class CalendarView(generic.ListView):
     model = Transacao
     template_name = 'cal/calendar.html'
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     d = get_date(self.request.GET.get('month'))
-    #     transacoes = Transacao.objects.filter(data__year=d.year, data__month=d.month)
-
-    #     cal = Calendar(d.year, d.month)
-    #     html_cal = cal.formatmonth(withyear=True, transacoes=transacoes)
-
-    #     context['calendar'] = mark_safe(html_cal)
-    #     context['prev_month'] = prev_month(d)
-    #     context['next_month'] = next_month(d)
-    #     context['month_name'] = d.strftime("%B")
-    #     context['year'] = d.year
-    #     return context
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         d = get_date(self.request.GET.get('month'))
 
-        # ✅ Filtra apenas transações do usuário logado
         transacoes = Transacao.objects.filter(
-            fk_user=self.request.user,
+            user=self.request.user,
             data__year=d.year,
             data__month=d.month
         )
@@ -68,57 +45,146 @@ class CalendarView(generic.ListView):
         cal = Calendar(d.year, d.month)
         html_cal = cal.formatmonth(withyear=True, transacoes=transacoes)
 
-        context['calendar'] = mark_safe(html_cal)
-        context['prev_month'] = prev_month(d)
-        context['next_month'] = next_month(d)
-        context['month_name'] = d.strftime("%B")
-        context['year'] = d.year
+        context.update({
+            'calendar': mark_safe(html_cal),
+            'prev_month': prev_month(d),
+            'next_month': next_month(d),
+            'month_name': d.strftime("%B"),
+            'year': d.year,
+        })
         return context
 
 
-def transacao_editar(request, pk=None):
-    # instancia = get_object_or_404(Transacao, pk=pk) if pk else Transacao(fk_user=request.user)
-    instancia = get_object_or_404(Transacao, pk=pk, fk_user=request.user) if pk else Transacao(fk_user=request.user)
 
-    form = TransacaoForm(request.POST or None, instance=instancia)
 
-    if request.method == 'POST' and form.is_valid():
-        form.save()
-        return redirect('cal:calendar')
 
-    return render(request, 'cal/event.html', {'form': form})
 
-def listar_transacoes(request):
-    # transacoes = Transacao.objects.order_by('-data')
-    transacoes = Transacao.objects.filter(fk_user=request.user).order_by('-data')
 
-    return render(request, 'cal/lista_transacoes.html', {'transacoes': transacoes})
 
-def excluir_transacao(request, pk):
-    # transacao = get_object_or_404(Transacao, pk=pk)
-    transacao = get_object_or_404(Transacao, pk=pk, fk_user=request.user)
 
-    transacao.delete()
-    return redirect('cal:listar_transacoes')
 
-@login_required
-def transacao_view(request):
-    form = TransacaoForm(request.POST or None)
-    if request.method == 'POST' and form.is_valid():
-        transacao = form.save(commit=False)
-        transacao.fk_user = request.user
-        transacao.save()
 
-        return redirect('cal:listar_transacoes')
+# import calendar
+# from datetime import datetime, timedelta, date
+# from django.shortcuts import render, get_object_or_404, redirect
+# from django.http import HttpResponse, HttpResponseRedirect
+# from django.views import generic
+# from django.utils.safestring import mark_safe
+# from django.urls import reverse
+# from ..models import Transacao
+# from ..utils import Calendar
+# from ..forms import TransacaoForm
+# from django.contrib.auth.decorators import login_required
 
-    return render(request, 'cal/transacao_form.html', {'form': form})
+# # def home(request):
+# #     return render(request, 'home.html')
 
-from ..serializers import TransacaoSerializer
-from rest_framework import viewsets
+# def home(request):
+#     return render(request, 'home.html', {})
 
-class TransacaoViewSet(viewsets.ModelViewSet):
-    queryset = Transacao.objects.all()
-    serializer_class = TransacaoSerializer
+# def index(request):
+#     return HttpResponse('Bem-vindo ao sistema de carteira pessoal!')
+
+# def get_date(req_month):
+#     if req_month:
+#         year, month = (int(x) for x in req_month.split('-'))
+#         return date(year, month, 1)
+#     return datetime.today()
+
+# def prev_month(d):
+#     first = d.replace(day=1)
+#     prev_month = first - timedelta(days=1)
+#     return f'month={prev_month.year}-{prev_month.month}'
+
+# def next_month(d):
+#     days_in_month = calendar.monthrange(d.year, d.month)[1]
+#     last = d.replace(day=days_in_month)
+#     next_month = last + timedelta(days=1)
+#     return f'month={next_month.year}-{next_month.month}'
+
+# class CalendarView(generic.ListView):
+#     model = Transacao
+#     template_name = 'cal/calendar.html'
+
+#     # def get_context_data(self, **kwargs):
+#     #     context = super().get_context_data(**kwargs)
+#     #     d = get_date(self.request.GET.get('month'))
+#     #     transacoes = Transacao.objects.filter(data__year=d.year, data__month=d.month)
+
+#     #     cal = Calendar(d.year, d.month)
+#     #     html_cal = cal.formatmonth(withyear=True, transacoes=transacoes)
+
+#     #     context['calendar'] = mark_safe(html_cal)
+#     #     context['prev_month'] = prev_month(d)
+#     #     context['next_month'] = next_month(d)
+#     #     context['month_name'] = d.strftime("%B")
+#     #     context['year'] = d.year
+#     #     return context
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         d = get_date(self.request.GET.get('month'))
+
+#         # ✅ Filtra apenas transações do usuário logado
+#         transacoes = Transacao.objects.filter(
+#             fk_user=self.request.user,
+#             data__year=d.year,
+#             data__month=d.month
+#         )
+
+#         cal = Calendar(d.year, d.month)
+#         html_cal = cal.formatmonth(withyear=True, transacoes=transacoes)
+
+#         context['calendar'] = mark_safe(html_cal)
+#         context['prev_month'] = prev_month(d)
+#         context['next_month'] = next_month(d)
+#         context['month_name'] = d.strftime("%B")
+#         context['year'] = d.year
+#         return context
+
+
+# def transacao_editar(request, pk=None):
+#     # instancia = get_object_or_404(Transacao, pk=pk) if pk else Transacao(fk_user=request.user)
+#     instancia = get_object_or_404(Transacao, pk=pk, fk_user=request.user) if pk else Transacao(fk_user=request.user)
+
+#     form = TransacaoForm(request.POST or None, instance=instancia)
+
+#     if request.method == 'POST' and form.is_valid():
+#         form.save()
+#         return redirect('cal:calendar')
+
+#     return render(request, 'cal/event.html', {'form': form})
+
+# def listar_transacoes(request):
+#     # transacoes = Transacao.objects.order_by('-data')
+#     transacoes = Transacao.objects.filter(fk_user=request.user).order_by('-data')
+
+#     return render(request, 'cal/lista_transacoes.html', {'transacoes': transacoes})
+
+# def excluir_transacao(request, pk):
+#     # transacao = get_object_or_404(Transacao, pk=pk)
+#     transacao = get_object_or_404(Transacao, pk=pk, fk_user=request.user)
+
+#     transacao.delete()
+#     return redirect('cal:listar_transacoes')
+
+# @login_required
+# def transacao_view(request):
+#     form = TransacaoForm(request.POST or None)
+#     if request.method == 'POST' and form.is_valid():
+#         transacao = form.save(commit=False)
+#         transacao.fk_user = request.user
+#         transacao.save()
+
+#         return redirect('cal:listar_transacoes')
+
+#     return render(request, 'cal/transacao_form.html', {'form': form})
+
+# from ..serializers import TransacaoSerializer
+# from rest_framework import viewsets
+
+# class TransacaoViewSet(viewsets.ModelViewSet):
+#     queryset = Transacao.objects.all()
+#     serializer_class = TransacaoSerializer
 
 
 

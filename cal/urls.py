@@ -1,38 +1,83 @@
+from django import views
 from django.urls import path
-from . import views
-from cal.views.views_cal import *
-from cal.views.views_login import *
+from cal.views.views_cal import CalendarView
+# from cal.views.views_transacao import (
+#     transacao_view,
+#     transacao_editar,
+#     listar_transacoes,
+#     excluir_transacao,
+#     transacoes_mes_view,
+# )
+from cal.views.views_transacao import *
+from cal.views.views_login import register_view, LogoutView
 from django.contrib.auth import views as auth_views
-from django.contrib.auth import login as login_django
-from cal.views.views_login import login_view
 
-
+from django.urls import path
+from .views import views_tipo
 
 app_name = 'cal'
 
 urlpatterns = [
-    path('calendar/', views.CalendarView.as_view(), name='calendar'),
-    path('', views.home, name='home'),
-    # path('', views.CalendarView.as_view(), name='calendar'),
-    path('transacao/nova/', views.transacao_view, name='transacao_nova'),
-    path('transacoes/', views.listar_transacoes, name='listar_transacoes'),
-    path('transacao/excluir/<int:pk>/', views.excluir_transacao, name='transacao_excluir'),
-    # path('transacao/editar/<int:transacao_id>/', views.transacao_editar, name='transacao_editar'),
-    path('transacao/editar/<int:pk>/', views.transacao_editar, name='transacao_editar'),
+    
+    path('', CalendarView.as_view(), name='calendar'),
+    path('calendar/', CalendarView.as_view(), name='calendar'),
+
+    # Transações
+    path('transacoes/', listar_transacoes, name='listar_transacoes'),
+    path('transacao/nova/', transacao_view, name='transacao_nova'),
+    path('transacao/editar/<int:pk>/', transacao_editar, name='transacao_editar'),
+    path('transacao/excluir/<int:pk>/', excluir_transacao, name='transacao_excluir'),
+
+    # Registro/Login/Logout
+    path('register/', register_view, name='register'),
+    path('accounts/login/', auth_views.LoginView.as_view(), name='login'),
+    path('accounts/logout/', LogoutView.as_view(next_page='/'), name='logout'),
+
+    path('tipos/', views_tipo.tipo_list, name='tipo_list'),
+    path('tipos/novo/', views_tipo.tipo_create, name='tipo_create'),
+    path('tipos/<int:pk>/editar/', views_tipo.tipo_update, name='tipo_update'),
+    path('tipos/<int:pk>/excluir/', views_tipo.tipo_delete, name='tipo_delete'),
+    path('transacoes-mes/', transacoes_mes_view, name='transacoes_mes'),
+
+]
+
+
+
+# from django.urls import path
+# from . import views
+# from cal.views.views_cal import *
+# from cal.views.views_login import *
+# from django.contrib.auth import views as auth_views
+# from django.contrib.auth import login as login_django
+# from cal.views.views_login import login_view
+
+
+
+# app_name = 'cal'
+
+# urlpatterns = [
+#     path('calendar/', views.CalendarView.as_view(), name='calendar'),
+#     path('', views.home, name='home'),
+#     # path('', views.CalendarView.as_view(), name='calendar'),
+#     path('transacao/nova/', views.transacao_view, name='transacao_nova'),
+#     path('transacoes/', views.listar_transacoes, name='listar_transacoes'),
+#     path('transacao/excluir/<int:pk>/', views.excluir_transacao, name='transacao_excluir'),
+#     # path('transacao/editar/<int:transacao_id>/', views.transacao_editar, name='transacao_editar'),
+#     path('transacao/editar/<int:pk>/', views.transacao_editar, name='transacao_editar'),
 
  
 
 
-    path('register/', register_view, name='register'),
-    # path('login/', auth_views.LoginView.as_view(), name='login'),
-    # path('login/', login_view, name='login'),
-    path('accounts/login/', auth_views.LoginView.as_view(), name='login'),
-    # path('login/', views.login, name='login'),
-    # path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-    # path('accounts/logout/', CustomLogoutView.as_view(), name='logout'),
-    path('accounts/logout/', LogoutView.as_view(next_page='/'), name='logout'),
+#     path('register/', register_view, name='register'),
+#     # path('login/', auth_views.LoginView.as_view(), name='login'),
+#     # path('login/', login_view, name='login'),
+#     path('accounts/login/', auth_views.LoginView.as_view(), name='login'),
+#     # path('login/', views.login, name='login'),
+#     # path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+#     # path('accounts/logout/', CustomLogoutView.as_view(), name='logout'),
+#     path('accounts/logout/', LogoutView.as_view(next_page='/'), name='logout'),
 
-]
+# ]
 
 
 

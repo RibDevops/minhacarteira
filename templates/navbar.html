@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
     <div class="container-fluid">
         <!-- Logo/Brand -->
-        <a class="navbar-brand" href="{% url 'cal:home' %}">Home</a>
+        <a class="navbar-brand" href="{% url 'cal:calendar' %}">Home</a>
         
         <!-- Botão Toggler para Offcanvas -->
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
@@ -22,8 +22,18 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'cal:transacao_nova' %}">Nova compra</a>
                     </li>
+                    
+                    
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'cal:listar_transacoes' %}">Lista de valores</a>
+                        <a class="nav-link" href="{% url 'cal:transacoes_mes' %}">Balanço mensal</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'cal:tipo_list' %}">Tipos</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'cal:listar_transacoes' %}">Lista geral</a>
                     </li>
                 </ul>
 

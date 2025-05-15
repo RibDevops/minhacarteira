@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Tipos de Transação</h2>
+    <a href="{% url 'cal:tipo_create' %}" class="btn btn-primary mb-3">Novo Tipo</a>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Descrição</th>
+                <th>É Crédito?</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tipo in tipos %}
+            <tr>
+                <td>{{ tipo.descricao }}</td>
+                <td>{{ tipo.is_credito|yesno:"Sim,Não" }}</td>
+                <td>
+                    <a href="{% url 'cal:tipo_update' tipo.pk %}" class="btn btn-sm btn-warning">Editar</a>
+                    <a href="{% url 'cal:tipo_delete' tipo.pk %}" class="btn btn-sm btn-danger">Excluir</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="3">Nenhum tipo cadastrado.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

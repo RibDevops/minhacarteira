@@ -4,6 +4,7 @@ from datetime import date, datetime
 from .models import Transacao
 import locale
 
+
 locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')
 
 class Calendar(calendar.HTMLCalendar):
@@ -14,7 +15,8 @@ class Calendar(calendar.HTMLCalendar):
 
     def formatday(self, day, transacoes):
         transacoes_do_dia = transacoes.filter(data__day=day)
-        itens = ''.join(f'<li>{t.get_html_url}</li>' for t in transacoes_do_dia)
+        # itens = ''.join(f'<li>{t.get_html_url}</li>' for t in transacoes_do_dia)
+        itens = ''.join(f'<li>{t.titulo}</li>' for t in transacoes_do_dia)
         if day != 0:
             css_class = 'today' if date(self.year, self.month, day) == datetime.today().date() else ''
             return f'<td class="{css_class}"><span class="date">{day}</span><ul>{itens}</ul></td>'

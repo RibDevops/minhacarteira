@@ -5,7 +5,7 @@ from cal import models
 def dashboard(request):
     user = request.user
     # Filtrar transações do usuário
-    transacoes = Transacao.objects.filter(fk_user=user)
+    transacoes = Transacao.objects.filter(user=user)
 
     # Somar os valores por categoria
     credito = transacoes.filter(categoria='CREDITO').aggregate(total=models.Sum('valor'))['total'] or 0
@@ -31,19 +31,19 @@ def dashboard(request):
         'cripto': cripto,
     })
 
-from datetime import timedelta
+from datetime import datetime, timedelta
 
-def processar_transacoes_recorrentes():
-    transacoes_recorrentes = Transacao.objects.filter(fk_user=user, recorrente=True)
-    for transacao in transacoes_recorrentes:
-        if transacao.data < datetime.now().date():
-            # Criar uma nova transação para o próximo período (por exemplo, mensal)
-            nova_transacao = Transacao(
-                fk_user=transacao.fk_user,
-                titulo=transacao.titulo,
-                valor=transacao.valor,
-                data=transacao.data + timedelta(days=30),  # Ajuste conforme o período
-                categoria=transacao.categoria,
-                recorrente=True
-            )
-            nova_transacao.save()
+# def processar_transacoes_recorrentes():
+#     transacoes_recorrentes = Transacao.objects.filter(user=user, recorrente=True)
+#     for transacao in transacoes_recorrentes:
+#         if transacao.data < datetime.now().date():
+#             # Criar uma nova transação para o próximo período (por exemplo, mensal)
+#             nova_transacao = Transacao(
+#                 fk_user=transacao.fk_user,
+#                 titulo=transacao.titulo,
+#                 valor=transacao.valor,
+#                 data=transacao.data + timedelta(days=30),  # Ajuste conforme o período
+#                 categoria=transacao.categoria,
+#                 recorrente=True
+#             )
+#             nova_transacao.save()
