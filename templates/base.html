@@ -49,30 +49,44 @@
    
     
     {% endblock %}
-    
+    {% if user.is_authenticated %}
     <!-- Botões Flutuantes -->
-<div style="position: fixed; bottom: 20px; right: 20px; z-index: 1050;">
-  <!-- Botão: Adicionar Transação -->
-  <a href="{% url 'cal:transacao_nova' %}" class="btn btn-primary rounded-circle shadow mb-2" title="Adicionar Transação" style="width: 56px; height: 56px; display: flex; justify-content: center; align-items: center;">
-    <i class="bi bi-plus-lg fs-4"></i>
-  </a>
-
-  <!-- Botão: Ver Gráficos -->
-  <a href="{% url 'cal:transacoes_mes' %}" class="btn btn-success rounded-circle shadow mb-2" title="Ver Gráficos" style="width: 56px; height: 56px; display: flex; justify-content: center; align-items: center;">
-    <i class="bi bi-pie-chart fs-4"></i>
-  </a>
-
-  <a href="{% url 'cal:calendar' %}" class="btn btn-primary rounded-circle shadow mb-2" title="Adicionar Transação" style="width: 56px; height: 56px; display: flex; justify-content: center; align-items: center;">
-    <i class="bi bi-calendar-event"></i>
-  </a>
-
-  <!-- Botão: Modo Escuro -->
-  <button class="btn btn-dark rounded-circle shadow" title="Modo Escuro" onclick="toggleDarkMode()" style="width: 56px; height: 56px; display: flex; justify-content: center; align-items: center;">
-  <!-- <button id="dark-mode-toggle" class="btn btn-secondary">Modo Escuro</button> -->
-
-    <i class="bi bi-moon-stars fs-4"></i>
+<!-- Botões Flutuantes -->
+<div id="fab-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 1050;">
+  <!-- Botão principal -->
+  <button id="fab-main" class="btn btn-primary rounded-circle shadow" title="Menu" style="width: 56px; height: 56px; display: flex; justify-content: center; align-items: center;">
+    <i class="bi bi-plus-lg fs-4""></i>
   </button>
+
+  <!-- Botões secundários -->
+  <div id="fab-actions" class="d-none flex-column align-items-end mt-2">
+    <a href="{% url 'cal:transacao_nova' %}" class="btn btn-primary rounded-circle shadow mb-2" title="Adicionar Transação" style="width: 56px; height: 56px; display: flex; justify-content: center; align-items: center;">
+      <i class="bi bi-currency-dollar"></i>
+    </a>
+
+    <a href="{% url 'cal:transacoes_mes' %}" class="btn btn-success rounded-circle shadow mb-2" title="Mês" style="width: 56px; height: 56px; display: flex; justify-content: center; align-items: center;">
+      <i class="bi bi-graph-up-arrow"></i>
+    </a>
+
+    <a href="{% url 'cal:calendar' %}" class="btn btn-info rounded-circle shadow mb-2" title="Calendário" style="width: 56px; height: 56px; display: flex; justify-content: center; align-items: center;">
+      <i class="bi bi-calendar-event fs-4"></i>
+    </a>
+
+    <button class="btn btn-dark rounded-circle shadow mb-2" title="Modo Escuro" onclick="toggleDarkMode()" style="width: 56px; height: 56px; display: flex; justify-content: center; align-items: center;">
+      <i class="bi bi-moon-stars fs-4"></i>
+    </button>
+  </div>
 </div>
+
+{% endif %}
+<script>
+  const fabMain = document.getElementById('fab-main');
+  const fabActions = document.getElementById('fab-actions');
+
+  fabMain.addEventListener('click', () => {
+    fabActions.classList.toggle('d-none');
+  });
+</script>
 
 <!-- Script simples para Modo Escuro -->
 <script>
