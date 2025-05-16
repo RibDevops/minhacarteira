@@ -22,7 +22,7 @@ def register_view(request):
             login(request, user)  # login automático após cadastro
             messages.success(request, 'Cadastro realizado com sucesso!')
             logger.info(f'Novo usuário registrado: {user.username}')
-            return redirect('home')  # ou outra página
+            return redirect('cal:home')  # ou outra página
     else:
         form = UserRegisterForm()
     return render(request, 'registration/register.html', {'form': form})

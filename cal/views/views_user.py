@@ -55,3 +55,6 @@ def resetar_senha(request, user_id):
     else:
         form = UsuarioPasswordResetForm()
     return render(request, 'usuarios/form_usuario.html', {'form': form, 'titulo': 'Resetar Senha'})
+
+def home(request):
+    return render(request, 'home.html', {})

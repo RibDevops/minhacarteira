@@ -149,6 +149,8 @@ LOGIN_REDIRECT_URL = '/'
 
 import os
 
+import os  # certifique-se de importar o os
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -159,18 +161,28 @@ LOGGING = {
         },
     },
     'handlers': {
-        'file': {
+        'console': {  # adicionar handler console
+            'class': 'logging.StreamHandler',
             'level': 'DEBUG',
+            'formatter': 'verbose',
+        },
+        'file': {
+            'level': 'WARNING',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs/django.log'),  # cria logs/django.log
+            'filename': os.path.join(BASE_DIR, 'logs/django.log'),
             'formatter': 'verbose',
         },
     },
+    'root': {
+        'handlers': ['console'],  # Logs para console em DEBUG+
+        'level': 'DEBUG',
+    },
     'loggers': {
         'django': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
+            'handlers': ['file'],  # Logs para arquivo em WARNING+
+            'level': 'WARNING',
             'propagate': True,
         },
     },
 }
+

@@ -16,8 +16,9 @@ from django.urls import path
 app_name = 'cal'
 
 urlpatterns = [
+    path('', views_user.home, name='home'),
     
-    path('', CalendarView.as_view(), name='calendar'),
+    # path('', CalendarView.as_view(), name='calendar'),
     path('calendar/', CalendarView.as_view(), name='calendar'),
 
     # Transações
