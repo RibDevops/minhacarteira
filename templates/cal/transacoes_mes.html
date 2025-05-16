@@ -4,80 +4,118 @@
 
 {% block content %}
 
-<h2>Transações - {{ mes_atual|date:"F \d\e Y" }}</h2>
+<h2 class="mt-3 mb-4">
+  <i class="bi bi-cash-coin"></i> Transações - {{ mes_atual|date:"F \d\e Y" }}
+</h2>
+
 
 <!-- Dashboard Resumido -->
 <div class="row text-center mb-4">
-  <div class="col-md-4 mb-2">
+  <div class="col-md-3 col-sm-6 mb-2">
     <div class="card bg-success text-white shadow rounded">
-      <div class="card-body">
-        <h5>Saldo Atual</h5>
-        <h3>R$ {{ saldo_total|floatformat:2|localize }}</h3>
+      <div class="card-body p-2">
+        <h5 class="mb-1">Saldo Atual</h5>
+        <h6 class="mb-0">R$ {{ saldo_total|floatformat:2|localize }}</h6>
       </div>
     </div>
   </div>
-  <div class="col-md-4 mb-2">
+  <div class="col-md-3 col-sm-6 mb-2">
     <div class="card bg-primary text-white shadow rounded">
-      <div class="card-body">
-        <h5>Total de Créditos</h5>
-        <h3>R$ {{ total_creditos|floatformat:2|localize }}</h3>
+      <div class="card-body p-2">
+        <h5 class="mb-1">Total de Créditos</h5>
+        <h6 class="mb-0">R$ {{ total_creditos|floatformat:2|localize }}</h6>
       </div>
     </div>
   </div>
-  <div class="col-md-4 mb-2">
+  <div class="col-md-3 col-sm-6 mb-2">
     <div class="card bg-danger text-white shadow rounded">
-      <div class="card-body">
-        <h5>Total de Débitos</h5>
-        <h3>R$ {{ total_debitos|floatformat:2|localize }}</h3>
+      <div class="card-body p-2">
+        <h5 class="mb-1">Total de Débitos</h5>
+        <h6 class="mb-0">R$ {{ total_debitos|floatformat:2|localize }}</h6>
       </div>
     </div>
   </div>
 </div>
+
 
 
 <!-- Navegação de meses -->
-<div class="mb-3">
-  <a href="?mes={{ mes_anterior.month }}&ano={{ mes_anterior.year }}" class="btn btn-secondary">← Mês anterior</a>
-  <a href="?mes={{ mes_proximo.month }}&ano={{ mes_proximo.year }}" class="btn btn-secondary">Próximo mês →</a>
+<!-- Navegação de meses -->
+<div class="d-flex justify-content-between flex-wrap mb-3 gap-2">
+  <a href="?mes={{ mes_anterior.month }}&ano={{ mes_anterior.year }}" class="btn btn-outline-primary">
+    <i class="bi bi-arrow-left-circle"></i> Mês anterior
+  </a>
+  <a href="?mes={{ mes_proximo.month }}&ano={{ mes_proximo.year }}" class="btn btn-outline-primary">
+    Próximo mês <i class="bi bi-arrow-right-circle"></i>
+  </a>
 </div>
 
+
 <!-- Tabela -->
-<table class="table table-striped mt-4">
-  <thead>
-    <tr>
-      <th>#</th>
-      <th>Título</th>
-      <th>Valor</th>
-      <th>Data</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for transacao in transacoes %}
-    <tr>
-      <td>{{ transacao.id }}</td>
-      <td>{{ transacao.titulo }}</td>
-      <td>
-        {% if transacao.tipo.nome|lower == "débito" %}
-          -R$ {{ transacao.valor|floatformat:2 }}
-        {% else %}
-          R$ {{ transacao.valor|floatformat:2 }}
-        {% endif %}
-      </td>
-      <td>{{ transacao.data|date:"d \d\e F \d\e Y" }}</td>
-    </tr>
-    {% empty %}
-    <tr><td colspan="4">Nenhuma transação este mês.</td></tr>
-    {% endfor %}
-  </tbody>
-  <tfoot>
-    <tr>
-      <td colspan="2"><strong>Total:</strong></td>
-      <td colspan="2">
-        <strong>R$ {{ total|floatformat:2 }}</strong>
-      </td>
-    </tr>
-  </tfoot>
-</table>
+<!-- Tabela -->
+<div class="table-responsive">
+  <table class="table table-striped mt-4 align-middle">
+    <thead class="table-dark">
+      <tr>
+        <th>#</th>
+        <th>Título</th>
+        <th>Valor</th>
+        <th>Data</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for transacao in transacoes %}
+      <tr>
+        <td>{{ transacao.id }}</td>
+        <td>
+          {% if transacao.tipo.is_credito %}
+            <i class="bi bi-plus-circle text-success"></i>
+          {% else %}
+            <i class="bi bi-dash-circle text-danger"></i>
+          {% endif %}
+          {{ transacao.titulo }}
+        </td>
+        <td>
+          {% if transacao.tipo.is_credito %}
+            <span class="text-success">R$ {{ transacao.valor|floatformat:2|localize }}</span>
+          {% else %}
+            <span class="text-danger">-R$ {{ transacao.valor|floatformat:2|localize }}</span>
+          {% endif %}
+        </td>
+        <td>{{ transacao.data|date:"d \d\e F \d\e Y" }}</td>
+    
+        <!-- Botão Editar -->
+        <td>
+          <a href="{% url 'cal:transacao_editar' transacao.id %}" class="btn btn-sm btn-primary" title="Editar">
+            <i class="bi bi-pencil"></i>
+          </a>
+     
+          <form action="{% url 'cal:transacao_excluir' transacao.id %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-danger" title="Excluir" onclick="return confirm('Confirma exclusão?');">
+              <i class="bi bi-trash"></i>
+            </button>
+          </form>
+        </td>
+    
+      </tr>
+      {% empty %}
+      <tr><td colspan="6">Nenhuma transação este mês.</td></tr>
+      {% endfor %}
+    </tbody>
+    
+    <tfoot>
+      <tr class="table-secondary">
+        <td colspan="2"><strong>Total:</strong></td>
+        <td colspan="2">
+          <strong>R$ {{ total|floatformat:2|localize }}</strong>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+  </div>
+  
 
 <!-- Container flexível para os gráficos lado a lado e responsivos -->
 <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 40px;">
@@ -159,5 +197,12 @@
 });
 
 </script>
+
+<!-- Botão Flutuante "Adicionar Transação" -->
+<a href="{% url 'cal:transacao_nova' %}" class="btn btn-primary rounded-circle shadow-lg"
+   style="position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px;
+          display: flex; align-items: center; justify-content: center; font-size: 28px; z-index: 1000;">
+  <i class="bi bi-plus-lg"></i>
+</a>
 
 {% endblock %}

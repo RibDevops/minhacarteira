@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
     <div class="container-fluid">
         <!-- Logo/Brand -->
-        <a class="navbar-brand" href="{% url 'cal:calendar' %}">Home</a>
+        <a class="navbar-brand" href="{% url 'cal:calendar' %}"><i class="bi bi-house-fill"></i></a>
         
         <!-- Botão Toggler para Offcanvas -->
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
@@ -16,33 +16,55 @@
             </div>
             <div class="offcanvas-body">
                 <ul class="navbar-nav me-auto">
+                    {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'cal:calendar' %}">Calendário</a>
+                        <a class="nav-link" href="{% url 'cal:calendar' %}"><i class="bi bi-calendar-event"></i> Calendário</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'cal:transacao_nova' %}">Registrar movimentação</a>
+                        <a class="nav-link" href="{% url 'cal:transacao_nova' %}"><i class="bi bi-currency-dollar"></i> Registrar movimentação</a>
                     </li>
                     
                     
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'cal:transacoes_mes' %}">Balanço mensal</a>
+                        <a class="nav-link" href="{% url 'cal:transacoes_mes' %}"><i class="bi bi-graph-up-arrow"></i> Balanço mensal</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'cal:tipo_list' %}">Tipos</a>
+                        <a class="nav-link" href="{% url 'cal:resumo_categoria' %}"><i class="bi bi-pie-chart-fill"></i> Balanço geral</a>
+                    </li>
+
+                    
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'cal:listar_transacoes' %}"><i class="bi bi-card-checklist"></i> Lista geral</a>
+                    </li>
+                    {% endif %}
+                    {% if user.is_authenticated and user.is_staff %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'cal:tipo_list' %}"><i class="bi bi-toggles2"></i> Tipos</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'cal:listar_transacoes' %}">Lista geral</a>
+                        <a class="nav-link" href="{% url 'cal:listar_usuarios' %}"><i class="bi bi-person-gear"></i> Usuários</a>
                     </li>
+                    {% endif %}
+                    <button id="toggleDarkMode" class="btn btn-outline-dark" style="margin-left: 10px;">
+                        🌙 Modo Escuro
+                      </button>
                 </ul>
 
                 <!-- Botão Sair/Login alinhado à direita -->
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        {% if user.is_authenticated %}
+                    {% if user.is_authenticated %}
+                    <li class="nav-link">
+                        <span class="navbar-text me-3">
+                          Olá, {{ user.username }}
+                        </span>
+                      </li>
+                    <li class="nav-item">                    
                             <form method="post" action="{% url 'logout' %}" class="d-flex">
                                 {% csrf_token %}
+                                
                                 <button type="submit" class="btn btn-outline-danger">Sair</button>
                             </form>
                         {% else %}

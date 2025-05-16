@@ -2,6 +2,7 @@ from django import forms
 from django.forms import ModelForm, DateInput, Select
 from .models import Transacao
 
+
 class TransacaoForm(ModelForm):
     class Meta:
         model = Transacao
@@ -57,6 +58,52 @@ class TipoForm(forms.ModelForm):
         }
 
 
+
+# forms.py
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+
+class CustomUserCreationForm(UserCreationForm):
+    email = forms.EmailField(required=True, label="Endereço de email")
+    first_name = forms.CharField(label="Primeiro nome", required=True)
+    last_name = forms.CharField(label="Último nome", required=True)
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name', 'password1', 'password2']
+
+    def __init__(self, *args, **kwargs):
+        super(CustomUserCreationForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+from django import forms
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+
+class UsuarioForm(UserCreationForm):
+    email = forms.EmailField(required=True)
+    first_name = forms.CharField(label='Nome', required=False)
+    last_name = forms.CharField(label='Sobrenome', required=False)
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name', 'password1', 'password2']
+
+class UsuarioUpdateForm(forms.ModelForm):
+    email = forms.EmailField(required=True)
+    
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name']
+
+class UsuarioPasswordResetForm(forms.ModelForm):
+    new_password = forms.CharField(widget=forms.PasswordInput, label="Nova Senha")
+
+    class Meta:
+        model = User
+        fields = []
 
 
 

@@ -6,14 +6,14 @@ from django.urls import reverse
 
 class BaseModel(models.Model):
     id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.PROTECT, verbose_name="Usuário")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Usuário")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Criado em")
 
     class Meta:
         abstract = True
 
 
-class Tipo(BaseModel):
+class Tipo(models.Model):
     descricao = models.CharField(max_length=200, verbose_name="Descrição do tipo")
     is_credito = models.BooleanField(default=False, verbose_name="É crédito?")
 
@@ -32,9 +32,20 @@ class Transacao(BaseModel):
     def __str__(self):
         return f"{self.titulo} - R$ {self.valor} ({self.tipo})"
     
+    # def get_html_url(self):
+    #     url = reverse('transacao_update', args=[self.id])
+    #     valor_formatado = f"R$ {self.valor:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+    #     descricao = f"{self.titulo} - {valor_formatado}"
+    #     # return f'<a href="{url}">{descricao}</a>'
+    #     return f'<a href="{url}"><strong>{self.titulo}</strong><br><small>{valor_formatado}</small></a>'
     def get_html_url(self):
-        url = reverse('transacao_update', args=[self.id])
-        return f'<a href="{url}">{self.titulo}</a>'
+        url = reverse('cal:transacao_update', args=[self.id])  # isso cria o link para editar
+        valor_formatado = f"R$ {self.valor:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+        descricao = f"{self.titulo} - {valor_formatado}"
+        return f'<a href="{url}"><strong>{self.titulo}</strong><br><small>{valor_formatado}</small></a>'
+
+    def get_absolute_url(self):
+        return reverse('cal:transacao_update', args=[self.id])
 
 
 

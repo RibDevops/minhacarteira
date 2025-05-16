@@ -1,19 +1,17 @@
 from django import views
 from django.urls import path
 from cal.views.views_cal import CalendarView
-# from cal.views.views_transacao import (
-#     transacao_view,
-#     transacao_editar,
-#     listar_transacoes,
-#     excluir_transacao,
-#     transacoes_mes_view,
-# )
+from cal.views.views_user import *
 from cal.views.views_transacao import *
 from cal.views.views_login import register_view, LogoutView
 from django.contrib.auth import views as auth_views
 
 from django.urls import path
 from .views import views_tipo
+from .views import views_user
+
+from django.urls import path
+
 
 app_name = 'cal'
 
@@ -38,8 +36,21 @@ urlpatterns = [
     path('tipos/<int:pk>/editar/', views_tipo.tipo_update, name='tipo_update'),
     path('tipos/<int:pk>/excluir/', views_tipo.tipo_delete, name='tipo_delete'),
     path('transacoes-mes/', transacoes_mes_view, name='transacoes_mes'),
+    path("resumo-categoria/", resumo_categoria_view, name="resumo_categoria"),
+    path('transacao/<int:pk>/editar/', TransacaoUpdateView.as_view(), name='transacao_update'),
+
+
+    path('usuarios/', views_user.listar_usuarios, name='listar_usuarios'),
+    path('usuarios/adicionar/', views_user.adicionar_usuario, name='adicionar_usuario'),
+    path('usuarios/editar/<int:user_id>/', views_user.editar_usuario, name='editar_usuario'),
+    path('usuarios/excluir/<int:user_id>/', views_user.excluir_usuario, name='excluir_usuario'),
+    path('usuarios/resetar_senha/<int:user_id>/', views_user.resetar_senha, name='resetar_senha'),
+    path('usuarios/desativar_usuario/<int:user_id>/', views_user.desativar_usuario, name='desativar_usuario'),
 
 ]
+
+
+
 
 
 

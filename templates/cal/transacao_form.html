@@ -6,7 +6,7 @@
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit" class="btn btn-primary">Salvar</button>
-    <a href="{% url 'cal:listar_transacoes' %}" class="btn btn-info">Voltar</a>
+    <a href="{% url 'cal:listar_transacoes' %}" class="btn btn-danger">Cancelar</a>
   </form>
   
 {% endblock %}

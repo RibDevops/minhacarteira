@@ -77,3 +77,46 @@ body { font-family: Arial; background-color: #f9f9f9; padding: 50px; }
             border-radius: 4px; font-size: 16px;
         }
         .error { color: red; margin-top: 10px; }
+
+
+/* Estilos padrão: Modo claro */
+body {
+  background-color: #fff;
+  color: #222;
+}
+
+/* Modo escuro */
+body.dark-mode {
+  background-color: #121212;
+  color: #eee;
+}
+
+/* Exemplo para tabela */
+.table {
+  background-color: #fff;
+  color: #222;
+}
+
+body.dark-mode .table {
+  background-color: #1e1e1e;
+  color: #eee;
+}
+
+/* Botões no modo escuro */
+.btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+body.dark-mode .btn-secondary {
+  background-color: #444;
+  border-color: #444;
+  color: #eee;
+}
+
+/* Ajustes para links, headers e outros */
+body.dark-mode a {
+  color: #90caf9;
+}
+
+/* Ajustar o canvas dos gráficos, se necessário */

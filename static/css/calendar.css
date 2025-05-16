@@ -53,7 +53,7 @@ table.calendar {
 .calendar .event,
 .calendar td li {
     font-size: 0.8em;
-    background-color: #a2e2c2;
+    background-color: #a7edca;
     padding: 2px 5px;
     border-radius: 3px;
     margin-bottom: 2px;
@@ -65,8 +65,14 @@ table.calendar {
 
 /* Dia atual destacado */
 .calendar td.today {
-    background-color: #ffe599; /* amarelo claro */
+    /* background-color: #ffe599; amarelo claro */
     /* border: 2px solid #ffa500; */
+
+    background-color: #fff3cd; /* amarelo claro pastel */
+    border: 2px solid #ffc107; /* contorno amarelo */
+    border-radius: 8px;
+    font-weight: bold;
+      
 }
 
 /* Evento normal */
@@ -81,6 +87,13 @@ table.calendar {
     color: #fff;
 }
 
+.event:hover {
+    background-color: #63c76a; /* um verde mais vivo */
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
 .calendar td ul {
     list-style: none;
     padding-left: 0;

@@ -1,54 +1,56 @@
-
 {% extends 'base.html' %}
 {% load static %}
 
-
 {% block content %}
+<style>
+    .form-login-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f1f3f5;
+    }
+    .formLogin {
+        width: 100%;
+        max-width: 400px;
+        padding: 30px;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+</style>
 
-<div class="container">
-    <div class="row">
+<div class="form-login-container">
+    <form method="POST" action="{% url 'login' %}" class="formLogin">
+        {% csrf_token %}
+
         {% if messages %}
             {% for message in messages %}
-                {% if message.tags == 'success' %}
-                <div class="alert alert-success" role="alert">{{ message }}</div>
-                {% elif message.tags == 'error' %}
-                <div class="alert alert-danger" role="alert">{{ message }}</div>
-                {% endif %}
+                <div class="alert alert-{{ message.tags }} mb-3" role="alert">
+                    {{ message }}
+                </div>
             {% endfor %}
         {% endif %}
 
-    <style>
-        .formLogin {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            max-width: 400px;
-            padding: 30px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f8f9fa;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <form method="POST" action="{% url 'login' %}" class="formLogin">
-            {% csrf_token %}
-            <h1 class="text-center">Login</h1>
-            <div class="form-group">
-                <label for="username">Usuário</label>
-                <input type="text" name="username" id="username" class="form-control" placeholder="Digite seu username" autofocus>
-            </div>
-            <br />
-            <div class="form-group">
-                <label for="password">Senha</label>
-                <input type="password" name="password" id="password" class="form-control" placeholder="Senha">
-            </div>
-            <br />
-            <button type="submit" class="btn btn-primary btn-block">Acessar</button>
-        </form>
-    </div>
-      
+        <h2 class="text-center mb-4">Acessar Conta</h2>
 
+        <div class="mb-3">
+            <label for="username" class="form-label">Usuário</label>
+            <input type="text" name="username" id="username" class="form-control" placeholder="Digite seu usuário" autofocus>
+        </div>
+
+        <div class="mb-4">
+            <label for="password" class="form-label">Senha</label>
+            <input type="password" name="password" id="password" class="form-control" placeholder="Digite sua senha">
+        </div>
+
+        <div class="d-grid gap-2 mb-2">
+            <button type="submit" class="btn btn-primary">Entrar</button>
+        </div>
+
+        <div class="text-center">
+            <small>Não tem uma conta? <a href="{% url 'cal:register' %}">Cadastre-se</a></small>
+        </div>
+    </form>
+</div>
 {% endblock %}

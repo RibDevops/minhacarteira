@@ -23,10 +23,9 @@
                     <td>{{ evento.start_time|date:"d/m/Y" }}</td>
                     <td>{{ evento.valor }}</td>
                     <td>
-                        <a class="btn btn-warning" href="{% url 'cal:event_edit' evento.id %}" >Editar</a> |
+                        <a class="btn btn-warning" href="{% url 'cal:event_edit' evento.id %}" ><i class="bi bi-pencil"></i> Editar</a> |
                         <a class="btn btn-danger"href="{% url 'cal:excluir_evento' evento.id %}" 
-                           onclick="return confirm('Tem certeza que deseja excluir este evento?');">
-                           Excluir
+                           onclick="return confirm('Tem certeza que deseja excluir este evento?');"><i class="bi bi-person-dash"></i> Excluir
                         </a>
                       </td>
                       

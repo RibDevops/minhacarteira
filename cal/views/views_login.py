@@ -44,7 +44,7 @@ def login_view(request):  # ✅ Evite sobrescrever 'login'
         
         if user:
             login_django(request, user)
-            return redirect('home')  # Ou qualquer nome de rota
+            return redirect('cal:home')  # Ou qualquer nome de rota
         else:
             messages.error(request, 'Usuário ou senha incorretos.')
             return redirect('login')

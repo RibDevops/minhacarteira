@@ -7,11 +7,11 @@
 <div class="calendar-container">
     <div class="calendar-navigation">
         <a class="btn btn-primary" href="{% url 'cal:calendar' %}?{{ prev_month }}">
-            <i class="bi bi-chevron-left"></i> Mês Anterior
+            <i class="bi bi-arrow-left"></i></i> Mês Anterior
         </a>
         <!-- <h2 class="calendar-title">{{ month_name|title }} {{ year }}</h2> -->
         <a class="btn btn-primary" href="{% url 'cal:calendar' %}?{{ next_month }}">
-            Próximo Mês <i class="bi bi-chevron-right"></i>
+            Próximo Mês <i class="bi bi-arrow-right"></i>
         </a>
     </div>
 
@@ -19,4 +19,10 @@
         {{ calendar }}
     </div>
 </div>
+<!-- Botão Flutuante "Adicionar Transação" -->
+<a href="{% url 'cal:transacao_nova' %}" class="btn btn-primary rounded-circle shadow-lg"
+   style="position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px;
+          display: flex; align-items: center; justify-content: center; font-size: 28px; z-index: 1000;">
+  <i class="bi bi-currency-dollar"></i>
+</a>
 {% endblock %}

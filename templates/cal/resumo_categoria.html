@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2 class="mb-4">Resumo por Categoria</h2>
+
+<div class="container text-center">
+  <canvas id="graficoResumo" height="50"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctxResumo = document.getElementById('graficoResumo');
+  new Chart(ctxResumo, {
+    type: 'bar',
+    data: {
+      labels: {{ labels|safe }},
+      datasets: [{
+        label: 'Total por Categoria',
+        data: {{ valores|safe }},
+        backgroundColor: {{ cores|safe }},
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: false
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>
+
+{% endblock %}
