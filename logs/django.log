@@ -1,0 +1,954 @@
+ERROR 2025-05-16 00:58:13,856 log Internal Server Error: /calendar/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 169, in render
+    with context.bind_template(self):
+  File "/usr/lib/python3.10/contextlib.py", line 135, in __enter__
+    return next(self.gen)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/context.py", line 256, in bind_template
+    processors = template.engine.template_context_processors + self._processors
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in template_context_processors
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in <genexpr>
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 30, in import_string
+    return cached_import(module_path, class_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 15, in cached_import
+    module = import_module(module_path)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1004, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'cal.context_processors'
+ERROR 2025-05-16 00:58:13,858 basehttp "GET /calendar/ HTTP/1.1" 500 141397
+ERROR 2025-05-16 00:59:09,717 log Internal Server Error: /calendar/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 169, in render
+    with context.bind_template(self):
+  File "/usr/lib/python3.10/contextlib.py", line 135, in __enter__
+    return next(self.gen)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/context.py", line 256, in bind_template
+    processors = template.engine.template_context_processors + self._processors
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in template_context_processors
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in <genexpr>
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 30, in import_string
+    return cached_import(module_path, class_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 15, in cached_import
+    module = import_module(module_path)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1004, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'cal.context_processors'
+ERROR 2025-05-16 00:59:09,718 basehttp "GET /calendar/ HTTP/1.1" 500 141397
+ERROR 2025-05-16 00:59:11,230 log Internal Server Error: /calendar/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 169, in render
+    with context.bind_template(self):
+  File "/usr/lib/python3.10/contextlib.py", line 135, in __enter__
+    return next(self.gen)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/context.py", line 256, in bind_template
+    processors = template.engine.template_context_processors + self._processors
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in template_context_processors
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in <genexpr>
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 30, in import_string
+    return cached_import(module_path, class_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 15, in cached_import
+    module = import_module(module_path)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1004, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'cal.context_processors'
+ERROR 2025-05-16 00:59:11,231 basehttp "GET /calendar/ HTTP/1.1" 500 141397
+ERROR 2025-05-16 00:59:34,105 log Internal Server Error: /calendar/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 199, in render
+    template = context.template.engine.select_template(template_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 208, in select_template
+    return self.get_template(template_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 489, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 487, in parse
+    filter_expression = self.compile_filter(token.contents)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 609, in compile_filter
+    return FilterExpression(token, self)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 705, in __init__
+    filter_func = parser.find_filter(filter_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 615, in find_filter
+    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
+django.template.exceptions.TemplateSyntaxError: Invalid filter: 'localize'
+ERROR 2025-05-16 00:59:34,108 basehttp "GET /calendar/ HTTP/1.1" 500 281928
+ERROR 2025-05-16 01:01:25,644 log Internal Server Error: /calendar/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 199, in render
+    template = context.template.engine.select_template(template_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 208, in select_template
+    return self.get_template(template_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 489, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 487, in parse
+    filter_expression = self.compile_filter(token.contents)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 609, in compile_filter
+    return FilterExpression(token, self)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 705, in __init__
+    filter_func = parser.find_filter(filter_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 615, in find_filter
+    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
+django.template.exceptions.TemplateSyntaxError: Invalid filter: 'intcomma'
+ERROR 2025-05-16 01:01:25,646 basehttp "GET /calendar/ HTTP/1.1" 500 281855
+WARNING 2025-05-16 01:01:25,675 log Not Found: /favicon.ico
+ERROR 2025-05-16 01:02:56,754 log Internal Server Error: /calendar/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 199, in render
+    template = context.template.engine.select_template(template_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 208, in select_template
+    return self.get_template(template_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 489, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 487, in parse
+    filter_expression = self.compile_filter(token.contents)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 609, in compile_filter
+    return FilterExpression(token, self)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 705, in __init__
+    filter_func = parser.find_filter(filter_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 615, in find_filter
+    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
+django.template.exceptions.TemplateSyntaxError: Invalid filter: 'intcomma'
+ERROR 2025-05-16 01:02:56,755 basehttp "GET /calendar/ HTTP/1.1" 500 283187
+ERROR 2025-05-16 01:07:30,366 log Internal Server Error: /calendar/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 169, in render
+    with context.bind_template(self):
+  File "/usr/lib/python3.10/contextlib.py", line 135, in __enter__
+    return next(self.gen)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/context.py", line 259, in bind_template
+    context = processor(self.request)
+  File "/home/suporte/dev/minhacarteira/cal/views/context_processors.py", line 11, in saldo_total
+    total_creditos = Transacao.objects.filter(tipo__nome='Crédito').aggregate(total=Sum('valor'))['total'] or 0
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1491, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1509, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1516, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1643, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1675, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1585, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1406, in build_lookup
+    lhs = self.try_transform(lhs, lookup_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1455, in try_transform
+    raise FieldError(
+django.core.exceptions.FieldError: Unsupported lookup 'nome' for ForeignKey or join on the field not permitted.
+ERROR 2025-05-16 01:07:30,368 basehttp "GET /calendar/ HTTP/1.1" 500 162163
+ERROR 2025-05-16 01:07:42,069 log Internal Server Error: /calendar/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 169, in render
+    with context.bind_template(self):
+  File "/usr/lib/python3.10/contextlib.py", line 135, in __enter__
+    return next(self.gen)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/context.py", line 259, in bind_template
+    context = processor(self.request)
+  File "/home/suporte/dev/minhacarteira/cal/views/context_processors.py", line 11, in saldo_total
+    total_creditos = Transacao.objects.filter(tipo__nome='Crédito').aggregate(total=Sum('valor'))['total'] or 0
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1491, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1509, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1516, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1643, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1675, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1585, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1406, in build_lookup
+    lhs = self.try_transform(lhs, lookup_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1455, in try_transform
+    raise FieldError(
+django.core.exceptions.FieldError: Unsupported lookup 'nome' for ForeignKey or join on the field not permitted.
+ERROR 2025-05-16 01:07:42,069 basehttp "GET /calendar/ HTTP/1.1" 500 162163
+ERROR 2025-05-16 01:09:02,528 log Internal Server Error: /calendar/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 30, in import_string
+    return cached_import(module_path, class_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 16, in cached_import
+    return getattr(module, class_name)
+AttributeError: module 'cal.views.views_dashboard' has no attribute 'saldo_total'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 169, in render
+    with context.bind_template(self):
+  File "/usr/lib/python3.10/contextlib.py", line 135, in __enter__
+    return next(self.gen)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/context.py", line 256, in bind_template
+    processors = template.engine.template_context_processors + self._processors
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in template_context_processors
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in <genexpr>
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 32, in import_string
+    raise ImportError(
+ImportError: Module "cal.views.views_dashboard" does not define a "saldo_total" attribute/class
+ERROR 2025-05-16 01:09:02,532 basehttp "GET /calendar/ HTTP/1.1" 500 137673
+ERROR 2025-05-16 01:09:04,112 log Internal Server Error: /calendar/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 30, in import_string
+    return cached_import(module_path, class_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 16, in cached_import
+    return getattr(module, class_name)
+AttributeError: module 'cal.views.views_dashboard' has no attribute 'saldo_total'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 169, in render
+    with context.bind_template(self):
+  File "/usr/lib/python3.10/contextlib.py", line 135, in __enter__
+    return next(self.gen)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/context.py", line 256, in bind_template
+    processors = template.engine.template_context_processors + self._processors
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in template_context_processors
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in <genexpr>
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 32, in import_string
+    raise ImportError(
+ImportError: Module "cal.views.views_dashboard" does not define a "saldo_total" attribute/class
+ERROR 2025-05-16 01:09:04,113 basehttp "GET /calendar/ HTTP/1.1" 500 138045
+ERROR 2025-05-16 01:10:05,980 log Internal Server Error: /calendar/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 30, in import_string
+    return cached_import(module_path, class_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 16, in cached_import
+    return getattr(module, class_name)
+AttributeError: module 'cal.views.views_dashboard' has no attribute 'saldo_total'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 169, in render
+    with context.bind_template(self):
+  File "/usr/lib/python3.10/contextlib.py", line 135, in __enter__
+    return next(self.gen)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/context.py", line 256, in bind_template
+    processors = template.engine.template_context_processors + self._processors
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in template_context_processors
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in <genexpr>
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 32, in import_string
+    raise ImportError(
+ImportError: Module "cal.views.views_dashboard" does not define a "saldo_total" attribute/class
+ERROR 2025-05-16 01:10:05,981 basehttp "GET /calendar/ HTTP/1.1" 500 138045
+ERROR 2025-05-16 01:10:09,339 log Internal Server Error: /calendar/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 30, in import_string
+    return cached_import(module_path, class_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 16, in cached_import
+    return getattr(module, class_name)
+AttributeError: module 'cal.views.views_dashboard' has no attribute 'saldo_total'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 169, in render
+    with context.bind_template(self):
+  File "/usr/lib/python3.10/contextlib.py", line 135, in __enter__
+    return next(self.gen)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/context.py", line 256, in bind_template
+    processors = template.engine.template_context_processors + self._processors
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in template_context_processors
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in <genexpr>
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 32, in import_string
+    raise ImportError(
+ImportError: Module "cal.views.views_dashboard" does not define a "saldo_total" attribute/class
+ERROR 2025-05-16 01:10:09,339 basehttp "GET /calendar/ HTTP/1.1" 500 138045
+ERROR 2025-05-16 01:10:16,703 log Internal Server Error: /calendar/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 30, in import_string
+    return cached_import(module_path, class_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 16, in cached_import
+    return getattr(module, class_name)
+AttributeError: module 'cal.views.views_dashboard' has no attribute 'saldo_total'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 169, in render
+    with context.bind_template(self):
+  File "/usr/lib/python3.10/contextlib.py", line 135, in __enter__
+    return next(self.gen)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/context.py", line 256, in bind_template
+    processors = template.engine.template_context_processors + self._processors
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in template_context_processors
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in <genexpr>
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 32, in import_string
+    raise ImportError(
+ImportError: Module "cal.views.views_dashboard" does not define a "saldo_total" attribute/class
+ERROR 2025-05-16 01:10:16,705 basehttp "GET /calendar/ HTTP/1.1" 500 137673
+ERROR 2025-05-16 01:10:17,767 log Internal Server Error: /calendar/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 30, in import_string
+    return cached_import(module_path, class_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 16, in cached_import
+    return getattr(module, class_name)
+AttributeError: module 'cal.views.views_dashboard' has no attribute 'saldo_total'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 169, in render
+    with context.bind_template(self):
+  File "/usr/lib/python3.10/contextlib.py", line 135, in __enter__
+    return next(self.gen)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/context.py", line 256, in bind_template
+    processors = template.engine.template_context_processors + self._processors
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in template_context_processors
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in <genexpr>
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 32, in import_string
+    raise ImportError(
+ImportError: Module "cal.views.views_dashboard" does not define a "saldo_total" attribute/class
+ERROR 2025-05-16 01:10:17,768 basehttp "GET /calendar/ HTTP/1.1" 500 138045
+ERROR 2025-05-16 01:10:56,097 log Internal Server Error: /calendar/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 30, in import_string
+    return cached_import(module_path, class_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 16, in cached_import
+    return getattr(module, class_name)
+AttributeError: module 'cal.views.views_dashboard' has no attribute 'saldo_total'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 169, in render
+    with context.bind_template(self):
+  File "/usr/lib/python3.10/contextlib.py", line 135, in __enter__
+    return next(self.gen)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/context.py", line 256, in bind_template
+    processors = template.engine.template_context_processors + self._processors
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in template_context_processors
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in <genexpr>
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 32, in import_string
+    raise ImportError(
+ImportError: Module "cal.views.views_dashboard" does not define a "saldo_total" attribute/class
+ERROR 2025-05-16 01:10:56,099 basehttp "GET /calendar/ HTTP/1.1" 500 137673
+ERROR 2025-05-16 01:10:57,503 log Internal Server Error: /calendar/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 30, in import_string
+    return cached_import(module_path, class_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 16, in cached_import
+    return getattr(module, class_name)
+AttributeError: module 'cal.views.views_dashboard' has no attribute 'saldo_total'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 169, in render
+    with context.bind_template(self):
+  File "/usr/lib/python3.10/contextlib.py", line 135, in __enter__
+    return next(self.gen)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/context.py", line 256, in bind_template
+    processors = template.engine.template_context_processors + self._processors
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in template_context_processors
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in <genexpr>
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 32, in import_string
+    raise ImportError(
+ImportError: Module "cal.views.views_dashboard" does not define a "saldo_total" attribute/class
+ERROR 2025-05-16 01:10:57,503 basehttp "GET /calendar/ HTTP/1.1" 500 138045
+ERROR 2025-05-16 01:11:36,890 log Internal Server Error: /calendar/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 30, in import_string
+    return cached_import(module_path, class_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 16, in cached_import
+    return getattr(module, class_name)
+AttributeError: module 'cal.views.views_dashboard' has no attribute 'saldo'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 169, in render
+    with context.bind_template(self):
+  File "/usr/lib/python3.10/contextlib.py", line 135, in __enter__
+    return next(self.gen)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/context.py", line 256, in bind_template
+    processors = template.engine.template_context_processors + self._processors
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in template_context_processors
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in <genexpr>
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 32, in import_string
+    raise ImportError(
+ImportError: Module "cal.views.views_dashboard" does not define a "saldo" attribute/class
+ERROR 2025-05-16 01:11:36,892 basehttp "GET /calendar/ HTTP/1.1" 500 137577
+ERROR 2025-05-16 01:11:38,045 log Internal Server Error: /calendar/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 30, in import_string
+    return cached_import(module_path, class_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 16, in cached_import
+    return getattr(module, class_name)
+AttributeError: module 'cal.views.views_dashboard' has no attribute 'saldo'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 169, in render
+    with context.bind_template(self):
+  File "/usr/lib/python3.10/contextlib.py", line 135, in __enter__
+    return next(self.gen)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/context.py", line 256, in bind_template
+    processors = template.engine.template_context_processors + self._processors
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in template_context_processors
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in <genexpr>
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 32, in import_string
+    raise ImportError(
+ImportError: Module "cal.views.views_dashboard" does not define a "saldo" attribute/class
+ERROR 2025-05-16 01:11:38,046 basehttp "GET /calendar/ HTTP/1.1" 500 137949
+ERROR 2025-05-16 01:12:05,018 log Internal Server Error: /calendar/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 30, in import_string
+    return cached_import(module_path, class_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 16, in cached_import
+    return getattr(module, class_name)
+AttributeError: module 'cal.views.views_dashboard' has no attribute 'transacoes_mes_view'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 169, in render
+    with context.bind_template(self):
+  File "/usr/lib/python3.10/contextlib.py", line 135, in __enter__
+    return next(self.gen)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/context.py", line 256, in bind_template
+    processors = template.engine.template_context_processors + self._processors
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in template_context_processors
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in <genexpr>
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 32, in import_string
+    raise ImportError(
+ImportError: Module "cal.views.views_dashboard" does not define a "transacoes_mes_view" attribute/class
+ERROR 2025-05-16 01:12:05,020 basehttp "GET /calendar/ HTTP/1.1" 500 137801
+ERROR 2025-05-16 01:13:49,486 log Internal Server Error: /calendar/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 169, in render
+    with context.bind_template(self):
+  File "/usr/lib/python3.10/contextlib.py", line 135, in __enter__
+    return next(self.gen)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/context.py", line 256, in bind_template
+    processors = template.engine.template_context_processors + self._processors
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in template_context_processors
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in <genexpr>
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 30, in import_string
+    return cached_import(module_path, class_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 15, in cached_import
+    module = import_module(module_path)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1004, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'cal.context_processors'
+ERROR 2025-05-16 01:13:49,487 basehttp "GET /calendar/ HTTP/1.1" 500 142357
+ERROR 2025-05-16 01:15:49,011 log Internal Server Error: /calendar/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 169, in render
+    with context.bind_template(self):
+  File "/usr/lib/python3.10/contextlib.py", line 135, in __enter__
+    return next(self.gen)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/context.py", line 256, in bind_template
+    processors = template.engine.template_context_processors + self._processors
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in template_context_processors
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in <genexpr>
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 30, in import_string
+    return cached_import(module_path, class_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 15, in cached_import
+    module = import_module(module_path)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1004, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'cal.context_processors'
+ERROR 2025-05-16 01:15:49,012 basehttp "GET /calendar/ HTTP/1.1" 500 142357
+ERROR 2025-05-16 01:16:30,696 log Internal Server Error: /calendar/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 169, in render
+    with context.bind_template(self):
+  File "/usr/lib/python3.10/contextlib.py", line 135, in __enter__
+    return next(self.gen)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/context.py", line 256, in bind_template
+    processors = template.engine.template_context_processors + self._processors
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in template_context_processors
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 118, in <genexpr>
+    return tuple(import_string(path) for path in context_processors)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 30, in import_string
+    return cached_import(module_path, class_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/module_loading.py", line 15, in cached_import
+    module = import_module(module_path)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1004, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'cal.context_processors'
+ERROR 2025-05-16 01:16:30,697 basehttp "GET /calendar/ HTTP/1.1" 500 142357
+ERROR 2025-05-16 01:28:15,492 log Internal Server Error: /calendar/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 169, in render
+    with context.bind_template(self):
+  File "/usr/lib/python3.10/contextlib.py", line 135, in __enter__
+    return next(self.gen)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/context.py", line 259, in bind_template
+    context = processor(self.request)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_dashboard.py", line 11, in dashboard
+    credito = transacoes.filter(categoria='CREDITO').aggregate(total=models.Sum('valor'))['total'] or 0
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1491, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1509, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1516, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1643, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1675, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1523, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1330, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1802, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'categoria' into field. Choices are: created_at, data, data_fim, id, parcelas, tipo, tipo_id, titulo, user, user_id, valor
+ERROR 2025-05-16 01:28:15,494 basehttp "GET /calendar/ HTTP/1.1" 500 157891
+ERROR 2025-05-16 01:28:39,092 log Internal Server Error: /calendar/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 169, in render
+    with context.bind_template(self):
+  File "/usr/lib/python3.10/contextlib.py", line 135, in __enter__
+    return next(self.gen)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/context.py", line 259, in bind_template
+    context = processor(self.request)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_dashboard.py", line 11, in dashboard
+    credito = transacoes.filter(categoria='CREDITO').aggregate(total=models.Sum('valor'))['total'] or 0
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1491, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1509, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1516, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1643, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1675, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1523, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1330, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1802, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'categoria' into field. Choices are: created_at, data, data_fim, id, parcelas, tipo, tipo_id, titulo, user, user_id, valor
+ERROR 2025-05-16 01:28:39,093 basehttp "GET /calendar/ HTTP/1.1" 500 157891

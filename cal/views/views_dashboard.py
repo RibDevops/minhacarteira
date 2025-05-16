@@ -33,17 +33,3 @@ def dashboard(request):
 
 from datetime import datetime, timedelta
 
-# def processar_transacoes_recorrentes():
-#     transacoes_recorrentes = Transacao.objects.filter(user=user, recorrente=True)
-#     for transacao in transacoes_recorrentes:
-#         if transacao.data < datetime.now().date():
-#             # Criar uma nova transação para o próximo período (por exemplo, mensal)
-#             nova_transacao = Transacao(
-#                 fk_user=transacao.fk_user,
-#                 titulo=transacao.titulo,
-#                 valor=transacao.valor,
-#                 data=transacao.data + timedelta(days=30),  # Ajuste conforme o período
-#                 categoria=transacao.categoria,
-#                 recorrente=True
-#             )
-#             nova_transacao.save()
