@@ -61,11 +61,11 @@ class CalendarView(generic.ListView):
 
         # Calcula o saldo para o mês exibido
         total_creditos = transacoes.filter(tipo__is_credito__iexact='1').aggregate(total=Sum('valor'))['total'] or 0
-        print(f'cal:{total_creditos}')
+        # print(f'cal:{total_creditos}')
         total_debitos = transacoes.filter(tipo__is_credito__iexact='0').aggregate(total=Sum('valor'))['total'] or 0
-        print(total_debitos)
+        # print(total_debitos)
         saldo_total = total_creditos - total_debitos
-        print(saldo_total)
+        # print(saldo_total)
 
         # Calendário HTML
         cal = Calendar(d.year, d.month)

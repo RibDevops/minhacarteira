@@ -50,31 +50,52 @@
     
     {% endblock %}
     
-    <script>
-        // Função para ativar/desativar o modo escuro
-        function toggleDarkMode() {
-          document.body.classList.toggle('dark-mode');
-      
-          // Salvar preferência no localStorage
-          if (document.body.classList.contains('dark-mode')) {
-            localStorage.setItem('darkMode', 'enabled');
-            document.getElementById('toggleDarkMode').textContent = '☀️ Modo Claro';
-          } else {
-            localStorage.setItem('darkMode', 'disabled');
-            document.getElementById('toggleDarkMode').textContent = '🌙 Modo Escuro';
-          }
-        }
-      
-        // Evento do botão
-        document.getElementById('toggleDarkMode').addEventListener('click', toggleDarkMode);
-      
-        // Verificar preferência salva ao carregar a página
-        window.onload = () => {
-          if (localStorage.getItem('darkMode') === 'enabled') {
-            document.body.classList.add('dark-mode');
-            document.getElementById('toggleDarkMode').textContent = '☀️ Modo Claro';
-          }
-        };
-      </script>
+    <!-- Botões Flutuantes -->
+<div style="position: fixed; bottom: 20px; right: 20px; z-index: 1050;">
+  <!-- Botão: Adicionar Transação -->
+  <a href="{% url 'cal:transacao_nova' %}" class="btn btn-primary rounded-circle shadow mb-2" title="Adicionar Transação" style="width: 56px; height: 56px; display: flex; justify-content: center; align-items: center;">
+    <i class="bi bi-plus-lg fs-4"></i>
+  </a>
+
+  <!-- Botão: Ver Gráficos -->
+  <a href="{% url 'cal:transacoes_mes' %}" class="btn btn-success rounded-circle shadow mb-2" title="Ver Gráficos" style="width: 56px; height: 56px; display: flex; justify-content: center; align-items: center;">
+    <i class="bi bi-pie-chart fs-4"></i>
+  </a>
+
+  <a href="{% url 'cal:calendar' %}" class="btn btn-primary rounded-circle shadow mb-2" title="Adicionar Transação" style="width: 56px; height: 56px; display: flex; justify-content: center; align-items: center;">
+    <i class="bi bi-calendar-event"></i>
+  </a>
+
+  <!-- Botão: Modo Escuro -->
+  <button class="btn btn-dark rounded-circle shadow" title="Modo Escuro" onclick="toggleDarkMode()" style="width: 56px; height: 56px; display: flex; justify-content: center; align-items: center;">
+  <!-- <button id="dark-mode-toggle" class="btn btn-secondary">Modo Escuro</button> -->
+
+    <i class="bi bi-moon-stars fs-4"></i>
+  </button>
+</div>
+
+<!-- Script simples para Modo Escuro -->
+<script>
+  function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    // (Opcional) Salvar preferência no localStorage
+    if (document.body.classList.contains('dark-mode')) {
+      localStorage.setItem('theme', 'dark');
+    } else {
+      localStorage.setItem('theme', 'light');
+    }
+  }
+
+  // Ativa tema salvo ao carregar a página
+  document.addEventListener('DOMContentLoaded', () => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      document.body.classList.add('dark-mode');
+    }
+  });
+</script>
+
+
+
 </body>
 </html>

@@ -11,9 +11,9 @@ import logging
 logger = logging.getLogger('django')
 
 def register_view(request):
-    print('POST')
+    # print('POST')
     if request.method == 'POST':
-        print('POST')
+        # print('POST')
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)

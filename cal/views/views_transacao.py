@@ -44,7 +44,7 @@ def transacao_view(request):
         transacao.user = request.user
 
         parcelas = form.cleaned_data.get('parcelas')
-        print(f'qtd: {parcelas}')
+        # print(f'qtd: {parcelas}')
         if parcelas and parcelas > 1:
             for i in range(parcelas):
                 nova = Transacao(
@@ -107,13 +107,13 @@ def transacoes_mes_view(request):
     valores = [float(v) for v in dados_por_tipo.values()]  # Para JSON e JS, converta para float
 
     total_creditos = transacoes.filter(tipo__is_credito__iexact='1').aggregate(Sum('valor'))['valor__sum'] or 0
-    print(total_creditos)
+    # print(total_creditos)
     
     total_debitos = transacoes.filter(tipo__is_credito__iexact='0').aggregate(Sum('valor'))['valor__sum'] or 0
-    print(total_debitos)
-    print(f'total_debitos:{total_debitos}')
+    # print(total_debitos)
+    # print(f'total_debitos:{total_debitos}')
     saldo_total = total_creditos - total_debitos
-    print(saldo_total)
+    # print(saldo_total)
     contexto = {
         'transacoes': transacoes,
         'mes_atual': date(ano, mes, 1),
@@ -131,9 +131,8 @@ def transacoes_mes_view(request):
 
 @login_required
 def resumo_categoria_view(request):
-    transacoes = Transacao.objects.all()
+    transacoes = Transacao.objects.filter(user=request.user)
 
-    # Agrupar por tipo (crédito/débito)
     dados_resumo = transacoes.values("tipo__descricao", "tipo__is_credito").annotate(total=Sum("valor"))
 
     labels = []
@@ -153,3 +152,4 @@ def resumo_categoria_view(request):
         "cores": cores,
     }
     return render(request, "cal/resumo_categoria.html", contexto)
+
