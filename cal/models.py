@@ -20,12 +20,11 @@ class Tipo(models.Model):
     def __str__(self):
         return f"{'Crédito' if self.is_credito else 'Débito'} - {self.descricao}"
 
-
 class Transacao(BaseModel):
     tipo = models.ForeignKey(Tipo, on_delete=models.PROTECT, verbose_name="Tipo da transação")
     titulo = models.CharField(max_length=200, verbose_name="Título")
     valor = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Valor")
-    data = models.DateField(verbose_name="Data da transação")
+    data = models.DateField(verbose_name="Data da transação (use a data de vencimento do proximo mês, se for no cartão de crédito")
     parcelas = models.IntegerField(null=True, blank=True, verbose_name="Quantidade de parcelas")
     data_fim = models.DateField(null=True, blank=True, verbose_name="Data da última parcela")
 
