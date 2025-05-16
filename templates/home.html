@@ -8,17 +8,22 @@
  
 
  <div class="container mt-5">
-  <h1 class="mb-4">Bem-vindo ao Sistema de Controle de Gastos</h1>
-  <p>Este sistema foi desenvolvido para ajudar no controle financeiro, permitindo registrar compras com o valor gasto e a data correspondente. O calendário mostra os registros por dia, facilitando a visualização dos seus gastos ao longo do mês. Você pode navegar entre os meses usando os botões "Mês Anterior" e "Próximo Mês".</p>
+  <h2 class="mb-4">Bem-vindo ao Sistema de Controle de Gastos</h2>
+  <p>Sistema para registrar e visualizar gastos por data, com calendário interativo, cadastro de compras e interface responsiva.</p>
   
   <h3 class="mt-4">Funcionalidades:</h3>
   <ul>
-    <li><strong>Visualização de Compras:</strong> Veja todos os gastos registrados organizados por dia.</li>
-    <li><strong>Registro de Compras:</strong> Cadastre novos gastos clicando em “Nova Compra”.</li>
-    <li><strong>Responsividade:</strong> A interface é adaptável para dispositivos móveis.</li>
-  </ul>
+    <li><strong>Compras por Dia:</strong> Visualize os gastos organizados por data.</li>
+<li><strong>Nova Transação:</strong> Cadastre despesas facilmente.</li>
+<li><strong>Balanço Mensal:</strong> Acompanhe seus totais mensais.</li>
+<li><strong>Interface Responsiva:</strong> Funciona bem em qualquer dispositivo.</li>
 
+  </ul>
+  {% if user.is_authenticated %}
   <a href="{% url 'cal:calendar' %}" class="btn btn-primary mt-3">Ver Calendário</a>
+  {% else %}
+                            <a href="{% url 'login' %}" class="btn btn-outline-success">Login</a>
+                        {% endif %}
 </div>
 
  
