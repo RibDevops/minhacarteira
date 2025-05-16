@@ -2,23 +2,7 @@
 {% load static %}
 
 {% block content %}
-<style>
-    .form-login-container {
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: #f1f3f5;
-    }
-    .formLogin {
-        width: 100%;
-        max-width: 400px;
-        padding: 30px;
-        background: #ffffff;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-</style>
+
 
 <div class="form-login-container">
     <form method="POST" action="{% url 'login' %}" class="formLogin">

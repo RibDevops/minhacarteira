@@ -2,9 +2,8 @@
 {% load static %}
 
 {% block content %}
-<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
-    <div class="card shadow p-4 rounded-4" style="width: 100%; max-width: 420px;">
-        <h2 class="text-center mb-4 fw-bold">Cadastro de Usuário</h2>
+<div class="form-login-container">
+    <h2 class="text-center mb-4">Cadastro de Usuário</h2>
 
         <form method="POST" class="d-flex flex-column gap-3">
             {% csrf_token %}
