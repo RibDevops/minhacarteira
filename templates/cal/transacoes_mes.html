@@ -6,6 +6,35 @@
 
 <h2>Transações - {{ mes_atual|date:"F \d\e Y" }}</h2>
 
+<!-- Dashboard Resumido -->
+<div class="row text-center mb-4">
+  <div class="col-md-4 mb-2">
+    <div class="card bg-success text-white shadow rounded">
+      <div class="card-body">
+        <h5>Saldo Atual</h5>
+        <h3>R$ {{ saldo_total|floatformat:2|localize }}</h3>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 mb-2">
+    <div class="card bg-primary text-white shadow rounded">
+      <div class="card-body">
+        <h5>Total de Créditos</h5>
+        <h3>R$ {{ total_creditos|floatformat:2|localize }}</h3>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 mb-2">
+    <div class="card bg-danger text-white shadow rounded">
+      <div class="card-body">
+        <h5>Total de Débitos</h5>
+        <h3>R$ {{ total_debitos|floatformat:2|localize }}</h3>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <!-- Navegação de meses -->
 <div class="mb-3">
   <a href="?mes={{ mes_anterior.month }}&ano={{ mes_anterior.year }}" class="btn btn-secondary">← Mês anterior</a>

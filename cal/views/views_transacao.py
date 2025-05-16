@@ -97,6 +97,8 @@ from datetime import datetime
 
 from decimal import Decimal
 from collections import defaultdict
+from django.db.models import Sum
+
 
 
 def transacoes_mes_view(request):
@@ -129,6 +131,10 @@ def transacoes_mes_view(request):
     labels = list(dados_por_tipo.keys())
     valores = [float(v) for v in dados_por_tipo.values()]  # Para JSON e JS, converta para float
 
+    total_creditos = transacoes.filter(tipo__descricao__iexact='CRÉDITO').aggregate(Sum('valor'))['valor__sum'] or 0
+    
+    total_debitos = transacoes.filter(tipo__descricao__iexact='DÉBITO').aggregate(Sum('valor'))['valor__sum'] or 0
+    saldo_total = total_creditos - total_debitos
     contexto = {
         'transacoes': transacoes,
         'mes_atual': date(ano, mes, 1),
@@ -137,5 +143,8 @@ def transacoes_mes_view(request):
         'total': total,
         'grafico_labels': labels,
         'grafico_valores': valores,
+        'total_creditos': total_creditos,
+        'total_debitos': total_debitos,
+        'saldo_total': saldo_total,
     }
     return render(request, 'cal/transacoes_mes.html', contexto)
