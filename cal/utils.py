@@ -7,6 +7,8 @@ from .models import Transacao
 import locale
 
 
+
+
 locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')
 
 class Calendar(calendar.HTMLCalendar):
@@ -50,4 +52,14 @@ class Calendar(calendar.HTMLCalendar):
                  'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
         nome_mes = meses[themonth - 1]
         return f'<tr><th colspan="7" class="month">{nome_mes} {theyear if withyear else ""}</th></tr>'
+
+    # def get_date(req_day):
+    #     """
+    #     Retorna um objeto datetime.date baseado no parâmetro GET (?month=YYYY-MM).
+    #     Se não for passado nada, retorna a data de hoje.
+    #     """
+    #     if req_day:
+    #         year, month = (int(x) for x in req_day.split('-'))
+    #         return date(year, month, 1)
+    #     return datetime.today().date()
 

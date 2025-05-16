@@ -106,10 +106,14 @@ def transacoes_mes_view(request):
     labels = list(dados_por_tipo.keys())
     valores = [float(v) for v in dados_por_tipo.values()]  # Para JSON e JS, converta para float
 
-    total_creditos = transacoes.filter(tipo__descricao__iexact='CRÉDITO').aggregate(Sum('valor'))['valor__sum'] or 0
+    total_creditos = transacoes.filter(tipo__is_credito__iexact='1').aggregate(Sum('valor'))['valor__sum'] or 0
+    print(total_creditos)
     
-    total_debitos = transacoes.filter(tipo__descricao__iexact='DÉBITO').aggregate(Sum('valor'))['valor__sum'] or 0
+    total_debitos = transacoes.filter(tipo__is_credito__iexact='0').aggregate(Sum('valor'))['valor__sum'] or 0
+    print(total_debitos)
+    print(f'total_debitos:{total_debitos}')
     saldo_total = total_creditos - total_debitos
+    print(saldo_total)
     contexto = {
         'transacoes': transacoes,
         'mes_atual': date(ano, mes, 1),

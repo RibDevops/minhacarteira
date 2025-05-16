@@ -67,7 +67,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "cal.context_processors.transacoes_mes_context",
+                # "cal.context_processors.transacoes_mes_context",
                 # "cal.views.views_dashboard.dashboard",
 
                 
