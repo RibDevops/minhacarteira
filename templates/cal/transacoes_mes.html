@@ -1,16 +1,19 @@
 {% extends 'base.html' %}
 {% load humanize %}
 {% load l10n %}
+
 {% block content %}
 
 <h2>Transações - {{ mes_atual|date:"F \d\e Y" }}</h2>
 
+<!-- Navegação de meses -->
 <div class="mb-3">
   <a href="?mes={{ mes_anterior.month }}&ano={{ mes_anterior.year }}" class="btn btn-secondary">← Mês anterior</a>
   <a href="?mes={{ mes_proximo.month }}&ano={{ mes_proximo.year }}" class="btn btn-secondary">Próximo mês →</a>
 </div>
 
-<table class="table table-striped">
+<!-- Tabela -->
+<table class="table table-striped mt-4">
   <thead>
     <tr>
       <th>#</th>
@@ -26,9 +29,9 @@
       <td>{{ transacao.titulo }}</td>
       <td>
         {% if transacao.tipo.nome|lower == "débito" %}
-          -R$ {{ transacao.valor|floatformat:2|localize }}
+          -R$ {{ transacao.valor|floatformat:2 }}
         {% else %}
-          R$ {{ transacao.valor|floatformat:2|localize }}
+          R$ {{ transacao.valor|floatformat:2 }}
         {% endif %}
       </td>
       <td>{{ transacao.data|date:"d \d\e F \d\e Y" }}</td>
@@ -41,10 +44,91 @@
     <tr>
       <td colspan="2"><strong>Total:</strong></td>
       <td colspan="2">
-        <strong>R$ {{ total|floatformat:2|localize }}</strong>
+        <strong>R$ {{ total|floatformat:2 }}</strong>
       </td>
     </tr>
   </tfoot>
 </table>
+
+<!-- Container flexível para os gráficos lado a lado e responsivos -->
+<div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 40px;">
+
+  <!-- Gráfico de Pizza dentro de um container que limita o tamanho -->
+  <div style="flex: 1 1 300px; max-width: 400px; height: 350px;">
+    <canvas id="graficoPizza" style="width: 100%; height: 100%;"></canvas>
+  </div>
+
+  <!-- Gráfico de Barras dentro de outro container para lado a lado -->
+  <div style="flex: 1 1 300px; max-width: 400px; height: 350px;">
+    <canvas id="graficoBarras" style="width: 100%; height: 100%;"></canvas>
+  </div>
+
+</div>
+
+<!-- Importação do Chart.js (biblioteca para gráficos) -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  // Pegamos o contexto do canvas do gráfico de pizza para desenhar
+  const ctxPizza = document.getElementById('graficoPizza').getContext('2d');
+
+  // Criamos o gráfico de pizza usando os dados enviados do Django
+  new Chart(ctxPizza, {
+    type: 'pie', // Tipo de gráfico: pizza
+    data: {
+      labels: {{ grafico_labels|safe }}, // Etiquetas (ex: tipos de transações)
+      datasets: [{
+        label: 'Transações por tipo', // Legenda do conjunto de dados
+        data: {{ grafico_valores|safe }}, // Valores numéricos para o gráfico
+        backgroundColor: [
+          '#4CAF50', '#F44336', '#FFC107', '#2196F3', '#9C27B0',
+          '#FF5722', '#00BCD4', '#8BC34A', '#E91E63', '#607D8B'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true, // O gráfico vai ajustar tamanho automaticamente
+      maintainAspectRatio: false, // Permite ajuste de largura e altura
+      plugins: {
+        legend: {
+          position: 'right' // Posição da legenda (direita do gráfico)
+        }
+      }
+    }
+  });
+
+  // Pegamos o contexto do canvas do gráfico de barras
+  const ctxBarras = document.getElementById('graficoBarras').getContext('2d');
+
+  // Criamos um gráfico de barras como exemplo (use seus dados aqui)
+  new Chart(ctxBarras, {
+  type: 'bar',
+  data: {
+    labels: {{ grafico_labels|safe }},
+    datasets: [{
+      label: 'Valores por tipo',
+      data: {{ grafico_valores|safe }},
+      backgroundColor: ['#4CAF50', '#F44336'],  // cores diferentes para cada barra
+      borderWidth: 1
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    },
+    plugins: {
+      legend: {
+        position: 'top'
+      }
+    }
+  }
+});
+
+</script>
 
 {% endblock %}

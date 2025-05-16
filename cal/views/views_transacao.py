@@ -62,15 +62,52 @@ from django.utils.timezone import make_aware
 from datetime import datetime
 
 
+# def transacoes_mes_view(request):
+#     # Pega o ano e mês da querystring ou usa o atual
+#     ano = int(request.GET.get('ano', date.today().year))
+#     mes = int(request.GET.get('mes', date.today().month))
+
+
+#     data_inicio = make_aware(datetime(ano, mes, 1))
+#     data_fim = make_aware(datetime(ano, mes, 1) + relativedelta(months=1))
+
+
+#     transacoes = Transacao.objects.filter(
+#         user=request.user,
+#         data__gte=data_inicio,
+#         data__lt=data_fim
+#     ).order_by('-data')
+
+#     # Soma os valores (débitos negativos)
+#     total = sum([
+#         -t.valor if t.tipo.descricao.lower() == 'débito' else t.valor
+#         for t in transacoes
+#     ])
+
+#     mes_atual = date(ano, mes, 1)
+
+#     contexto = {
+#         'transacoes': transacoes,
+#         'mes_atual': mes_atual,
+#         'mes_anterior': mes_atual - relativedelta(months=1),
+#         'mes_proximo': mes_atual + relativedelta(months=1),
+#         'total': total,
+#     }
+#     return render(request, 'cal/transacoes_mes.html', contexto)
+
+from decimal import Decimal
+from collections import defaultdict
+
+
 def transacoes_mes_view(request):
-    # Pega o ano e mês da querystring ou usa o atual
+    # Código anterior...
     ano = int(request.GET.get('ano', date.today().year))
     mes = int(request.GET.get('mes', date.today().month))
 
-
+    # data_inicio = make_aware(date(ano, mes, 1))
+    # data_fim = make_aware(date(ano, mes, 1) + relativedelta(months=1))
     data_inicio = make_aware(datetime(ano, mes, 1))
     data_fim = make_aware(datetime(ano, mes, 1) + relativedelta(months=1))
-
 
     transacoes = Transacao.objects.filter(
         user=request.user,
@@ -78,19 +115,27 @@ def transacoes_mes_view(request):
         data__lt=data_fim
     ).order_by('-data')
 
-    # Soma os valores (débitos negativos)
     total = sum([
         -t.valor if t.tipo.descricao.lower() == 'débito' else t.valor
         for t in transacoes
     ])
 
-    mes_atual = date(ano, mes, 1)
+    # Prepara dados para o gráfico por tipo
+    dados_por_tipo = defaultdict(Decimal)  # Corrigido para Decimal
+    for t in transacoes:
+        valor = -t.valor if t.tipo.descricao.lower() == 'débito' else t.valor
+        dados_por_tipo[t.tipo.descricao] += valor  # Agora soma Decimal com Decimal
+
+    labels = list(dados_por_tipo.keys())
+    valores = [float(v) for v in dados_por_tipo.values()]  # Para JSON e JS, converta para float
 
     contexto = {
         'transacoes': transacoes,
-        'mes_atual': mes_atual,
-        'mes_anterior': mes_atual - relativedelta(months=1),
-        'mes_proximo': mes_atual + relativedelta(months=1),
+        'mes_atual': date(ano, mes, 1),
+        'mes_anterior': date(ano, mes, 1) - relativedelta(months=1),
+        'mes_proximo': date(ano, mes, 1) + relativedelta(months=1),
         'total': total,
+        'grafico_labels': labels,
+        'grafico_valores': valores,
     }
     return render(request, 'cal/transacoes_mes.html', contexto)
