@@ -21,7 +21,7 @@
           <td>{{ transacao.data }}</td>
           <td>
             <a href="{% url 'cal:transacao_editar' transacao.id %}" class="btn btn-primary">Editar</a> | 
-            <a href="{% url 'cal:transacao_excluir' transacao.id %}" class="btn btn-danger">Excluir</a>
+            <a href="{% url 'cal:excluir_transacao_lista' transacao.id %}" class="btn btn-danger">Excluir</a>
           </td>
         </tr>
       {% endfor %}

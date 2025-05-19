@@ -1,9 +1,23 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
     <div class="container-fluid">
         <!-- Logo/Brand -->
-        <a class="navbar-brand" href="{% url 'cal:calendar' %}">
+        <a class="navbar-brand" href="{% url 'cal:home' %}">
             {% if user.is_authenticated %}
-            <i class="bi bi-house-fill"></i>  R$ {{ saldo_total|floatformat:2 }}</a>
+            <i class="bi bi-house-fill"></i> </a>
+            <p>
+  <span style="color: rgb(163, 163, 163);">{{ month_name|capfirst }}:</span>
+  <span style="color: {% if saldo_total >= 0 %}green{% else %}red{% endif %};">
+    R$ {{ saldo_total|floatformat:2 }}
+  </span>
+<br>
+  <span style="color: rgb(163, 163, 163);">{{ mes_proximo_nome|capfirst }}:</span>
+  <span style="color: {% if saldo_total_prox >= 0 %}green{% else %}red{% endif %};">
+    R$ {{ saldo_total_prox|floatformat:2 }}
+  </span>
+</p>
+
+
+            
             {% endif %}
         <!-- Botão Toggler para Offcanvas -->
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">

@@ -8,15 +8,38 @@
  
 
  <div class="container mt-5">
-  <h2 class="mb-4">Bem-vindo ao Sistema de Controle de Gastos</h2>
-  <p>Sistema para registrar e visualizar gastos por data, com calendário interativo, cadastro de compras e interface responsiva.</p>
-  
-  <h3 class="mt-4">Funcionalidades:</h3>
+
+ 
   <ul>
-    <li><strong>Compras por Dia:</strong> Visualize os gastos organizados por data.</li>
-<li><strong>Nova Transação:</strong> Cadastre despesas facilmente.</li>
-<li><strong>Balanço Mensal:</strong> Acompanhe seus totais mensais.</li>
-<li><strong>Interface Responsiva:</strong> Funciona bem em qualquer dispositivo.</li>
+    <section class="container mt-4">
+  <h2 class="mb-3">Bem-vindo à sua Carteira Digital</h2>
+  <p class="lead">Gerencie seus gastos de forma simples e visual.</p>
+
+  <ul class="list-group">
+    <li class="list-group-item">
+      📆 <strong>Compras por Dia:</strong> Visualize os gastos organizados por data no calendário.
+    </li>
+    <li class="list-group-item">
+      💸 <strong>Nova Transação:</strong> Cadastre despesas ou entradas facilmente.
+    </li>
+    <li class="list-group-item">
+      📊 <strong>Balanço Mensal:</strong> Acompanhe seus totais mensais e entenda para onde vai seu dinheiro.
+    </li>
+    <li class="list-group-item">
+      📱 <strong>Interface Responsiva:</strong> Funciona bem em qualquer dispositivo — celular, tablet ou desktop.
+    </li>
+    <li class="list-group-item">
+      🔘 <strong>Menu Rápido (Botão Flutuante):</strong> Use o botão no canto inferior direito para:
+      <ul class="mt-2">
+        <li>💰 <strong>Adicionar Transação</strong></li>
+        <li>📅 <strong>Acessar o Calendário</strong></li>
+        <li>📊 <strong>Ver o Resumo Mensal</strong></li>
+        <li>🌙 <strong>Ativar o Modo Escuro</strong></li>
+      </ul>
+    </li>
+ 
+
+
 
   </ul>
   {% if user.is_authenticated %}
@@ -25,7 +48,7 @@
                             <a href="{% url 'login' %}" class="btn btn-outline-success">Login</a>
                         {% endif %}
 </div>
-
+</section>
  
  
 {% endblock %}

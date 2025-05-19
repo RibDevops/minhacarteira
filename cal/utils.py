@@ -21,7 +21,10 @@ class Calendar(calendar.HTMLCalendar):
         transacoes_do_dia = transacoes.filter(data__day=day)
         # itens = ''.join(f'<li>{t.get_html_url}</li>' for t in transacoes_do_dia)
         # itens = ''.join(f'<li>{t.titulo}</li>' for t in transacoes_do_dia)
-        itens = ''.join(f'<li><a href="{t.get_absolute_url()}">{t.titulo} - R$ {t.valor}</a></li>' for t in transacoes_do_dia)
+        # itens = ''.join(f'<li><a href="{t.get_absolute_url()}">{t.titulo} - R$ {t.valor}</a></li>' for t in transacoes_do_dia)
+        itens = ''.join(f'<li><a href="{t.get_absolute_url()}">{t.titulo}{" - CC" if not t.valor else f" - R$ {t.valor:.2f}"}</a></li>'
+        for t in transacoes_do_dia)
+
 
         if day != 0:
             css_class = 'today' if date(self.year, self.month, day) == datetime.today().date() else ''

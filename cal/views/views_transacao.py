@@ -11,6 +11,15 @@ from collections import defaultdict
 
 from ..models import Transacao
 from ..forms import TransacaoForm
+from dateutil.relativedelta import relativedelta
+from ..models import Tipo, Transacao
+from ..forms import TransacaoForm
+from django.shortcuts import render, redirect
+
+from dateutil.relativedelta import relativedelta
+from django.shortcuts import render, redirect
+from ..forms import TransacaoForm
+from ..models import Transacao
 
 
 @login_required
@@ -25,6 +34,12 @@ def excluir_transacao(request, pk):
     return redirect('cal:transacoes_mes')
 
 @login_required
+def excluir_transacao_lista(request, pk):
+    transacao = get_object_or_404(Transacao, pk=pk, user=request.user)
+    transacao.delete()
+    return redirect('cal:listar_transacoes')
+
+@login_required
 def transacao_editar(request, pk=None):
     instancia = get_object_or_404(Transacao, pk=pk, user=request.user) if pk else Transacao(user=request.user)
     form = TransacaoForm(request.POST or None, instance=instancia)
@@ -36,6 +51,37 @@ def transacao_editar(request, pk=None):
     return render(request, 'cal/event.html', {'form': form})
 
 @login_required
+# def transacao_view(request):
+#     form = TransacaoForm(request.POST or None)
+#     print(request.POST)
+#     if request.method == 'POST' and form.is_valid():
+#         print(request.POST)
+#         transacao = form.save(commit=False)
+#         transacao.user = request.user
+
+#         parcelas = form.cleaned_data.get('parcelas')
+#         # print(f'qtd: {parcelas}')
+#         if parcelas and parcelas > 1:
+#             for i in range(parcelas):
+#                 nova = Transacao(
+#                     user=request.user,
+#                     tipo=transacao.tipo,
+#                     titulo=transacao.titulo + f' ({i+1}/{parcelas})',
+#                     valor=(transacao.valor)/parcelas,
+#                     data=transacao.data + relativedelta(months=i),
+#                     parcelas=parcelas,
+#                     data_fim=transacao.data + relativedelta(months=parcelas-1)
+#                 )
+#                 nova.save()
+#         else:
+#             transacao.save()
+
+#         return redirect('cal:transacoes_mes')
+
+#     return render(request, 'cal/transacao_form.html', {'form': form})
+
+
+
 def transacao_view(request):
     form = TransacaoForm(request.POST or None)
 
@@ -43,26 +89,57 @@ def transacao_view(request):
         transacao = form.save(commit=False)
         transacao.user = request.user
 
-        parcelas = form.cleaned_data.get('parcelas')
-        # print(f'qtd: {parcelas}')
-        if parcelas and parcelas > 1:
+        tipo = transacao.tipo
+        parcelas = form.cleaned_data.get('parcelas') or 1
+        valor_total = transacao.valor or 0
+
+        # Caso seja compra no cartão (crédito)
+        if tipo.id == 3:
+            # Criar registro visual na data da compra (sem valor)
+            Transacao.objects.create(
+                user=request.user,
+                tipo=tipo,
+                titulo=transacao.titulo,
+                valor=0,
+                data=transacao.data,
+                parcelas=None,
+                data_fim=None,
+            )
+
+            # Criar as parcelas a partir do mês seguinte
             for i in range(parcelas):
-                nova = Transacao(
+                Transacao.objects.create(
                     user=request.user,
-                    tipo=transacao.tipo,
-                    titulo=transacao.titulo + f' ({i+1}/{parcelas})',
-                    valor=transacao.valor,
-                    data=transacao.data + relativedelta(months=i),
+                    tipo=tipo,
+                    titulo=f"{transacao.titulo} ({i+1}/{parcelas})",
+                    valor=valor_total / parcelas,
+                    data=transacao.data + relativedelta(months=i + 1),
                     parcelas=parcelas,
-                    data_fim=transacao.data + relativedelta(months=parcelas-1)
+                    data_fim=transacao.data + relativedelta(months=parcelas),
                 )
-                nova.save()
         else:
-            transacao.save()
+            # Transação normal (débito ou crédito sem parcelamento)
+            if parcelas > 1:
+                for i in range(parcelas):
+                    Transacao.objects.create(
+                        user=request.user,
+                        tipo=tipo,
+                        titulo=f"{transacao.titulo} ({i+1}/{parcelas})",
+                        valor=valor_total / parcelas,
+                        data=transacao.data + relativedelta(months=i),
+                        parcelas=parcelas,
+                        data_fim=transacao.data + relativedelta(months=parcelas - 1),
+                    )
+            else:
+                transacao.save()
 
         return redirect('cal:transacoes_mes')
 
     return render(request, 'cal/transacao_form.html', {'form': form})
+
+
+
+
 
 def get_absolute_url(self):
         return reverse('transacao_editar', args=[self.id])

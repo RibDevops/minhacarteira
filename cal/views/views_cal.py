@@ -19,7 +19,10 @@ from dateutil.relativedelta import relativedelta
 from cal.models import Transacao
 # from cal.utils import Calendar, get_date, prev_month, next_month  # suas funções utilitárias
 from cal.utils import Calendar
-
+from datetime import date
+from calendar import monthrange
+from django.utils.safestring import mark_safe
+from django.db.models import Sum
 
 def get_date(req_month):
     if req_month:
@@ -44,32 +47,94 @@ def next_month(d):
 
 
 @method_decorator(login_required, name='dispatch')
+# class CalendarView(generic.ListView):
+#     model = Transacao
+#     template_name = 'cal/calendar.html'
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         d = get_date(self.request.GET.get('month'))  # data baseada na query string (?month=2025-05)
+
+#         # Transações do mês visualizado
+#         transacoes = Transacao.objects.filter(
+#             user=self.request.user,
+#             data__year=d.year,
+#             data__month=d.month
+#         )
+
+#         total_creditos = transacoes.filter(tipo__is_credito=True).aggregate(total=Sum('valor'))['total'] or 0
+#         total_debitos = transacoes.filter(tipo__is_credito=False).aggregate(total=Sum('valor'))['total'] or 0
+#         saldo_total = total_creditos - total_debitos
+
+
+
+#         # Calendário HTML
+#         cal = Calendar(d.year, d.month)
+#         html_cal = cal.formatmonth(withyear=True, transacoes=transacoes)
+
+#         context.update({
+#             'calendar': mark_safe(html_cal),
+#             'prev_month': prev_month(d),
+#             'next_month': next_month(d),
+#             'month_name': d.strftime("%B"),
+#             'year': d.year,
+#             'total_creditos': total_creditos,
+#             'total_debitos': total_debitos,
+#             'saldo_total': saldo_total,
+#         })
+
+#         return context
+
+
+
 class CalendarView(generic.ListView):
     model = Transacao
     template_name = 'cal/calendar.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        d = get_date(self.request.GET.get('month'))  # data baseada na query string (?month=2025-05)
 
-        # Transações do mês visualizado
-        transacoes = Transacao.objects.filter(
-            user=self.request.user,
+        d = get_date(self.request.GET.get('month'))  # mês atual
+
+        user = self.request.user
+
+        # ==================== MÊS ATUAL ====================
+        transacoes_mes_atual = Transacao.objects.filter(
+            user=user,
             data__year=d.year,
             data__month=d.month
         )
+        print(transacoes_mes_atual)
 
-        # Calcula o saldo para o mês exibido
-        total_creditos = transacoes.filter(tipo__is_credito__iexact='1').aggregate(total=Sum('valor'))['total'] or 0
-        # print(f'cal:{total_creditos}')
-        total_debitos = transacoes.filter(tipo__is_credito__iexact='0').aggregate(total=Sum('valor'))['total'] or 0
-        # print(total_debitos)
+        total_creditos = transacoes_mes_atual.filter(tipo__is_credito=True).aggregate(total=Sum('valor'))['total'] or 0
+        total_debitos = transacoes_mes_atual.filter(tipo__is_credito=False).aggregate(total=Sum('valor'))['total'] or 0
         saldo_total = total_creditos - total_debitos
-        # print(saldo_total)
 
-        # Calendário HTML
+        # ==================== PRÓXIMO MÊS ====================
+        if d.month == 12:
+            proximo_ano = d.year + 1
+            proximo_mes = 1
+        else:
+            proximo_ano = d.year
+            proximo_mes = d.month + 1
+
+        transacoes_prox_mes = Transacao.objects.filter(
+            user=user,
+            data__year=proximo_ano,
+            data__month=d.month + 1
+        )
+        print(transacoes_prox_mes)
+        total_creditos_prox = transacoes_prox_mes.filter(tipo__is_credito=True).aggregate(total=Sum('valor'))['total'] or 0
+        print(total_creditos_prox)
+        total_debitos_prox = transacoes_prox_mes.filter(tipo__is_credito=False).aggregate(total=Sum('valor'))['total'] or 0
+        print(total_debitos_prox)
+        saldo_total_prox = total_creditos_prox - total_debitos_prox
+        print(saldo_total_prox)
+
+
+        # ==================== CALENDÁRIO HTML ====================
         cal = Calendar(d.year, d.month)
-        html_cal = cal.formatmonth(withyear=True, transacoes=transacoes)
+        html_cal = cal.formatmonth(withyear=True, transacoes=transacoes_mes_atual)
 
         context.update({
             'calendar': mark_safe(html_cal),
@@ -80,10 +145,20 @@ class CalendarView(generic.ListView):
             'total_creditos': total_creditos,
             'total_debitos': total_debitos,
             'saldo_total': saldo_total,
+
+            # Adiciona dados do próximo mês
+            'saldo_total_prox': saldo_total_prox,
+            'total_creditos_prox': total_creditos_prox,
+            'total_debitos_prox': total_debitos_prox,
+            'mes_proximo_nome': date(proximo_ano, proximo_mes, 1).strftime("%B"),
         })
 
         return context
-    
+
+
+
+
+
 
 # @method_decorator(login_required, name='dispatch')
 # class CalendarView(generic.ListView):

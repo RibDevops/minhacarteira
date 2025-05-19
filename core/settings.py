@@ -69,6 +69,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 # "cal.context_processors.transacoes_mes_context",
                 # "cal.views.views_dashboard.dashboard",
+                'cal.context_processors.saldo_context', 
 
                 
 

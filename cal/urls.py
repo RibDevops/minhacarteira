@@ -26,6 +26,7 @@ urlpatterns = [
     path('transacao/nova/', transacao_view, name='transacao_nova'),
     path('transacao/editar/<int:pk>/', transacao_editar, name='transacao_editar'),
     path('transacao/excluir/<int:pk>/', excluir_transacao, name='transacao_excluir'),
+    path('excluir_transacao_lista/<int:pk>/', excluir_transacao_lista, name='excluir_transacao_lista'),
 
     # Registro/Login/Logout
     path('register/', register_view, name='register'),
