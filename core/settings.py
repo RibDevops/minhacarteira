@@ -12,6 +12,18 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 import os
 from pathlib import Path
+from decouple import config
+import base64
+
+#new_key = base64.urlsafe_b64encode(os.urandom(32))
+# print(new_key)
+SECRET_KEY = config('SECRET_KEY')
+# FIELD_ENCRYPTION_KEY = os.environ.get('FIELD_ENCRYPTION_KEY', '')
+FIELD_ENCRYPTION_KEY = config('FIELD_ENCRYPTION_KEY')
+
+
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,7 +33,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-8(+6ey(k5wt+8+6%l*08q%omi)81)b)a@gwya#*2twmn!n$2zl"
+# SECRET_KEY = "django-insecure-8(+6ey(k5wt+8+6%l*08q%omi)81)b)a@gwya#*2twmn!n$2zl"
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -38,8 +51,10 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'django.contrib.auth',
+    "debug_toolbar",
     "cal",
     'django.contrib.humanize',
+    'encrypted_model_fields',
     
 ]
 
@@ -52,6 +67,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     'django.middleware.locale.LocaleMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "core.urls"
@@ -67,11 +83,9 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                # "cal.context_processors.transacoes_mes_context",
-                # "cal.views.views_dashboard.dashboard",
-                'cal.context_processors.saldo_context', 
+                "cal.context_processors.saldos_mensais",
 
-                
+
 
             ],
         },
@@ -192,3 +206,8 @@ LOGGING = {
     },
 }
 
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
+]

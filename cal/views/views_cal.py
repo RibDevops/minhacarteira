@@ -104,7 +104,7 @@ class CalendarView(generic.ListView):
             data__year=d.year,
             data__month=d.month
         )
-        print(transacoes_mes_atual)
+        # print(transacoes_mes_atual)
 
         total_creditos = transacoes_mes_atual.filter(tipo__is_credito=True).aggregate(total=Sum('valor'))['total'] or 0
         total_debitos = transacoes_mes_atual.filter(tipo__is_credito=False).aggregate(total=Sum('valor'))['total'] or 0
@@ -123,13 +123,13 @@ class CalendarView(generic.ListView):
             data__year=proximo_ano,
             data__month=d.month + 1
         )
-        print(transacoes_prox_mes)
+        # print(transacoes_prox_mes)
         total_creditos_prox = transacoes_prox_mes.filter(tipo__is_credito=True).aggregate(total=Sum('valor'))['total'] or 0
-        print(total_creditos_prox)
+        # print(total_creditos_prox)
         total_debitos_prox = transacoes_prox_mes.filter(tipo__is_credito=False).aggregate(total=Sum('valor'))['total'] or 0
-        print(total_debitos_prox)
+        # print(total_debitos_prox)
         saldo_total_prox = total_creditos_prox - total_debitos_prox
-        print(saldo_total_prox)
+        # print(saldo_total_prox)
 
 
         # ==================== CALENDÁRIO HTML ====================

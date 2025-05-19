@@ -20,7 +20,7 @@ from dateutil.relativedelta import relativedelta
 from django.shortcuts import render, redirect
 from ..forms import TransacaoForm
 from ..models import Transacao
-
+from decimal import Decimal
 
 @login_required
 def listar_transacoes(request):
@@ -50,7 +50,7 @@ def transacao_editar(request, pk=None):
 
     return render(request, 'cal/event.html', {'form': form})
 
-@login_required
+
 # def transacao_view(request):
 #     form = TransacaoForm(request.POST or None)
 #     print(request.POST)
@@ -81,10 +81,10 @@ def transacao_editar(request, pk=None):
 #     return render(request, 'cal/transacao_form.html', {'form': form})
 
 
-
+@login_required
 def transacao_view(request):
     form = TransacaoForm(request.POST or None)
-
+    print(f'post: {request.POST}')
     if request.method == 'POST' and form.is_valid():
         transacao = form.save(commit=False)
         transacao.user = request.user
@@ -131,7 +131,9 @@ def transacao_view(request):
                         data_fim=transacao.data + relativedelta(months=parcelas - 1),
                     )
             else:
+                print(f'Transação: título={transacao.titulo}, valor=R$ {transacao.valor:.2f}')
                 transacao.save()
+                
 
         return redirect('cal:transacoes_mes')
 
@@ -169,10 +171,18 @@ def transacoes_mes_view(request):
         data__lt=data_fim
     ).order_by('-data')
 
+    # total = sum([
+    #     -t.valor if t.tipo.descricao.lower() == 'débito' else t.valor
+    #     for t in transacoes
+    # ])
+    
+
     total = sum([
-        -t.valor if t.tipo.descricao.lower() == 'débito' else t.valor
+        -Decimal(t.valor) if t.tipo.descricao.lower() == 'débito' else Decimal(t.valor)
         for t in transacoes
+        if t.valor is not None and str(t.valor).strip() != ''
     ])
+
 
     # Prepara dados para o gráfico por tipo
     dados_por_tipo = defaultdict(Decimal)  # Corrigido para Decimal
