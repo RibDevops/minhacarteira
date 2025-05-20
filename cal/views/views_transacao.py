@@ -156,6 +156,7 @@ class TransacaoUpdateView(UpdateView):
 
 @login_required
 def transacoes_mes_view(request):
+    print('entrou na view transacoes_mes_view')
     # Código anterior...
     ano = int(request.GET.get('ano', date.today().year))
     mes = int(request.GET.get('mes', date.today().month))
@@ -170,7 +171,7 @@ def transacoes_mes_view(request):
         data__gte=data_inicio,
         data__lt=data_fim
     ).order_by('-data')
-
+    print(f'transacoes na mes: {transacoes}')
     # total = sum([
     #     -t.valor if t.tipo.descricao.lower() == 'débito' else t.valor
     #     for t in transacoes
@@ -178,7 +179,7 @@ def transacoes_mes_view(request):
     
 
     total = sum([
-        -Decimal(t.valor) if t.tipo.descricao.lower() == 'débito' else Decimal(t.valor)
+        -Decimal(t.valor) if t.tipo.descricao.lower() == 'Pagando' else Decimal(t.valor)
         for t in transacoes
         if t.valor is not None and str(t.valor).strip() != ''
     ])
@@ -187,7 +188,7 @@ def transacoes_mes_view(request):
     # Prepara dados para o gráfico por tipo
     dados_por_tipo = defaultdict(Decimal)  # Corrigido para Decimal
     for t in transacoes:
-        valor = -t.valor if t.tipo.descricao.lower() == 'débito' else t.valor
+        valor = -t.valor if t.tipo.descricao.lower() == 'Pagando' else t.valor
         dados_por_tipo[t.tipo.descricao] += valor  # Agora soma Decimal com Decimal
 
     labels = list(dados_por_tipo.keys())

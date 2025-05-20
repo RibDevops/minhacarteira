@@ -54,11 +54,11 @@ class Transacao(BaseModel):
 #     parcelas = models.IntegerField(null=True, blank=True, verbose_name="Quantidade de parcelas")
 #     data_fim = models.DateField(null=True, blank=True, verbose_name="Data da última parcela")
 
-    def get_valor(self):
-        return Decimal(self.valor)
+    # def get_valor(self):
+    #     return Decimal(self.valor)
 
-    def set_valor(self, val):
-        self.valor = str(val)
+    # def set_valor(self, val):
+    #     self.valor = str(val)
 
 # class Transacao(BaseModel):
 #     tipo = models.ForeignKey(Tipo, on_delete=models.PROTECT, verbose_name="Tipo da transação")

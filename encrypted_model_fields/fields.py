@@ -5,14 +5,19 @@ from cryptography.fernet import Fernet, InvalidToken
 from django.conf import settings
 from django.db import models
 
+from django.conf import settings
+import base64
+from cryptography.fernet import Fernet
 logger = logging.getLogger(__name__)
 
-# Geração da chave (não inclua em produção!)
-# print(Fernet.generate_key().decode())
+import base64
+from cryptography.fernet import Fernet
+from django.conf import settings
 
-# Usa chave do settings
-FERNET_KEY = settings.SECRET_KEY[:32].encode()  # segura se < 32
-fernet = Fernet(base64.urlsafe_b64encode(FERNET_KEY.ljust(32, b"0")))
+# Decodifica a chave base64 da configuração
+fernet_key = settings.FERNET_SECRET_KEY.encode()  # string para bytes
+# Aqui você pode testar se é válida
+fernet = Fernet(fernet_key)
 
 
 class EncryptedCharField(models.CharField):

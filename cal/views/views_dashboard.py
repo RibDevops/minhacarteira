@@ -7,29 +7,39 @@ def dashboard(request):
     # Filtrar transações do usuário
     transacoes = Transacao.objects.filter(user=user)
 
-    # Somar os valores por categoria
-    credito = transacoes.filter(categoria='CREDITO').aggregate(total=models.Sum('valor'))['total'] or 0
-    debito = transacoes.filter(categoria='DEBITO').aggregate(total=models.Sum('valor'))['total'] or 0
-    salario = transacoes.filter(categoria='SALARIO').aggregate(total=models.Sum('valor'))['total'] or 0
-    emprestimo = transacoes.filter(categoria='EMPRESTIMO').aggregate(total=models.Sum('valor'))['total'] or 0
-    cripto = transacoes.filter(categoria='CRIPTO').aggregate(total=models.Sum('valor'))['total'] or 0
+
+    # Somar os valores por tipo
+    credito = transacoes.filter(tipo='Recebendo').aggregate(total=models.Sum('valor'))['total'] or 0
+    debito = transacoes.filter(tipo='Pagando').aggregate(total=models.Sum('valor'))['total'] or 0
+    salario = transacoes.filter(tipo='SALARIO').aggregate(total=models.Sum('valor'))['total'] or 0
+    emprestimo = transacoes.filter(tipo='EMPRESTIMO').aggregate(total=models.Sum('valor'))['total'] or 0
+    cripto = transacoes.filter(tipo='CRIPTO').aggregate(total=models.Sum('valor'))['total'] or 0
 
     # Calcular o saldo
     saldo = credito - debito
 
     # Verificar se está em crédito ou débito
     estado = "Crédito" if saldo >= 0 else "Débito"
+    print(">>> Transações do usuário:", transacoes.count())
+    for t in transacoes:
+        print(f" - ID: {t.id} | valor: {t.valor} | tipo: {t.tipo}")
+    print(">>> crédito:", credito)
+    print(">>> débito:", debito)
+    print(">>> saldo:", saldo)
 
     # Renderizar na página
     return render(request, 'dashboard.html', {
-        'credito': credito,
-        'debito': debito,
-        'saldo': saldo,
-        'estado': estado,
-        'salario': salario,
-        'emprestimo': emprestimo,
-        'cripto': cripto,
+    'saldo_total': saldo,
+    'total_creditos': credito,
+    'total_debitos': debito,
+    'estado': estado,
+    'salario': salario,
+    'emprestimo': emprestimo,
+    'cripto': cripto,
+    'transacoes': transacoes,  # <-- IMPORTANTE para renderizar a lista!
     })
+
+
 
 from datetime import datetime, timedelta
 

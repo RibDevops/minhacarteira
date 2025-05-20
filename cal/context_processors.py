@@ -16,6 +16,7 @@ def saldos_mensais(request):
         data__year=hoje.year,
         data__month=hoje.month
     )
+    print(f'transacoes_mes: {transacoes_mes}')
     total_creditos = transacoes_mes.filter(tipo__is_credito=True).aggregate(total=Sum('valor'))['total'] or 0
     total_debitos = transacoes_mes.filter(tipo__is_credito=False).aggregate(total=Sum('valor'))['total'] or 0
     saldo_total = total_creditos - total_debitos

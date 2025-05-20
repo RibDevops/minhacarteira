@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load humanize %}
-{% load l10n %}
 
 {% block content %}
 
@@ -8,14 +7,13 @@
   <i class="bi bi-cash-coin"></i> Transações - {{ mes_atual|date:"F \d\e Y" }}
 </h2>
 
-
 <!-- Dashboard Resumido -->
 <div class="row text-center mb-4">
   <div class="col-md-3 col-sm-6 mb-2">
     <div class="card bg-success text-white shadow rounded">
       <div class="card-body p-2">
         <h5 class="mb-1">Saldo Atual</h5>
-        <h6 class="mb-0">R$ {{ saldo_total|floatformat:2|localize }}</h6>
+        <h6 class="mb-0">R$ {{ saldo_total|floatformat:2 }}</h6>
       </div>
     </div>
   </div>
@@ -23,7 +21,7 @@
     <div class="card bg-primary text-white shadow rounded">
       <div class="card-body p-2">
         <h5 class="mb-1">Total de Créditos</h5>
-        <h6 class="mb-0">R$ {{ total_creditos|floatformat:2|localize }}</h6>
+        <h6 class="mb-0">R$ {{ total_creditos|floatformat:2 }}</h6>
       </div>
     </div>
   </div>
@@ -31,13 +29,12 @@
     <div class="card bg-danger text-white shadow rounded">
       <div class="card-body p-2">
         <h5 class="mb-1">Total de Débitos</h5>
-        <h6 class="mb-0">R$ {{ total_debitos|floatformat:2|localize }}</h6>
+        <h6 class="mb-0">R$ {{ total_debitos|floatformat:2 }}</h6>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Navegação de meses -->
 <!-- Navegação de meses -->
 <div class="d-flex justify-content-between flex-wrap mb-3 gap-2">
   <a href="?mes={{ mes_anterior.month }}&ano={{ mes_anterior.year }}" class="btn btn-outline-primary">
@@ -48,8 +45,6 @@
   </a>
 </div>
 
-
-<!-- Tabela -->
 <!-- Tabela -->
 <div class="table-responsive">
   <table class="table table-striped mt-4 align-middle">
@@ -75,21 +70,16 @@
           {{ transacao.titulo }}
         </td>
         <td>
-          {% if transacao.tipo.is_credito %}
-            <span class="text-success">R$ {{ transacao.valor|floatformat:2|localize }}</span>
-          {% else %}
-            <span class="text-danger">-R$ {{ transacao.valor|floatformat:2|localize }}</span>
-          {% endif %}
+          <span class="{% if transacao.tipo.is_credito %}text-success{% else %}text-danger{% endif %}">
+            {% if transacao.tipo.is_credito %}+{% else %}-{% endif %}
+            R$ {{ transacao.valor|floatformat:2 }}
+          </span>
         </td>
         <td>{{ transacao.data|date:"d \d\e F \d\e Y" }}</td>
-    
-        <!-- Botão Editar -->
         <td>
           <a href="{% url 'cal:transacao_editar' transacao.id %}" class="btn btn-sm btn-outline-primary" title="Editar">
             <i class="bi bi-pencil-square"></i>
           </a>
-          
-     
           <form action="{% url 'cal:transacao_excluir' transacao.id %}" method="post" style="display:inline;">
             {% csrf_token %}
             <button type="submit" class="btn btn-sm btn-danger" title="Excluir" onclick="return confirm('Confirma exclusão?');">
@@ -97,28 +87,24 @@
             </button>
           </form>
         </td>
-    
       </tr>
       {% empty %}
       <tr><td colspan="6">Nenhuma transação este mês.</td></tr>
       {% endfor %}
     </tbody>
-    
     <tfoot>
       <tr class="table-secondary">
         <td colspan="2"><strong>Total:</strong></td>
         <td colspan="2">
-          <strong>R$ {{ saldo_total|floatformat:2|localize }}</strong>
+          <strong>R$ {{ saldo_total|floatformat:2 }}</strong>
         </td>
       </tr>
     </tfoot>
   </table>
-  </div>
-  
+</div>
 
-<!-- Container flexível para os gráficos lado a lado e responsivos -->
+<!-- Gráficos -->
 <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 40px;">
-
   <div class="d-flex flex-column flex-md-row justify-content-center align-items-start gap-4 mt-5">
     <div class="w-100" style="max-width: 400px; height: 350px;">
       <canvas id="graficoPizza" role="img" aria-label="Gráfico de Pizza de Transações"></canvas>
@@ -127,25 +113,20 @@
       <canvas id="graficoBarras" role="img" aria-label="Gráfico de Barras de Transações"></canvas>
     </div>
   </div>
-  
-
 </div>
 
-<!-- Importação do Chart.js (biblioteca para gráficos) -->
+<!-- Importação do Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-  // Pegamos o contexto do canvas do gráfico de pizza para desenhar
   const ctxPizza = document.getElementById('graficoPizza').getContext('2d');
-
-  // Criamos o gráfico de pizza usando os dados enviados do Django
   new Chart(ctxPizza, {
-    type: 'pie', // Tipo de gráfico: pizza
+    type: 'pie',
     data: {
-      labels: {{ grafico_labels|safe }}, // Etiquetas (ex: tipos de transações)
+      labels: {{ grafico_labels|safe }},
       datasets: [{
-        label: 'Transações por tipo', // Legenda do conjunto de dados
-        data: {{ grafico_valores|safe }}, // Valores numéricos para o gráfico
+        label: 'Transações por tipo',
+        data: {{ grafico_valores|safe }},
         backgroundColor: [
           '#4CAF50', '#F44336', '#FFC107', '#2196F3', '#9C27B0',
           '#FF5722', '#00BCD4', '#8BC34A', '#E91E63', '#607D8B'
@@ -154,54 +135,39 @@
       }]
     },
     options: {
-      responsive: true, // O gráfico vai ajustar tamanho automaticamente
-      maintainAspectRatio: false, // Permite ajuste de largura e altura
+      responsive: true,
+      maintainAspectRatio: false,
       plugins: {
         legend: {
-          position: 'right' // Posição da legenda (direita do gráfico)
+          position: 'right'
         }
       }
     }
   });
 
-  // Pegamos o contexto do canvas do gráfico de barras
   const ctxBarras = document.getElementById('graficoBarras').getContext('2d');
-
-  // Criamos um gráfico de barras como exemplo (use seus dados aqui)
   new Chart(ctxBarras, {
-  type: 'bar',
-  data: {
-    labels: {{ grafico_labels|safe }},
-    datasets: [{
-      label: 'Valores por tipo',
-      data: {{ grafico_valores|safe }},
-      backgroundColor: ['#4CAF50', '#F44336'],  // cores diferentes para cada barra
-      borderWidth: 1
-    }]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-      y: {
-        beginAtZero: true
-      }
+    type: 'bar',
+    data: {
+      labels: {{ grafico_labels|safe }},
+      datasets: [{
+        label: 'Valores por tipo',
+        data: {{ grafico_valores|safe }},
+        backgroundColor: ['#4CAF50', '#F44336'],
+        borderWidth: 1
+      }]
     },
-    plugins: {
-      legend: {
-        position: 'top'
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: { beginAtZero: true }
+      },
+      plugins: {
+        legend: { position: 'top' }
       }
     }
-  }
-});
-
+  });
 </script>
-
-<!-- Botão Flutuante "Adicionar Transação" -->
-<!-- <a href="{% url 'cal:transacao_nova' %}" class="btn btn-primary rounded-circle shadow-lg"
-   style="position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px;
-          display: flex; align-items: center; justify-content: center; font-size: 28px; z-index: 1000;">
-  <i class="bi bi-plus-lg"></i>
-</a> -->
 
 {% endblock %}

@@ -15,13 +15,21 @@ from pathlib import Path
 from decouple import config
 import base64
 
-#new_key = base64.urlsafe_b64encode(os.urandom(32))
-# print(new_key)
-SECRET_KEY = config('SECRET_KEY')
-# FIELD_ENCRYPTION_KEY = os.environ.get('FIELD_ENCRYPTION_KEY', '')
-FIELD_ENCRYPTION_KEY = config('FIELD_ENCRYPTION_KEY')
+from decouple import config
+
+SECRET_KEY = config('SECRET_KEY', default='8-!*@7%uwq-5h9=j=qzz@x@)8^b)%a*vj&z%_sghzg$&jhs4sj')
+FERNET_SECRET_KEY = config('FERNET_SECRET_KEY')
+
+# Pode validar se as chaves foram carregadas:
+# if not SECRET_KEY or SECRET_KEY == '8-!*@7%uwq-5h9=j=qzz@x@)8^b)%a*vj&z%_sghzg$&jhs4sj':
+#     raise Exception("SECRET_KEY não está configurada corretamente!")
+
+# if not FERNET_SECRET_KEY:
+#     raise Exception("FERNET_SECRET_KEY não está configurada corretamente!")
 
 
+# SECRET_KEY = config('SECRET_KEY', default='')  # Nunca deixe vazio em produção!
+# FERNET_SECRET_KEY = config('FERNET_SECRET_KEY')  # Essa chave deve estar base64 urlsafe encoded
 
 
 
