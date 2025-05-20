@@ -25,7 +25,7 @@ def categoria_nova(request):
 
 # ATUALIZAR CATEGORIA
 def categoria_update(request, pk):
-    categoria = get_object_or_404(Categoria, pk=pk, user=request.user)
+    categoria = get_object_or_404(Categoria, pk=pk)
     if request.method == 'POST':
         form = CategoriaForm(request.POST, instance=categoria)
         if form.is_valid():
@@ -38,7 +38,7 @@ def categoria_update(request, pk):
 
 # EXCLUIR CATEGORIA
 def categoria_delete(request, pk):
-    categoria = get_object_or_404(Categoria, pk=pk, user=request.user)
+    categoria = get_object_or_404(Categoria, pk=pk)
     if request.method == 'POST':
         categoria.delete()
         messages.success(request, 'Categoria excluída com sucesso!')

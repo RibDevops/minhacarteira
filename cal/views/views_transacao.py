@@ -332,11 +332,14 @@ def transacoes_mes_view(request):
     valores = [float(v) for v in dados_por_tipo.values()]
 
     # Gráfico por categoria
+    # Gráfico por categoria (exclui transações sem categoria)
     dados_por_categoria = (
-        transacoes.values('categoria__nome')
-        .annotate(total=Sum('valor'))
-        .order_by('-total')
+        transacoes.exclude(categoria__isnull=True)
+                .values('categoria__nome')
+                .annotate(total=Sum('valor'))
+                .order_by('-total')
     )
+
 
     categorias = [item['categoria__nome'] for item in dados_por_categoria]
     totais_categoria = [float(item['total']) for item in dados_por_categoria]

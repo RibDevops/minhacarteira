@@ -58,3 +58,8 @@ def resetar_senha(request, user_id):
 
 def home(request):
     return render(request, 'home.html', {})
+
+from django.shortcuts import render
+
+def contato(request):
+    return render(request, 'contato.html')

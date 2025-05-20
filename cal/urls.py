@@ -56,6 +56,8 @@ urlpatterns = [
     path('usuarios/resetar_senha/<int:user_id>/', views_user.resetar_senha, name='resetar_senha'),
     path('usuarios/desativar_usuario/<int:user_id>/', views_user.desativar_usuario, name='desativar_usuario'),
 
+    path('contato/', views_user.contato, name='contato'),
+
 ]
 
 

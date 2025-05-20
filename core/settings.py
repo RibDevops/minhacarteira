@@ -59,7 +59,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'django.contrib.auth',
-    "debug_toolbar",
+    # "debug_toolbar",
     "cal",
     'django.contrib.humanize',
     'encrypted_model_fields',
@@ -75,7 +75,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     'django.middleware.locale.LocaleMiddleware',
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
+    # "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "core.urls"

@@ -71,13 +71,13 @@
           {{ transacao.titulo }}
         </td>
         <td>
+          {{ transacao.categoria.nome|default:"-" }}
+        </td>
+        <td>
           <span class="{% if transacao.tipo.is_credito %}text-success{% else %}text-danger{% endif %}">
             {% if transacao.tipo.is_credito %}+{% else %}-{% endif %}
             R$ {{ transacao.valor|floatformat:2 }}
           </span>
-        </td>
-        <td>
-          {{ transacao.categoria.nome }}
         </td>
         <td>{{ transacao.data|date:"d \d\e F \d\e Y" }}</td>
         <td>
@@ -107,18 +107,20 @@
   </table>
 </div>
 
+<!-- Dados para gráficos em JSON seguro -->
+{{ grafico_labels|json_script:"grafico-labels" }}
+{{ grafico_valores|json_script:"grafico-valores" }}
+{{ grafico_categorias|json_script:"grafico-categorias" }}
+{{ grafico_totais_categoria|json_script:"grafico-totais-categorias" }}
 
 <!-- Gráficos -->
 <div class="row justify-content-center gap-4 mt-5">
-  <!-- Tipo: Pizza e Barras -->
   <div class="col-12 col-md-5">
     <canvas id="graficoPizza" height="350"></canvas>
   </div>
   <div class="col-12 col-md-5">
     <canvas id="graficoBarras" height="350"></canvas>
   </div>
-
-  <!-- Categoria: Pizza e Barras -->
   <div class="col-12 col-md-5">
     <canvas id="graficoCategoriaPizza" height="350"></canvas>
   </div>
@@ -130,10 +132,10 @@
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-  const tipoLabels = {{ grafico_labels|safe }};
-  const tipoValores = {{ grafico_valores|safe }};
-  const categoriaLabels = {{ grafico_categorias|safe }};
-  const categoriaValores = {{ grafico_totais_categoria|safe }};
+  const tipoLabels = JSON.parse(document.getElementById("grafico-labels").textContent);
+  const tipoValores = JSON.parse(document.getElementById("grafico-valores").textContent);
+  const categoriaLabels = JSON.parse(document.getElementById("grafico-categorias").textContent);
+  const categoriaValores = JSON.parse(document.getElementById("grafico-totais-categorias").textContent);
 
   const colors = tipoLabels.map((_, i) => `hsl(${i * 45}, 70%, 60%)`);
 
