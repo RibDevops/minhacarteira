@@ -3,7 +3,7 @@ from django.db.models import Sum
 from .models import Transacao
 
 def saldos_mensais(request):
-    print(">>> Context Processor CHAMADO <<<")
+    # print(">>> Context Processor CHAMADO <<<")
     if not request.user.is_authenticated:
         return {}
 
@@ -16,11 +16,11 @@ def saldos_mensais(request):
         data__year=hoje.year,
         data__month=hoje.month
     )
-    print(f'transacoes_mes: {transacoes_mes}')
+    # print(f'transacoes_mes: {transacoes_mes}')
     total_creditos = transacoes_mes.filter(tipo__is_credito=True).aggregate(total=Sum('valor'))['total'] or 0
     total_debitos = transacoes_mes.filter(tipo__is_credito=False).aggregate(total=Sum('valor'))['total'] or 0
     saldo_total = total_creditos - total_debitos
-    print(f'saldo_total: {saldo_total}')
+    # print(f'saldo_total: {saldo_total}')
 
     # Próximo mês
     if hoje.month == 12:

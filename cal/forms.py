@@ -3,18 +3,29 @@ from django.forms import ModelForm, DateInput, Select
 from .models import Transacao
 
 
+from django.forms import ModelForm
+from django.forms.widgets import DateInput
+from datetime import date
+from .models import Transacao
+
 class TransacaoForm(ModelForm):
     class Meta:
         model = Transacao
-        fields = ['tipo', 'titulo', 'valor', 'data', 'parcelas']  # Remova 'categoria' e 'recorrente'
+        fields = ['tipo', 'titulo', 'valor', 'data', 'parcelas']
         widgets = {
             'data': DateInput(attrs={'type': 'date'}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['titulo'].widget.attrs['placeholder'] = 'ex: Mercado, Salário, Bitcoin'
-        self.fields['titulo'].widget.attrs['class'] = 'form-control'
+        # Define o valor inicial para a data atual
+        self.fields['data'].initial = date.today().strftime('%Y-%m-%d')
+        
+        # Configura os placeholders e classes CSS
+        self.fields['titulo'].widget.attrs.update({
+            'placeholder': 'ex: Mercado, Salário, Bitcoin',
+            'class': 'form-control'
+        })
         self.fields['valor'].widget.attrs['class'] = 'form-control'
         self.fields['data'].widget.attrs['class'] = 'form-control'
         self.fields['tipo'].widget.attrs['class'] = 'form-control'

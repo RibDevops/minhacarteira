@@ -5,6 +5,7 @@ from datetime import date, datetime
 from django.urls import reverse
 from .models import Transacao
 import locale
+import decimal
 
 
 

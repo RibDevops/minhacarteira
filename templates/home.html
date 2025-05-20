@@ -3,52 +3,49 @@
 {% block content %}
  <!-- Page content -->
 
+<div class="container mt-5">
+  <section class="text-center mb-4">
+    <h2>Bem-vindo à sua <strong>Carteira Digital</strong></h2>
+    <p class="lead">Gerencie seus gastos de forma simples, visual e segura.</p>
+  </section>
 
-
- 
-
- <div class="container mt-5">
-
- 
-  <ul>
-    <section class="container mt-4">
-  <h2 class="mb-3">Bem-vindo à sua Carteira Digital</h2>
-  <p class="lead">Gerencie seus gastos de forma simples e visual.</p>
-
-  <ul class="list-group">
+  <ul class="list-group mb-4">
     <li class="list-group-item">
-      📆 <strong>Compras por Dia:</strong> Visualize os gastos organizados por data no calendário.
+      📆 <strong>Compras por Dia:</strong> Visualize seus gastos organizados no calendário mensal.
     </li>
     <li class="list-group-item">
-      💸 <strong>Nova Transação:</strong> Cadastre despesas ou entradas facilmente.
+      💸 <strong>Nova Transação:</strong> Registre despesas ou receitas com rapidez e praticidade.
     </li>
     <li class="list-group-item">
-      📊 <strong>Balanço Mensal:</strong> Acompanhe seus totais mensais e entenda para onde vai seu dinheiro.
+      📊 <strong>Balanço Mensal:</strong> Acompanhe seus totais mensais e entenda melhor sua vida financeira.
     </li>
     <li class="list-group-item">
-      📱 <strong>Interface Responsiva:</strong> Funciona bem em qualquer dispositivo — celular, tablet ou desktop.
+      📱 <strong>Interface Responsiva:</strong> Compatível com celular, tablet e computador.
     </li>
     <li class="list-group-item">
-      🔘 <strong>Menu Rápido (Botão Flutuante):</strong> Use o botão no canto inferior direito para:
-      <ul class="mt-2">
+      🔘 <strong>Menu Rápido (Botão Flutuante):</strong>
+      <ul class="mt-2 mb-0">
         <li>💰 <strong>Adicionar Transação</strong></li>
         <li>📅 <strong>Acessar o Calendário</strong></li>
         <li>📊 <strong>Ver o Resumo Mensal</strong></li>
         <li>🌙 <strong>Ativar o Modo Escuro</strong></li>
       </ul>
     </li>
- 
-<p></p>
-
-
   </ul>
-  {% if user.is_authenticated %}
-  <a href="{% url 'cal:calendar' %}" class="btn btn-primary mt-3">Ver Calendário</a>
-  {% else %}
-                            <a href="{% url 'login' %}" class="btn btn-outline-success">Login</a>
-                        {% endif %}
+
+  <div class="alert alert-info text-center" role="alert">
+    🔐 <strong>Segurança dos Dados:</strong> Todas as transações são armazenadas com criptografia, garantindo sua privacidade e proteção.
+  </div>
+
+  <div class="text-center">
+    {% if user.is_authenticated %}
+      <a href="{% url 'cal:calendar' %}" class="btn btn-primary">Ver Calendário</a>
+    {% else %}
+      <a href="{% url 'login' %}" class="btn btn-outline-success">Fazer Login</a>
+    {% endif %}
+  </div>
 </div>
-</section>
+
  
  
 {% endblock %}

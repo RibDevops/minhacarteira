@@ -21,6 +21,7 @@ from django.shortcuts import render, redirect
 from ..forms import TransacaoForm
 from ..models import Transacao
 from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 
 @login_required
 def listar_transacoes(request):
@@ -92,24 +93,24 @@ def transacao_editar(request, pk=None):
 #         tipo = transacao.tipo
 #         parcelas = form.cleaned_data.get('parcelas') or 1
 #         valor_total = transacao.valor or 0
+
+
 def transacao_view(request):
     form = TransacaoForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
         transacao = form.save(commit=False)
         transacao.user = request.user
 
-        # Garante que o valor é Decimal
-        try:
-            valor_total = Decimal(str(transacao.valor)) if transacao.valor else Decimal('0')
-        except (TypeError, ValueError):
-            valor_total = Decimal('0')
-
         tipo = transacao.tipo
         parcelas = form.cleaned_data.get('parcelas') or 1
-        valor_total = transacao.valor or 0
-        # Caso seja compra no cartão (crédito)
+
+        try:
+            valor_total = Decimal(str(transacao.valor)) if transacao.valor else Decimal('0')
+        except (TypeError, ValueError, InvalidOperation):
+            valor_total = Decimal('0')
+
         if tipo.id == 3:
-            # Criar registro visual na data da compra (sem valor)
+            # Lança uma transação "visual" na data atual
             Transacao.objects.create(
                 user=request.user,
                 tipo=tipo,
@@ -119,8 +120,6 @@ def transacao_view(request):
                 parcelas=None,
                 data_fim=None,
             )
-
-            # Criar as parcelas a partir do mês seguinte
             for i in range(parcelas):
                 Transacao.objects.create(
                     user=request.user,
@@ -132,7 +131,6 @@ def transacao_view(request):
                     data_fim=transacao.data + relativedelta(months=parcelas),
                 )
         else:
-            # Transação normal (débito ou crédito sem parcelamento)
             if parcelas > 1:
                 for i in range(parcelas):
                     Transacao.objects.create(
@@ -145,15 +143,13 @@ def transacao_view(request):
                         data_fim=transacao.data + relativedelta(months=parcelas - 1),
                     )
             else:
-                # print(f'Transação: título={transacao.titulo}, valor=R$ {transacao.valor:.2f}')
-                print(f'Transação: título={transacao.titulo}, valor=R$ {Decimal(str(transacao.valor)):.2f}')
-                # print(f'Transação: título={transacao.titulo}, valor=R$ {valor_total:.2f}')
+                transacao.valor = valor_total
                 transacao.save()
-                
 
         return redirect('cal:transacoes_mes')
 
     return render(request, 'cal/transacao_form.html', {'form': form})
+
 
 
 
@@ -171,81 +167,136 @@ class TransacaoUpdateView(UpdateView):
     success_url = reverse_lazy('cal:calendar')  # ou outra URL para onde redirecionar depois da edição
 
 @login_required
+# def transacoes_mes_view(request):
+#     print('entrou na view transacoes_mes_view')
+#     # Código anterior...
+#     ano = int(request.GET.get('ano', date.today().year))
+#     mes = int(request.GET.get('mes', date.today().month))
+
+#     # data_inicio = make_aware(date(ano, mes, 1))
+#     # data_fim = make_aware(date(ano, mes, 1) + relativedelta(months=1))
+#     data_inicio = make_aware(datetime(ano, mes, 1))
+#     data_fim = make_aware(datetime(ano, mes, 1) + relativedelta(months=1))
+
+#     # transacoes = Transacao.objects.filter(
+#     #     user=request.user,
+#     #     data__gte=data_inicio,
+#     #     data__lt=data_fim
+#     # ).order_by('-data')
+#     # print(f'transacoes na mes: {transacoes.valor}')
+#     # # total = sum([
+#     #     -t.valor if t.tipo.descricao.lower() == 'débito' else t.valor
+#     #     for t in transacoes
+#     # ])
+#     transacoes = Transacao.objects.filter(
+#         user=request.user,
+#         data__gte=data_inicio,
+#         data__lt=data_fim
+#     ).order_by('-data')
+
+#     total = Decimal('0')
+#     for t in transacoes:
+#         if t.valor is not None and str(t.valor).strip() != '':
+#             print(f'Transação: {t.valor}')
+#             total += Decimal(t.valor)
+
+#     print(f'Total no mês: {total}')
+
+#     # total = sum([
+#     #     Decimal(t.valor)
+#     #     for t in transacoes
+#     #     print(f'transacao: {t.valor}')
+#     #     if t.valor is not None and str(t.valor).strip() != ''
+#     # ])
+#     # print(f'Total no mês: {total}')
+
+#     # total = sum([
+#     #     # -Decimal(t.valor) if t.tipo.descricao.lower() == 'Pagando' else Decimal(t.valor)
+#     #     -Decimal(t.valor) if t.tipo.is_credito == False else Decimal(t.valor)
+#     #     for t in transacoes
+#     #     if t.valor is not None and str(t.valor).strip() != ''
+#     # ])
+#     print(f'total: {total}')
+
+
+#     # Prepara dados para o gráfico por tipo
+#     dados_por_tipo = defaultdict(Decimal)  # Corrigido para Decimal
+#     for t in transacoes:
+#         debito = transacoes.filter(tipo__is_credito=False).aggregate(total=models.Sum('valor'))['total'] or 0
+
+#         valor = -t.valor if t.tipo.descricao.lower() == 'Pagando' else t.valor
+#         dados_por_tipo[t.tipo.descricao] += valor
+
+
+#     labels = list(dados_por_tipo.keys())
+#     valores = [float(v) for v in dados_por_tipo.values()]  # Para JSON e JS, converta para float
+
+#     total_creditos = transacoes.filter(tipo__is_credito__iexact='1').aggregate(Sum('valor'))['valor__sum'] or 0
+#     # print(total_creditos)
+    
+#     total_debitos = transacoes.filter(tipo__is_credito__iexact='0').aggregate(Sum('valor'))['valor__sum'] or 0
+#     # print(total_debitos)
+#     # print(f'total_debitos:{total_debitos}')
+#     saldo_total = total_creditos - total_debitos
+#     # print(saldo_total)
+#     contexto = {
+#         'transacoes': transacoes,
+#         'mes_atual': date(ano, mes, 1),
+#         'mes_anterior': date(ano, mes, 1) - relativedelta(months=1),
+#         'mes_proximo': date(ano, mes, 1) + relativedelta(months=1),
+#         'total': total,
+#         'grafico_labels': labels,
+#         'grafico_valores': valores,
+#         'total_creditos': total_creditos,
+#         'total_debitos': total_debitos,
+#         'saldo_total': saldo_total,
+#     }
+#     return render(request, 'cal/transacoes_mes.html', contexto)
 def transacoes_mes_view(request):
-    print('entrou na view transacoes_mes_view')
-    # Código anterior...
     ano = int(request.GET.get('ano', date.today().year))
     mes = int(request.GET.get('mes', date.today().month))
 
-    # data_inicio = make_aware(date(ano, mes, 1))
-    # data_fim = make_aware(date(ano, mes, 1) + relativedelta(months=1))
     data_inicio = make_aware(datetime(ano, mes, 1))
     data_fim = make_aware(datetime(ano, mes, 1) + relativedelta(months=1))
 
-    # transacoes = Transacao.objects.filter(
-    #     user=request.user,
-    #     data__gte=data_inicio,
-    #     data__lt=data_fim
-    # ).order_by('-data')
-    # print(f'transacoes na mes: {transacoes.valor}')
-    # # total = sum([
-    #     -t.valor if t.tipo.descricao.lower() == 'débito' else t.valor
-    #     for t in transacoes
-    # ])
     transacoes = Transacao.objects.filter(
         user=request.user,
         data__gte=data_inicio,
         data__lt=data_fim
     ).order_by('-data')
 
-    total = Decimal('0')
+    # Gráfico por tipo com valores ajustados
+    dados_por_tipo = defaultdict(Decimal)
     for t in transacoes:
-        if t.valor is not None and str(t.valor).strip() != '':
-            print(f'Transação: {t.valor}')
-            total += Decimal(t.valor)
+        try:
+            valor = Decimal(t.valor)
+            if not t.tipo.is_credito:
+                valor = -valor
+            dados_por_tipo[t.tipo.descricao] += valor
 
-    print(f'Total no mês: {total}')
+#     dados_por_tipo = defaultdict(Decimal)
+# for t in transacoes:
+#     valor = Decimal(t.valor)
+#     if not t.tipo.is_credito:
+#         valor = -valor
+#     dados_por_tipo[t.tipo.descricao] += valor
 
-    # total = sum([
-    #     Decimal(t.valor)
-    #     for t in transacoes
-    #     print(f'transacao: {t.valor}')
-    #     if t.valor is not None and str(t.valor).strip() != ''
-    # ])
-    # print(f'Total no mês: {total}')
-
-    # total = sum([
-    #     # -Decimal(t.valor) if t.tipo.descricao.lower() == 'Pagando' else Decimal(t.valor)
-    #     -Decimal(t.valor) if t.tipo.is_credito == False else Decimal(t.valor)
-    #     for t in transacoes
-    #     if t.valor is not None and str(t.valor).strip() != ''
-    # ])
-    print(f'total: {total}')
-
-
-    # Prepara dados para o gráfico por tipo
-    dados_por_tipo = defaultdict(Decimal)  # Corrigido para Decimal
-    for t in transacoes:
-        valor = -t.valor if t.tipo.descricao.lower() == 'Pagando' else t.valor
-        dados_por_tipo[t.tipo.descricao] += valor  # Agora soma Decimal com Decimal
+        except Exception as e:
+            print(f"Erro ao processar transação {t.id}: {e}")
 
     labels = list(dados_por_tipo.keys())
-    valores = [float(v) for v in dados_por_tipo.values()]  # Para JSON e JS, converta para float
+    valores = [float(v) for v in dados_por_tipo.values()]  # Para o gráfico
 
-    total_creditos = transacoes.filter(tipo__is_credito__iexact='1').aggregate(Sum('valor'))['valor__sum'] or 0
-    # print(total_creditos)
-    
-    total_debitos = transacoes.filter(tipo__is_credito__iexact='0').aggregate(Sum('valor'))['valor__sum'] or 0
-    # print(total_debitos)
-    # print(f'total_debitos:{total_debitos}')
+    # Totais
+    total_creditos = transacoes.filter(tipo__is_credito=True).aggregate(Sum('valor'))['valor__sum'] or 0
+    total_debitos = transacoes.filter(tipo__is_credito=False).aggregate(Sum('valor'))['valor__sum'] or 0
     saldo_total = total_creditos - total_debitos
-    # print(saldo_total)
+
     contexto = {
         'transacoes': transacoes,
         'mes_atual': date(ano, mes, 1),
         'mes_anterior': date(ano, mes, 1) - relativedelta(months=1),
         'mes_proximo': date(ano, mes, 1) + relativedelta(months=1),
-        'total': total,
         'grafico_labels': labels,
         'grafico_valores': valores,
         'total_creditos': total_creditos,
