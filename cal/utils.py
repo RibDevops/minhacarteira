@@ -66,3 +66,22 @@ class Calendar(calendar.HTMLCalendar):
     #         return date(year, month, 1)
     #     return datetime.today().date()
 
+    def formatday(self, day, transacoes):
+        transacoes_do_dia = transacoes.filter(data__day=day)
+        
+        itens = []
+        for t in transacoes_do_dia:
+            try:
+                # Tenta converter para Decimal se for string
+                valor = t.valor if isinstance(t.valor, (int, float, decimal.Decimal)) else decimal.Decimal(str(t.valor))
+                item = f'<li><a href="{t.get_absolute_url()}">{t.titulo} - R$ {valor:.2f}</a></li>'
+            except (TypeError, ValueError, decimal.InvalidOperation):
+                item = f'<li><a href="{t.get_absolute_url()}">{t.titulo} - CC</a></li>'
+            itens.append(item)
+        
+        itens_html = ''.join(itens)
+
+        if day != 0:
+            css_class = 'today' if date(self.year, self.month, day) == datetime.today().date() else ''
+            return f'<td class="{css_class}"><span class="date">{day}</span><ul>{itens_html}</ul></td>'
+        return '<td></td>'

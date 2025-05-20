@@ -1,9 +1,10 @@
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 from django.urls import reverse
-from encrypted_model_fields.fields import EncryptedCharField
+from encrypted_model_fields.fields import EncryptedCharField, validate_fernet_key
 from encrypted_model_fields.fields import EncryptedDecimalField
 from encrypted_model_fields.fields import EncryptedCharField  # ou mantenha o EncryptedCharField do pacote, se quiser
 from encrypted_model_fields.fields import EncryptedCharField
@@ -31,6 +32,21 @@ from decimal import Decimal
 
 from encrypted_model_fields.fields import EncryptedCharField, EncryptedDecimalField
 
+class EncryptedDecimalField(models.Field):
+    def __init__(self, *args, max_digits=None, decimal_places=None, **kwargs):
+        self.max_digits = max_digits
+        self.decimal_places = decimal_places
+        self.fernet = validate_fernet_key(settings.FERNET_SECRET_KEY)
+        super().__init__(*args, **kwargs)
+
+    def db_type(self, connection):
+        # Força o Django a criar uma coluna VARCHAR no banco
+        return 'varchar(255)'
+    
+    def get_internal_type(self):
+        return "CharField"
+    
+    # ... (mantenha o resto da implementação igual)
 class Transacao(BaseModel):
     tipo = models.ForeignKey(Tipo, on_delete=models.PROTECT, verbose_name="Tipo da transação")
     # titulo = EncryptedCharField(models.CharField(max_length=200, verbose_name="Título"))

@@ -1,4 +1,24 @@
-ERROR 2025-05-19 15:22:16,830 log Internal Server Error: /transacoes-mes/
+ERROR 2025-05-20 02:28:49,121 log Internal Server Error: /transacoes/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/cryptography/fernet.py", line 131, in _verify_signature
+    h.verify(data[-32:])
+cryptography.exceptions.InvalidSignature: Signature did not match digest.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/encrypted_model_fields/fields.py", line 84, in from_db_value
+    decrypted = self.fernet.decrypt(value.encode()).decode()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/cryptography/fernet.py", line 90, in decrypt
+    return self._decrypt_data(data, timestamp, time_info)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/cryptography/fernet.py", line 149, in _decrypt_data
+    self._verify_signature(data)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/cryptography/fernet.py", line 133, in _verify_signature
+    raise InvalidToken
+cryptography.fernet.InvalidToken
+
+The above exception was the direct cause of the following exception:
+
 Traceback (most recent call last):
   File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -6,12 +26,98 @@ Traceback (most recent call last):
     response = wrapped_callback(request, *callback_args, **callback_kwargs)
   File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
     return view_func(request, *args, **kwargs)
-  File "/home/suporte/dev/minhacarteira/cal/views/views_transacao.py", line 172, in transacoes_mes_view
-    total = sum([
-TypeError: unsupported operand type(s) for +: 'int' and 'str'
-ERROR 2025-05-19 15:22:16,877 basehttp "GET /transacoes-mes/ HTTP/1.1" 500 88621
-WARNING 2025-05-19 15:22:16,971 log Not Found: /favicon.ico
-ERROR 2025-05-19 16:47:01,257 log Internal Server Error: /transacoes-mes/
+  File "/home/suporte/dev/minhacarteira/cal/views/views_transacao.py", line 28, in listar_transacoes
+    return render(request, 'cal/lista_transacoes.html', {'transacoes': transacoes})
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 169, in render
+    with context.bind_template(self):
+  File "/usr/lib/python3.10/contextlib.py", line 135, in __enter__
+    return next(self.gen)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/debug_toolbar/panels/templates/panel.py", line 50, in _request_context_bind_template
+    context = processor(self.request)
+  File "/home/suporte/dev/minhacarteira/cal/context_processors.py", line 19, in saldos_mensais
+    print(f'transacoes_mes: {transacoes_mes}')
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/query.py", line 360, in __repr__
+    data = list(self[: REPR_OUTPUT_SIZE + 1])
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/query.py", line 384, in __iter__
+    self._fetch_all()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1945, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/query.py", line 123, in __iter__
+    for row in compiler.results_iter(results):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1541, in apply_converters
+    value = converter(value, expression, connection)
+  File "/home/suporte/dev/minhacarteira/encrypted_model_fields/fields.py", line 88, in from_db_value
+    raise ValueError("Failed to decrypt value") from e
+ValueError: Failed to decrypt value
+ERROR 2025-05-20 02:28:49,196 basehttp "GET /transacoes/ HTTP/1.1" 500 172041
+ERROR 2025-05-20 02:32:23,732 log Internal Server Error: /
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/backends/sqlite3/base.py", line 360, in execute
+    return super().execute(query, params)
+sqlite3.OperationalError: no such column: cal_transacao.valor
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_user.py", line 60, in home
+    return render(request, 'home.html', {})
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 169, in render
+    with context.bind_template(self):
+  File "/usr/lib/python3.10/contextlib.py", line 135, in __enter__
+    return next(self.gen)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/debug_toolbar/panels/templates/panel.py", line 50, in _request_context_bind_template
+    context = processor(self.request)
+  File "/home/suporte/dev/minhacarteira/cal/context_processors.py", line 19, in saldos_mensais
+    print(f'transacoes_mes: {transacoes_mes}')
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/query.py", line 360, in __repr__
+    data = list(self[: REPR_OUTPUT_SIZE + 1])
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/query.py", line 384, in __iter__
+    self._fetch_all()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1945, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1623, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/debug_toolbar/panels/sql/tracking.py", line 235, in execute
+    return self._record(super().execute, sql, params)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/debug_toolbar/panels/sql/tracking.py", line 160, in _record
+    return method(sql, params)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/backends/sqlite3/base.py", line 360, in execute
+    return super().execute(query, params)
+django.db.utils.OperationalError: no such column: cal_transacao.valor
+ERROR 2025-05-20 02:32:23,817 basehttp "GET / HTTP/1.1" 500 198287
+ERROR 2025-05-20 02:45:50,796 log Internal Server Error: /transacao/nova/
 Traceback (most recent call last):
   File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -19,11 +125,23 @@ Traceback (most recent call last):
     response = wrapped_callback(request, *callback_args, **callback_kwargs)
   File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
     return view_func(request, *args, **kwargs)
-  File "/home/suporte/dev/minhacarteira/cal/views/views_transacao.py", line 191, in transacoes_mes_view
+  File "/home/suporte/dev/minhacarteira/cal/views/views_transacao.py", line 134, in transacao_view
+    print(f'Transação: título={transacao.titulo}, valor=R$ {transacao.valor:.2f}')
+ValueError: Unknown format code 'f' for object of type 'str'
+ERROR 2025-05-20 02:45:50,848 basehttp "POST /transacao/nova/ HTTP/1.1" 500 88837
+ERROR 2025-05-20 02:48:45,291 log Internal Server Error: /transacoes-mes/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_transacao.py", line 215, in transacoes_mes_view
     dados_por_tipo[t.tipo.descricao] += valor  # Agora soma Decimal com Decimal
-TypeError: unsupported operand type(s) for +=: 'decimal.Decimal' and 'NoneType'
-ERROR 2025-05-19 16:47:01,298 basehttp "GET /transacoes-mes/ HTTP/1.1" 500 89740
-ERROR 2025-05-19 23:29:14,605 log Internal Server Error: /transacoes/
+TypeError: unsupported operand type(s) for +=: 'decimal.Decimal' and 'str'
+ERROR 2025-05-20 02:48:45,340 basehttp "GET /transacoes-mes/ HTTP/1.1" 500 88574
+ERROR 2025-05-20 02:49:03,110 log Internal Server Error: /transacoes-mes/
 Traceback (most recent call last):
   File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -31,480 +149,11 @@ Traceback (most recent call last):
     response = wrapped_callback(request, *callback_args, **callback_kwargs)
   File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
     return view_func(request, *args, **kwargs)
-  File "/home/suporte/dev/minhacarteira/cal/views/views_transacao.py", line 28, in listar_transacoes
-    return render(request, 'cal/lista_transacoes.html', {'transacoes': transacoes})
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
-    content = loader.render_to_string(template_name, context, request, using=using)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
-    return template.render(context, request)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
-    return self.template.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 171, in render
-    return self._render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
-    return self.nodelist.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
-    return self.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
-    return compiled_parent._render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
-    return self.nodelist.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
-    return self.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 199, in render
-    template = context.template.engine.select_template(template_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 208, in select_template
-    return self.get_template(template_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 177, in get_template
-    template, origin = self.find_template(template_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 159, in find_template
-    template = loader.get_template(name, skip=skip)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/cached.py", line 57, in get_template
-    template = super().get_template(template_name, skip)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/base.py", line 28, in get_template
-    return Template(
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 154, in __init__
-    self.nodelist = self.compile_nodelist()
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 196, in compile_nodelist
-    nodelist = parser.parse()
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
-    raise self.error(token, e)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
-    compiled_result = compile_func(self, token)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 962, in do_if
-    nodelist = parser.parse(("elif", "else", "endif"))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 489, in parse
-    raise self.error(token, e)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 487, in parse
-    filter_expression = self.compile_filter(token.contents)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 609, in compile_filter
-    return FilterExpression(token, self)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 705, in __init__
-    filter_func = parser.find_filter(filter_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 615, in find_filter
-    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
-django.template.exceptions.TemplateSyntaxError: Invalid filter: 'moeda'
-ERROR 2025-05-19 23:29:14,744 basehttp "GET /transacoes/ HTTP/1.1" 500 275835
-ERROR 2025-05-19 23:29:22,752 log Internal Server Error: /
-Traceback (most recent call last):
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/home/suporte/dev/minhacarteira/cal/views/views_user.py", line 60, in home
-    return render(request, 'home.html', {})
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
-    content = loader.render_to_string(template_name, context, request, using=using)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
-    return template.render(context, request)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
-    return self.template.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 171, in render
-    return self._render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
-    return self.nodelist.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
-    return self.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
-    return compiled_parent._render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
-    return self.nodelist.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
-    return self.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 199, in render
-    template = context.template.engine.select_template(template_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 208, in select_template
-    return self.get_template(template_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 177, in get_template
-    template, origin = self.find_template(template_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 159, in find_template
-    template = loader.get_template(name, skip=skip)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/cached.py", line 57, in get_template
-    template = super().get_template(template_name, skip)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/base.py", line 28, in get_template
-    return Template(
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 154, in __init__
-    self.nodelist = self.compile_nodelist()
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 196, in compile_nodelist
-    nodelist = parser.parse()
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
-    raise self.error(token, e)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
-    compiled_result = compile_func(self, token)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 962, in do_if
-    nodelist = parser.parse(("elif", "else", "endif"))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 489, in parse
-    raise self.error(token, e)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 487, in parse
-    filter_expression = self.compile_filter(token.contents)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 609, in compile_filter
-    return FilterExpression(token, self)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 705, in __init__
-    filter_func = parser.find_filter(filter_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 615, in find_filter
-    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
-django.template.exceptions.TemplateSyntaxError: Invalid filter: 'moeda'
-ERROR 2025-05-19 23:29:22,843 basehttp "GET / HTTP/1.1" 500 264221
-WARNING 2025-05-19 23:29:22,978 log Not Found: /favicon.ico
-ERROR 2025-05-19 23:29:38,269 log Internal Server Error: /
-Traceback (most recent call last):
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/home/suporte/dev/minhacarteira/cal/views/views_user.py", line 60, in home
-    return render(request, 'home.html', {})
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
-    content = loader.render_to_string(template_name, context, request, using=using)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
-    return template.render(context, request)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
-    return self.template.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 171, in render
-    return self._render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
-    return self.nodelist.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
-    return self.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
-    return compiled_parent._render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
-    return self.nodelist.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
-    return self.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 199, in render
-    template = context.template.engine.select_template(template_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 208, in select_template
-    return self.get_template(template_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 177, in get_template
-    template, origin = self.find_template(template_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 159, in find_template
-    template = loader.get_template(name, skip=skip)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/cached.py", line 57, in get_template
-    template = super().get_template(template_name, skip)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/base.py", line 28, in get_template
-    return Template(
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 154, in __init__
-    self.nodelist = self.compile_nodelist()
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 196, in compile_nodelist
-    nodelist = parser.parse()
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
-    raise self.error(token, e)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
-    compiled_result = compile_func(self, token)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 962, in do_if
-    nodelist = parser.parse(("elif", "else", "endif"))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 489, in parse
-    raise self.error(token, e)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 487, in parse
-    filter_expression = self.compile_filter(token.contents)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 609, in compile_filter
-    return FilterExpression(token, self)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 705, in __init__
-    filter_func = parser.find_filter(filter_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 615, in find_filter
-    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
-django.template.exceptions.TemplateSyntaxError: Invalid filter: 'moeda'
-ERROR 2025-05-19 23:29:38,406 basehttp "GET / HTTP/1.1" 500 264221
-WARNING 2025-05-19 23:29:38,513 log Not Found: /favicon.ico
-ERROR 2025-05-19 23:30:41,570 log Internal Server Error: /
-Traceback (most recent call last):
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/home/suporte/dev/minhacarteira/cal/views/views_user.py", line 60, in home
-    return render(request, 'home.html', {})
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
-    content = loader.render_to_string(template_name, context, request, using=using)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
-    return template.render(context, request)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
-    return self.template.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 171, in render
-    return self._render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
-    return self.nodelist.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
-    return self.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
-    return compiled_parent._render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
-    return self.nodelist.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
-    return self.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 199, in render
-    template = context.template.engine.select_template(template_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 208, in select_template
-    return self.get_template(template_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 177, in get_template
-    template, origin = self.find_template(template_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 159, in find_template
-    template = loader.get_template(name, skip=skip)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/cached.py", line 57, in get_template
-    template = super().get_template(template_name, skip)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/base.py", line 28, in get_template
-    return Template(
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 154, in __init__
-    self.nodelist = self.compile_nodelist()
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 196, in compile_nodelist
-    nodelist = parser.parse()
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
-    raise self.error(token, e)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
-    compiled_result = compile_func(self, token)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 962, in do_if
-    nodelist = parser.parse(("elif", "else", "endif"))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 489, in parse
-    raise self.error(token, e)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 487, in parse
-    filter_expression = self.compile_filter(token.contents)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 609, in compile_filter
-    return FilterExpression(token, self)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 705, in __init__
-    filter_func = parser.find_filter(filter_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 615, in find_filter
-    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
-django.template.exceptions.TemplateSyntaxError: Invalid filter: 'moeda'
-ERROR 2025-05-19 23:30:41,709 basehttp "GET / HTTP/1.1" 500 264221
-ERROR 2025-05-19 23:33:48,763 log Internal Server Error: /
-Traceback (most recent call last):
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/home/suporte/dev/minhacarteira/cal/views/views_user.py", line 60, in home
-    return render(request, 'home.html', {})
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
-    content = loader.render_to_string(template_name, context, request, using=using)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
-    return template.render(context, request)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
-    return self.template.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 171, in render
-    return self._render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
-    return self.nodelist.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
-    return self.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
-    return compiled_parent._render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
-    return self.nodelist.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
-    return self.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 199, in render
-    template = context.template.engine.select_template(template_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 208, in select_template
-    return self.get_template(template_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 177, in get_template
-    template, origin = self.find_template(template_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 159, in find_template
-    template = loader.get_template(name, skip=skip)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/cached.py", line 57, in get_template
-    template = super().get_template(template_name, skip)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/base.py", line 28, in get_template
-    return Template(
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 154, in __init__
-    self.nodelist = self.compile_nodelist()
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 196, in compile_nodelist
-    nodelist = parser.parse()
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
-    raise self.error(token, e)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
-    compiled_result = compile_func(self, token)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 962, in do_if
-    nodelist = parser.parse(("elif", "else", "endif"))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 489, in parse
-    raise self.error(token, e)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 487, in parse
-    filter_expression = self.compile_filter(token.contents)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 609, in compile_filter
-    return FilterExpression(token, self)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 705, in __init__
-    filter_func = parser.find_filter(filter_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 615, in find_filter
-    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
-django.template.exceptions.TemplateSyntaxError: Invalid filter: 'moeda'
-ERROR 2025-05-19 23:33:48,906 basehttp "GET / HTTP/1.1" 500 264221
-WARNING 2025-05-19 23:33:49,038 log Not Found: /favicon.ico
-ERROR 2025-05-19 23:34:29,256 log Internal Server Error: /
-Traceback (most recent call last):
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/home/suporte/dev/minhacarteira/cal/views/views_user.py", line 60, in home
-    return render(request, 'home.html', {})
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
-    content = loader.render_to_string(template_name, context, request, using=using)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
-    return template.render(context, request)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
-    return self.template.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 171, in render
-    return self._render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
-    return self.nodelist.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
-    return self.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
-    return compiled_parent._render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
-    return self.nodelist.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
-    return self.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 199, in render
-    template = context.template.engine.select_template(template_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 208, in select_template
-    return self.get_template(template_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 177, in get_template
-    template, origin = self.find_template(template_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 159, in find_template
-    template = loader.get_template(name, skip=skip)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/cached.py", line 57, in get_template
-    template = super().get_template(template_name, skip)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/base.py", line 28, in get_template
-    return Template(
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 154, in __init__
-    self.nodelist = self.compile_nodelist()
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 196, in compile_nodelist
-    nodelist = parser.parse()
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
-    raise self.error(token, e)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
-    compiled_result = compile_func(self, token)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 962, in do_if
-    nodelist = parser.parse(("elif", "else", "endif"))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 489, in parse
-    raise self.error(token, e)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 487, in parse
-    filter_expression = self.compile_filter(token.contents)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 609, in compile_filter
-    return FilterExpression(token, self)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 705, in __init__
-    filter_func = parser.find_filter(filter_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 615, in find_filter
-    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
-django.template.exceptions.TemplateSyntaxError: Invalid filter: 'moeda'
-ERROR 2025-05-19 23:34:29,403 basehttp "GET / HTTP/1.1" 500 264441
-ERROR 2025-05-19 23:34:31,333 log Internal Server Error: /
-Traceback (most recent call last):
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/home/suporte/dev/minhacarteira/cal/views/views_user.py", line 60, in home
-    return render(request, 'home.html', {})
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
-    content = loader.render_to_string(template_name, context, request, using=using)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
-    return template.render(context, request)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
-    return self.template.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 171, in render
-    return self._render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
-    return self.nodelist.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
-    return self.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
-    return compiled_parent._render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
-    return self.nodelist.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
-    return self.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 199, in render
-    template = context.template.engine.select_template(template_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 208, in select_template
-    return self.get_template(template_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 177, in get_template
-    template, origin = self.find_template(template_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 159, in find_template
-    template = loader.get_template(name, skip=skip)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/cached.py", line 57, in get_template
-    template = super().get_template(template_name, skip)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/base.py", line 28, in get_template
-    return Template(
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 154, in __init__
-    self.nodelist = self.compile_nodelist()
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 196, in compile_nodelist
-    nodelist = parser.parse()
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
-    raise self.error(token, e)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
-    compiled_result = compile_func(self, token)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 962, in do_if
-    nodelist = parser.parse(("elif", "else", "endif"))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 489, in parse
-    raise self.error(token, e)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 487, in parse
-    filter_expression = self.compile_filter(token.contents)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 609, in compile_filter
-    return FilterExpression(token, self)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 705, in __init__
-    filter_func = parser.find_filter(filter_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 615, in find_filter
-    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
-django.template.exceptions.TemplateSyntaxError: Invalid filter: 'moeda'
-ERROR 2025-05-19 23:34:31,431 basehttp "GET / HTTP/1.1" 500 264441
-ERROR 2025-05-19 23:39:26,946 log Internal Server Error: /transacoes/
+  File "/home/suporte/dev/minhacarteira/cal/views/views_transacao.py", line 215, in transacoes_mes_view
+    dados_por_tipo[t.tipo.descricao] += valor  # Agora soma Decimal com Decimal
+TypeError: unsupported operand type(s) for +=: 'decimal.Decimal' and 'str'
+ERROR 2025-05-20 02:49:03,159 basehttp "GET /transacoes-mes/ HTTP/1.1" 500 88615
+ERROR 2025-05-20 02:53:32,612 log Internal Server Error: /transacoes-mes/
 Traceback (most recent call last):
   File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -512,69 +161,11 @@ Traceback (most recent call last):
     response = wrapped_callback(request, *callback_args, **callback_kwargs)
   File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
     return view_func(request, *args, **kwargs)
-  File "/home/suporte/dev/minhacarteira/cal/views/views_transacao.py", line 28, in listar_transacoes
-    return render(request, 'cal/lista_transacoes.html', {'transacoes': transacoes})
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
-    content = loader.render_to_string(template_name, context, request, using=using)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
-    return template.render(context, request)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
-    return self.template.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 171, in render
-    return self._render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
-    return self.nodelist.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
-    return self.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
-    return compiled_parent._render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
-    return self.nodelist.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
-    return self.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 199, in render
-    template = context.template.engine.select_template(template_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 208, in select_template
-    return self.get_template(template_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 177, in get_template
-    template, origin = self.find_template(template_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 159, in find_template
-    template = loader.get_template(name, skip=skip)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/cached.py", line 57, in get_template
-    template = super().get_template(template_name, skip)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/base.py", line 28, in get_template
-    return Template(
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 154, in __init__
-    self.nodelist = self.compile_nodelist()
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 196, in compile_nodelist
-    nodelist = parser.parse()
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
-    raise self.error(token, e)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
-    compiled_result = compile_func(self, token)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 962, in do_if
-    nodelist = parser.parse(("elif", "else", "endif"))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 489, in parse
-    raise self.error(token, e)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 487, in parse
-    filter_expression = self.compile_filter(token.contents)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 609, in compile_filter
-    return FilterExpression(token, self)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 705, in __init__
-    filter_func = parser.find_filter(filter_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 615, in find_filter
-    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
-django.template.exceptions.TemplateSyntaxError: Invalid filter: 'moeda'
-ERROR 2025-05-19 23:39:27,090 basehttp "GET /transacoes/ HTTP/1.1" 500 276152
-ERROR 2025-05-19 23:39:41,223 log Internal Server Error: /transacoes/
+  File "/home/suporte/dev/minhacarteira/cal/views/views_transacao.py", line 230, in transacoes_mes_view
+    dados_por_tipo[t.tipo.descricao] += valor  # Agora soma Decimal com Decimal
+TypeError: unsupported operand type(s) for +=: 'decimal.Decimal' and 'str'
+ERROR 2025-05-20 02:53:32,680 basehttp "GET /transacoes-mes/ HTTP/1.1" 500 88617
+ERROR 2025-05-20 02:53:33,730 log Internal Server Error: /transacoes-mes/
 Traceback (most recent call last):
   File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -582,69 +173,11 @@ Traceback (most recent call last):
     response = wrapped_callback(request, *callback_args, **callback_kwargs)
   File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
     return view_func(request, *args, **kwargs)
-  File "/home/suporte/dev/minhacarteira/cal/views/views_transacao.py", line 28, in listar_transacoes
-    return render(request, 'cal/lista_transacoes.html', {'transacoes': transacoes})
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
-    content = loader.render_to_string(template_name, context, request, using=using)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
-    return template.render(context, request)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
-    return self.template.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 171, in render
-    return self._render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
-    return self.nodelist.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
-    return self.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
-    return compiled_parent._render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
-    return self.nodelist.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
-    return self.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 199, in render
-    template = context.template.engine.select_template(template_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 208, in select_template
-    return self.get_template(template_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 177, in get_template
-    template, origin = self.find_template(template_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 159, in find_template
-    template = loader.get_template(name, skip=skip)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/cached.py", line 57, in get_template
-    template = super().get_template(template_name, skip)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/base.py", line 28, in get_template
-    return Template(
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 154, in __init__
-    self.nodelist = self.compile_nodelist()
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 196, in compile_nodelist
-    nodelist = parser.parse()
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
-    raise self.error(token, e)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
-    compiled_result = compile_func(self, token)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 962, in do_if
-    nodelist = parser.parse(("elif", "else", "endif"))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 489, in parse
-    raise self.error(token, e)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 487, in parse
-    filter_expression = self.compile_filter(token.contents)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 609, in compile_filter
-    return FilterExpression(token, self)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 705, in __init__
-    filter_func = parser.find_filter(filter_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 615, in find_filter
-    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
-django.template.exceptions.TemplateSyntaxError: Invalid filter: 'moeda'
-ERROR 2025-05-19 23:39:41,358 basehttp "GET /transacoes/ HTTP/1.1" 500 276152
-ERROR 2025-05-19 23:39:42,930 log Internal Server Error: /transacoes/
+  File "/home/suporte/dev/minhacarteira/cal/views/views_transacao.py", line 230, in transacoes_mes_view
+    dados_por_tipo[t.tipo.descricao] += valor  # Agora soma Decimal com Decimal
+TypeError: unsupported operand type(s) for +=: 'decimal.Decimal' and 'str'
+ERROR 2025-05-20 02:53:33,781 basehttp "GET /transacoes-mes/ HTTP/1.1" 500 88615
+ERROR 2025-05-20 02:53:54,387 log Internal Server Error: /transacao/nova/
 Traceback (most recent call last):
   File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -652,76 +185,166 @@ Traceback (most recent call last):
     response = wrapped_callback(request, *callback_args, **callback_kwargs)
   File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
     return view_func(request, *args, **kwargs)
-  File "/home/suporte/dev/minhacarteira/cal/views/views_transacao.py", line 28, in listar_transacoes
-    return render(request, 'cal/lista_transacoes.html', {'transacoes': transacoes})
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
-    content = loader.render_to_string(template_name, context, request, using=using)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
-    return template.render(context, request)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
-    return self.template.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 171, in render
-    return self._render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
-    return self.nodelist.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
-    return self.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
-    return compiled_parent._render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
-    return self.nodelist.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
-    return SafeString("".join([node.render_annotated(context) for node in self]))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
-    return self.render(context)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 199, in render
-    template = context.template.engine.select_template(template_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 208, in select_template
-    return self.get_template(template_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 177, in get_template
-    template, origin = self.find_template(template_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 159, in find_template
-    template = loader.get_template(name, skip=skip)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/cached.py", line 57, in get_template
-    template = super().get_template(template_name, skip)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/base.py", line 28, in get_template
-    return Template(
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 154, in __init__
-    self.nodelist = self.compile_nodelist()
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 196, in compile_nodelist
-    nodelist = parser.parse()
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
-    raise self.error(token, e)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
-    compiled_result = compile_func(self, token)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 962, in do_if
-    nodelist = parser.parse(("elif", "else", "endif"))
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 489, in parse
-    raise self.error(token, e)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 487, in parse
-    filter_expression = self.compile_filter(token.contents)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 609, in compile_filter
-    return FilterExpression(token, self)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 705, in __init__
-    filter_func = parser.find_filter(filter_name)
-  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 615, in find_filter
-    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
-django.template.exceptions.TemplateSyntaxError: Invalid filter: 'moeda'
-ERROR 2025-05-19 23:39:43,039 basehttp "GET /transacoes/ HTTP/1.1" 500 276152
-ERROR 2025-05-19 23:58:01,905 basehttp "GET /transacoes/ HTTP/1.1" 500 59
-ERROR 2025-05-19 23:58:10,527 basehttp "GET / HTTP/1.1" 500 59
-ERROR 2025-05-19 23:58:25,012 basehttp "GET / HTTP/1.1" 500 59
-WARNING 2025-05-20 00:08:08,746 base Session data corrupted
-WARNING 2025-05-20 00:08:10,881 base Session data corrupted
-WARNING 2025-05-20 00:08:21,170 base Session data corrupted
-WARNING 2025-05-20 00:08:32,495 base Session data corrupted
-WARNING 2025-05-20 00:09:01,019 base Session data corrupted
-WARNING 2025-05-20 00:09:22,768 base Session data corrupted
-WARNING 2025-05-20 00:09:34,898 base Session data corrupted
-WARNING 2025-05-20 00:09:45,637 base Session data corrupted
+  File "/home/suporte/dev/minhacarteira/cal/views/views_transacao.py", line 150, in transacao_view
+    print(f'Transação: título={transacao.titulo}, valor=R$ {valor_total:.2f}')
+ValueError: Unknown format code 'f' for object of type 'str'
+ERROR 2025-05-20 02:53:54,438 basehttp "POST /transacao/nova/ HTTP/1.1" 500 88928
+ERROR 2025-05-20 02:54:45,392 log Internal Server Error: /calendar/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/views/generic/list.py", line 178, in get
+    context = self.get_context_data()
+  File "/home/suporte/dev/minhacarteira/cal/views/views_cal.py", line 137, in get_context_data
+    html_cal = cal.formatmonth(withyear=True, transacoes=transacoes_mes_atual)
+  File "/home/suporte/dev/minhacarteira/cal/utils.py", line 49, in formatmonth
+    cal += self.formatweek(week, transacoes)
+  File "/home/suporte/dev/minhacarteira/cal/utils.py", line 35, in formatweek
+    return '<tr>' + ''.join(self.formatday(d, transacoes) for d, _ in theweek) + '</tr>'
+  File "/home/suporte/dev/minhacarteira/cal/utils.py", line 35, in <genexpr>
+    return '<tr>' + ''.join(self.formatday(d, transacoes) for d, _ in theweek) + '</tr>'
+  File "/home/suporte/dev/minhacarteira/cal/utils.py", line 25, in formatday
+    itens = ''.join(f'<li><a href="{t.get_absolute_url()}">{t.titulo}{" - CC" if not t.valor else f" - R$ {t.valor:.2f}"}</a></li>'
+  File "/home/suporte/dev/minhacarteira/cal/utils.py", line 25, in <genexpr>
+    itens = ''.join(f'<li><a href="{t.get_absolute_url()}">{t.titulo}{" - CC" if not t.valor else f" - R$ {t.valor:.2f}"}</a></li>'
+ValueError: Unknown format code 'f' for object of type 'str'
+ERROR 2025-05-20 02:54:45,596 basehttp "GET /calendar/ HTTP/1.1" 500 135250
+ERROR 2025-05-20 03:04:21,362 log Internal Server Error: /calendar/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/cal/utils.py", line 76, in formatday
+    valor = t.valor if isinstance(t.valor, (int, float, decimal.Decimal)) else decimal.Decimal(str(t.valor))
+NameError: name 'decimal' is not defined
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/views/generic/list.py", line 178, in get
+    context = self.get_context_data()
+  File "/home/suporte/dev/minhacarteira/cal/views/views_cal.py", line 137, in get_context_data
+    html_cal = cal.formatmonth(withyear=True, transacoes=transacoes_mes_atual)
+  File "/home/suporte/dev/minhacarteira/cal/utils.py", line 49, in formatmonth
+    cal += self.formatweek(week, transacoes)
+  File "/home/suporte/dev/minhacarteira/cal/utils.py", line 35, in formatweek
+    return '<tr>' + ''.join(self.formatday(d, transacoes) for d, _ in theweek) + '</tr>'
+  File "/home/suporte/dev/minhacarteira/cal/utils.py", line 35, in <genexpr>
+    return '<tr>' + ''.join(self.formatday(d, transacoes) for d, _ in theweek) + '</tr>'
+  File "/home/suporte/dev/minhacarteira/cal/utils.py", line 78, in formatday
+    except (TypeError, ValueError, decimal.InvalidOperation):
+NameError: name 'decimal' is not defined
+ERROR 2025-05-20 03:04:21,598 basehttp "GET /calendar/ HTTP/1.1" 500 135647
+ERROR 2025-05-20 03:04:23,330 log Internal Server Error: /calendar/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/cal/utils.py", line 76, in formatday
+    valor = t.valor if isinstance(t.valor, (int, float, decimal.Decimal)) else decimal.Decimal(str(t.valor))
+NameError: name 'decimal' is not defined
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/views/generic/list.py", line 178, in get
+    context = self.get_context_data()
+  File "/home/suporte/dev/minhacarteira/cal/views/views_cal.py", line 137, in get_context_data
+    html_cal = cal.formatmonth(withyear=True, transacoes=transacoes_mes_atual)
+  File "/home/suporte/dev/minhacarteira/cal/utils.py", line 49, in formatmonth
+    cal += self.formatweek(week, transacoes)
+  File "/home/suporte/dev/minhacarteira/cal/utils.py", line 35, in formatweek
+    return '<tr>' + ''.join(self.formatday(d, transacoes) for d, _ in theweek) + '</tr>'
+  File "/home/suporte/dev/minhacarteira/cal/utils.py", line 35, in <genexpr>
+    return '<tr>' + ''.join(self.formatday(d, transacoes) for d, _ in theweek) + '</tr>'
+  File "/home/suporte/dev/minhacarteira/cal/utils.py", line 78, in formatday
+    except (TypeError, ValueError, decimal.InvalidOperation):
+NameError: name 'decimal' is not defined
+ERROR 2025-05-20 03:04:23,397 basehttp "GET /calendar/ HTTP/1.1" 500 135647
+ERROR 2025-05-20 03:04:30,972 log Internal Server Error: /calendar/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/cal/utils.py", line 76, in formatday
+    valor = t.valor if isinstance(t.valor, (int, float, decimal.Decimal)) else decimal.Decimal(str(t.valor))
+NameError: name 'decimal' is not defined
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/views/generic/list.py", line 178, in get
+    context = self.get_context_data()
+  File "/home/suporte/dev/minhacarteira/cal/views/views_cal.py", line 137, in get_context_data
+    html_cal = cal.formatmonth(withyear=True, transacoes=transacoes_mes_atual)
+  File "/home/suporte/dev/minhacarteira/cal/utils.py", line 49, in formatmonth
+    cal += self.formatweek(week, transacoes)
+  File "/home/suporte/dev/minhacarteira/cal/utils.py", line 35, in formatweek
+    return '<tr>' + ''.join(self.formatday(d, transacoes) for d, _ in theweek) + '</tr>'
+  File "/home/suporte/dev/minhacarteira/cal/utils.py", line 35, in <genexpr>
+    return '<tr>' + ''.join(self.formatday(d, transacoes) for d, _ in theweek) + '</tr>'
+  File "/home/suporte/dev/minhacarteira/cal/utils.py", line 78, in formatday
+    except (TypeError, ValueError, decimal.InvalidOperation):
+NameError: name 'decimal' is not defined
+ERROR 2025-05-20 03:04:31,040 basehttp "GET /calendar/ HTTP/1.1" 500 135632
+ERROR 2025-05-20 03:04:51,351 log Internal Server Error: /transacoes-mes/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_transacao.py", line 230, in transacoes_mes_view
+    dados_por_tipo[t.tipo.descricao] += valor  # Agora soma Decimal com Decimal
+TypeError: unsupported operand type(s) for +=: 'decimal.Decimal' and 'str'
+ERROR 2025-05-20 03:04:51,401 basehttp "GET /transacoes-mes/ HTTP/1.1" 500 88658
+ERROR 2025-05-20 03:05:01,576 log Internal Server Error: /transacoes-mes/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_transacao.py", line 230, in transacoes_mes_view
+    dados_por_tipo[t.tipo.descricao] += valor  # Agora soma Decimal com Decimal
+TypeError: unsupported operand type(s) for +=: 'decimal.Decimal' and 'str'
+ERROR 2025-05-20 03:05:01,621 basehttp "GET /transacoes-mes/ HTTP/1.1" 500 88658

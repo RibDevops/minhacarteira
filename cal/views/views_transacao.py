@@ -82,17 +82,31 @@ def transacao_editar(request, pk=None):
 
 
 @login_required
+# def transacao_view(request):
+#     form = TransacaoForm(request.POST or None)
+#     print(f'post: {request.POST}')
+#     if request.method == 'POST' and form.is_valid():
+#         transacao = form.save(commit=False)
+#         transacao.user = request.user
+
+#         tipo = transacao.tipo
+#         parcelas = form.cleaned_data.get('parcelas') or 1
+#         valor_total = transacao.valor or 0
 def transacao_view(request):
     form = TransacaoForm(request.POST or None)
-    print(f'post: {request.POST}')
     if request.method == 'POST' and form.is_valid():
         transacao = form.save(commit=False)
         transacao.user = request.user
 
+        # Garante que o valor é Decimal
+        try:
+            valor_total = Decimal(str(transacao.valor)) if transacao.valor else Decimal('0')
+        except (TypeError, ValueError):
+            valor_total = Decimal('0')
+
         tipo = transacao.tipo
         parcelas = form.cleaned_data.get('parcelas') or 1
         valor_total = transacao.valor or 0
-
         # Caso seja compra no cartão (crédito)
         if tipo.id == 3:
             # Criar registro visual na data da compra (sem valor)
@@ -131,7 +145,9 @@ def transacao_view(request):
                         data_fim=transacao.data + relativedelta(months=parcelas - 1),
                     )
             else:
-                print(f'Transação: título={transacao.titulo}, valor=R$ {transacao.valor:.2f}')
+                # print(f'Transação: título={transacao.titulo}, valor=R$ {transacao.valor:.2f}')
+                print(f'Transação: título={transacao.titulo}, valor=R$ {Decimal(str(transacao.valor)):.2f}')
+                # print(f'Transação: título={transacao.titulo}, valor=R$ {valor_total:.2f}')
                 transacao.save()
                 
 
@@ -166,23 +182,45 @@ def transacoes_mes_view(request):
     data_inicio = make_aware(datetime(ano, mes, 1))
     data_fim = make_aware(datetime(ano, mes, 1) + relativedelta(months=1))
 
+    # transacoes = Transacao.objects.filter(
+    #     user=request.user,
+    #     data__gte=data_inicio,
+    #     data__lt=data_fim
+    # ).order_by('-data')
+    # print(f'transacoes na mes: {transacoes.valor}')
+    # # total = sum([
+    #     -t.valor if t.tipo.descricao.lower() == 'débito' else t.valor
+    #     for t in transacoes
+    # ])
     transacoes = Transacao.objects.filter(
         user=request.user,
         data__gte=data_inicio,
         data__lt=data_fim
     ).order_by('-data')
-    print(f'transacoes na mes: {transacoes}')
-    # total = sum([
-    #     -t.valor if t.tipo.descricao.lower() == 'débito' else t.valor
-    #     for t in transacoes
-    # ])
-    
 
-    total = sum([
-        -Decimal(t.valor) if t.tipo.descricao.lower() == 'Pagando' else Decimal(t.valor)
-        for t in transacoes
-        if t.valor is not None and str(t.valor).strip() != ''
-    ])
+    total = Decimal('0')
+    for t in transacoes:
+        if t.valor is not None and str(t.valor).strip() != '':
+            print(f'Transação: {t.valor}')
+            total += Decimal(t.valor)
+
+    print(f'Total no mês: {total}')
+
+    # total = sum([
+    #     Decimal(t.valor)
+    #     for t in transacoes
+    #     print(f'transacao: {t.valor}')
+    #     if t.valor is not None and str(t.valor).strip() != ''
+    # ])
+    # print(f'Total no mês: {total}')
+
+    # total = sum([
+    #     # -Decimal(t.valor) if t.tipo.descricao.lower() == 'Pagando' else Decimal(t.valor)
+    #     -Decimal(t.valor) if t.tipo.is_credito == False else Decimal(t.valor)
+    #     for t in transacoes
+    #     if t.valor is not None and str(t.valor).strip() != ''
+    # ])
+    print(f'total: {total}')
 
 
     # Prepara dados para o gráfico por tipo
