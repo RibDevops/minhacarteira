@@ -52,6 +52,7 @@
       <tr>
         <th>#</th>
         <th>Título</th>
+        <th>Categoria</th>
         <th>Valor</th>
         <th>Data</th>
         <th>Ações</th>
@@ -74,6 +75,9 @@
             {% if transacao.tipo.is_credito %}+{% else %}-{% endif %}
             R$ {{ transacao.valor|floatformat:2 }}
           </span>
+        </td>
+        <td>
+          {{ transacao.categoria.nome }}
         </td>
         <td>{{ transacao.data|date:"d \d\e F \d\e Y" }}</td>
         <td>
@@ -103,68 +107,117 @@
   </table>
 </div>
 
+
 <!-- Gráficos -->
-<div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 40px;">
-  <div class="d-flex flex-column flex-md-row justify-content-center align-items-start gap-4 mt-5">
-    <div class="w-100" style="max-width: 400px; height: 350px;">
-      <canvas id="graficoPizza" role="img" aria-label="Gráfico de Pizza de Transações"></canvas>
-    </div>
-    <div class="w-100" style="max-width: 400px; height: 350px;">
-      <canvas id="graficoBarras" role="img" aria-label="Gráfico de Barras de Transações"></canvas>
-    </div>
+<div class="row justify-content-center gap-4 mt-5">
+  <!-- Tipo: Pizza e Barras -->
+  <div class="col-12 col-md-5">
+    <canvas id="graficoPizza" height="350"></canvas>
+  </div>
+  <div class="col-12 col-md-5">
+    <canvas id="graficoBarras" height="350"></canvas>
+  </div>
+
+  <!-- Categoria: Pizza e Barras -->
+  <div class="col-12 col-md-5">
+    <canvas id="graficoCategoriaPizza" height="350"></canvas>
+  </div>
+  <div class="col-12 col-md-5">
+    <canvas id="graficoCategoriaBarra" height="350"></canvas>
   </div>
 </div>
 
-<!-- Importação do Chart.js -->
+<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <script>
-  const ctxPizza = document.getElementById('graficoPizza').getContext('2d');
-  new Chart(ctxPizza, {
+  const tipoLabels = {{ grafico_labels|safe }};
+  const tipoValores = {{ grafico_valores|safe }};
+  const categoriaLabels = {{ grafico_categorias|safe }};
+  const categoriaValores = {{ grafico_totais_categoria|safe }};
+
+  const colors = tipoLabels.map((_, i) => `hsl(${i * 45}, 70%, 60%)`);
+
+  new Chart(document.getElementById('graficoPizza'), {
     type: 'pie',
     data: {
-      labels: {{ grafico_labels|safe }},
+      labels: tipoLabels,
       datasets: [{
-        label: 'Transações por tipo',
-        data: {{ grafico_valores|safe }},
-        backgroundColor: [
-          '#4CAF50', '#F44336', '#FFC107', '#2196F3', '#9C27B0',
-          '#FF5722', '#00BCD4', '#8BC34A', '#E91E63', '#607D8B'
-        ],
-        borderWidth: 1
+        data: tipoValores,
+        backgroundColor: colors
       }]
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
       plugins: {
-        legend: {
-          position: 'right'
-        }
-      }
+        title: { display: true, text: 'Transações por Tipo' },
+        legend: { position: 'bottom' }
+      },
+      responsive: true,
+      maintainAspectRatio: false
     }
   });
 
-  const ctxBarras = document.getElementById('graficoBarras').getContext('2d');
-  new Chart(ctxBarras, {
+  new Chart(document.getElementById('graficoBarras'), {
     type: 'bar',
     data: {
-      labels: {{ grafico_labels|safe }},
+      labels: tipoLabels,
       datasets: [{
-        label: 'Valores por tipo',
-        data: {{ grafico_valores|safe }},
-        backgroundColor: ['#4CAF50', '#F44336'],
-        borderWidth: 1
+        label: 'Valores',
+        data: tipoValores,
+        backgroundColor: colors
       }]
     },
     options: {
+      plugins: {
+        title: { display: true, text: 'Transações por Tipo (Barras)' }
+      },
       responsive: true,
       maintainAspectRatio: false,
       scales: {
         y: { beginAtZero: true }
-      },
+      }
+    }
+  });
+
+  new Chart(document.getElementById('graficoCategoriaPizza'), {
+    type: 'doughnut',
+    data: {
+      labels: categoriaLabels,
+      datasets: [{
+        data: categoriaValores,
+        backgroundColor: categoriaLabels.map((_, i) => `hsl(${i * 40}, 60%, 65%)`)
+      }]
+    },
+    options: {
       plugins: {
-        legend: { position: 'top' }
+        title: { display: true, text: 'Gastos por Categoria' },
+        legend: { position: 'bottom' }
+      },
+      responsive: true,
+      maintainAspectRatio: false
+    }
+  });
+
+  new Chart(document.getElementById('graficoCategoriaBarra'), {
+    type: 'bar',
+    data: {
+      labels: categoriaLabels,
+      datasets: [{
+        label: 'Totais por Categoria',
+        data: categoriaValores,
+        backgroundColor: 'rgba(153, 102, 255, 0.6)',
+        borderColor: 'rgba(153, 102, 255, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      plugins: {
+        title: { display: true, text: 'Totais por Categoria (Barras)' }
+      },
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: { beginAtZero: true }
       }
     }
   });

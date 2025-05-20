@@ -22,6 +22,7 @@ class BaseModel(models.Model):
 
 class Tipo(models.Model):
     descricao = models.CharField(max_length=200, verbose_name="Descrição do tipo")
+    categoria = models.CharField(max_length=200, verbose_name="Categoria")
     is_credito = models.BooleanField(default=False, verbose_name="É crédito?")
 
     def __str__(self):
@@ -47,8 +48,15 @@ class EncryptedDecimalField(models.Field):
         return "CharField"
     
     # ... (mantenha o resto da implementação igual)
+class Categoria(models.Model):
+    nome = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.nome
+    
 class Transacao(BaseModel):
     tipo = models.ForeignKey(Tipo, on_delete=models.PROTECT, verbose_name="Tipo da transação")
+    categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True, blank=True)
     # titulo = EncryptedCharField(models.CharField(max_length=200, verbose_name="Título"))
     titulo = EncryptedCharField(max_length=200, verbose_name="Título")
 

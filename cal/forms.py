@@ -1,17 +1,28 @@
 from django import forms
 from django.forms import ModelForm, DateInput, Select
 from .models import Transacao
-
-
 from django.forms import ModelForm
 from django.forms.widgets import DateInput
 from datetime import date
 from .models import Transacao
 
+from django import forms
+from cal.models import Categoria
+
+class CategoriaForm(forms.ModelForm):
+    class Meta:
+        model = Categoria
+        fields = ['nome']
+        widgets = {
+            'nome': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nome da categoria'})
+        }
+
+
+
 class TransacaoForm(ModelForm):
     class Meta:
         model = Transacao
-        fields = ['tipo', 'titulo', 'valor', 'data', 'parcelas']
+        fields = ['tipo', 'titulo', 'categoria', 'valor', 'data', 'parcelas']
         widgets = {
             'data': DateInput(attrs={'type': 'date'}),
         }
@@ -30,6 +41,7 @@ class TransacaoForm(ModelForm):
         self.fields['data'].widget.attrs['class'] = 'form-control'
         self.fields['tipo'].widget.attrs['class'] = 'form-control'
         self.fields['parcelas'].widget.attrs['class'] = 'form-control'
+        self.fields['categoria'].widget.attrs['class'] = 'form-control'
 
 
 

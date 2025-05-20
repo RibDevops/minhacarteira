@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Categorias</h2>
+        <a href="{% url 'cal:categoria_nova' %}" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Nova Categoria
+        </a>
+    </div>
+
+    {% if categorias %}
+    <table class="table table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Descrição</th>
+                <th class="text-end">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in categorias %}
+            <tr>
+                <td>{{ c.nome }}</td>
+                <td class="text-end">
+                    <a href="{% url 'cal:categoria_update' c.pk %}" class="btn btn-sm btn-warning"><i class="bi bi-pencil-square"></i> Editar</a>
+                    <a href="{% url 'cal:categoria_delete' c.pk %}" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i> Excluir</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="alert alert-info">Nenhuma categoria cadastrada.</div>
+    {% endif %}
+</div>
+{% endblock %}

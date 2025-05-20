@@ -1,8 +1,10 @@
 from django import views
 from django.urls import path
+from cal.views import views_categoria
 from cal.views.views_cal import CalendarView
 from cal.views.views_user import *
 from cal.views.views_transacao import *
+from cal.views.views_categoria import *
 from cal.views.views_login import register_view, LogoutView
 from django.contrib.auth import views as auth_views
 
@@ -40,6 +42,11 @@ urlpatterns = [
     path('transacoes-mes/', transacoes_mes_view, name='transacoes_mes'),
     path("resumo-categoria/", resumo_categoria_view, name="resumo_categoria"),
     path('transacao/<int:pk>/editar/', TransacaoUpdateView.as_view(), name='transacao_update'),
+
+    path('categorias/', views_categoria.categoria_list, name='categorias'),
+    path('categorias/nova/', views_categoria.categoria_nova, name='categoria_nova'),
+    path('categorias/<int:pk>/editar/', views_categoria.categoria_update, name='categoria_update'),
+    path('categorias/<int:pk>/excluir/', views_categoria.categoria_delete, name='categoria_delete'),
 
 
     path('usuarios/', views_user.listar_usuarios, name='listar_usuarios'),

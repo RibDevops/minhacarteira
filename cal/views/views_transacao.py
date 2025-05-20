@@ -252,6 +252,58 @@ class TransacaoUpdateView(UpdateView):
 #         'saldo_total': saldo_total,
 #     }
 #     return render(request, 'cal/transacoes_mes.html', contexto)
+# def transacoes_mes_view(request):
+#     ano = int(request.GET.get('ano', date.today().year))
+#     mes = int(request.GET.get('mes', date.today().month))
+
+#     data_inicio = make_aware(datetime(ano, mes, 1))
+#     data_fim = make_aware(datetime(ano, mes, 1) + relativedelta(months=1))
+
+#     transacoes = Transacao.objects.filter(
+#         user=request.user,
+#         data__gte=data_inicio,
+#         data__lt=data_fim
+#     ).order_by('-data')
+
+#     # Gráfico por tipo com valores ajustados
+#     dados_por_tipo = defaultdict(Decimal)
+#     for t in transacoes:
+#         try:
+#             valor = Decimal(t.valor)
+#             if not t.tipo.is_credito:
+#                 valor = -valor
+#             dados_por_tipo[t.tipo.descricao] += valor
+
+# #     dados_por_tipo = defaultdict(Decimal)
+# # for t in transacoes:
+# #     valor = Decimal(t.valor)
+# #     if not t.tipo.is_credito:
+# #         valor = -valor
+# #     dados_por_tipo[t.tipo.descricao] += valor
+
+#         except Exception as e:
+#             print(f"Erro ao processar transação {t.id}: {e}")
+
+#     labels = list(dados_por_tipo.keys())
+#     valores = [float(v) for v in dados_por_tipo.values()]  # Para o gráfico
+
+#     # Totais
+#     total_creditos = transacoes.filter(tipo__is_credito=True).aggregate(Sum('valor'))['valor__sum'] or 0
+#     total_debitos = transacoes.filter(tipo__is_credito=False).aggregate(Sum('valor'))['valor__sum'] or 0
+#     saldo_total = total_creditos - total_debitos
+
+#     contexto = {
+#         'transacoes': transacoes,
+#         'mes_atual': date(ano, mes, 1),
+#         'mes_anterior': date(ano, mes, 1) - relativedelta(months=1),
+#         'mes_proximo': date(ano, mes, 1) + relativedelta(months=1),
+#         'grafico_labels': labels,
+#         'grafico_valores': valores,
+#         'total_creditos': total_creditos,
+#         'total_debitos': total_debitos,
+#         'saldo_total': saldo_total,
+#     }
+#     return render(request, 'cal/transacoes_mes.html', contexto)
 def transacoes_mes_view(request):
     ano = int(request.GET.get('ano', date.today().year))
     mes = int(request.GET.get('mes', date.today().month))
@@ -265,7 +317,7 @@ def transacoes_mes_view(request):
         data__lt=data_fim
     ).order_by('-data')
 
-    # Gráfico por tipo com valores ajustados
+    # Gráfico por tipo (Crédito/Débito)
     dados_por_tipo = defaultdict(Decimal)
     for t in transacoes:
         try:
@@ -273,19 +325,21 @@ def transacoes_mes_view(request):
             if not t.tipo.is_credito:
                 valor = -valor
             dados_por_tipo[t.tipo.descricao] += valor
-
-#     dados_por_tipo = defaultdict(Decimal)
-# for t in transacoes:
-#     valor = Decimal(t.valor)
-#     if not t.tipo.is_credito:
-#         valor = -valor
-#     dados_por_tipo[t.tipo.descricao] += valor
-
         except Exception as e:
             print(f"Erro ao processar transação {t.id}: {e}")
 
     labels = list(dados_por_tipo.keys())
-    valores = [float(v) for v in dados_por_tipo.values()]  # Para o gráfico
+    valores = [float(v) for v in dados_por_tipo.values()]
+
+    # Gráfico por categoria
+    dados_por_categoria = (
+        transacoes.values('categoria__nome')
+        .annotate(total=Sum('valor'))
+        .order_by('-total')
+    )
+
+    categorias = [item['categoria__nome'] for item in dados_por_categoria]
+    totais_categoria = [float(item['total']) for item in dados_por_categoria]
 
     # Totais
     total_creditos = transacoes.filter(tipo__is_credito=True).aggregate(Sum('valor'))['valor__sum'] or 0
@@ -299,12 +353,13 @@ def transacoes_mes_view(request):
         'mes_proximo': date(ano, mes, 1) + relativedelta(months=1),
         'grafico_labels': labels,
         'grafico_valores': valores,
+        'grafico_categorias': categorias,  # para gráfico por categoria
+        'grafico_totais_categoria': totais_categoria,  # para gráfico por categoria
         'total_creditos': total_creditos,
         'total_debitos': total_debitos,
         'saldo_total': saldo_total,
     }
     return render(request, 'cal/transacoes_mes.html', contexto)
-
 
 @login_required
 def resumo_categoria_view(request):
