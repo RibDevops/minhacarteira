@@ -9,7 +9,7 @@ from django.utils.timezone import make_aware
 from decimal import Decimal
 from collections import defaultdict
 
-from ..models import Transacao
+from ..models import Categoria, Transacao
 from ..forms import TransacaoForm
 from dateutil.relativedelta import relativedelta
 from ..models import Tipo, Transacao
@@ -23,10 +23,10 @@ from ..models import Transacao
 from decimal import Decimal
 from decimal import Decimal, InvalidOperation
 
-@login_required
-def listar_transacoes(request):
-    transacoes = Transacao.objects.filter(user=request.user).order_by('-data')
-    return render(request, 'cal/lista_transacoes.html', {'transacoes': transacoes})
+# @login_required
+# def listar_transacoes(request):
+#     transacoes = Transacao.objects.filter(user=request.user).order_by('-data')
+#     return render(request, 'cal/lista_transacoes.html', {'transacoes': transacoes})
 
 @login_required
 def excluir_transacao(request, pk):
@@ -388,3 +388,41 @@ def resumo_categoria_view(request):
     }
     return render(request, "cal/resumo_categoria.html", contexto)
 
+from django.db import connection
+
+
+@login_required
+def listar_transacoes(request):
+    transacoes = Transacao.objects.filter(user=request.user).order_by('-data')
+    print(connection.queries)
+    print(transacoes)
+    for t in transacoes:
+        print(f"{t.id} | {t.titulo} | {t.valor} | {t.data} | {t.categoria} | {t.tipo}")
+
+
+    ano = request.GET.get('ano')
+    print(ano)
+    mes = request.GET.get('mes')
+    print(mes)
+    tipo = request.GET.get('tipo')
+    categoria = request.GET.get('categoria')
+
+    if ano:
+        transacoes = transacoes.filter(data__year=int(ano))
+        print(f'ano_t {transacoes}')
+    if mes:
+        transacoes = transacoes.filter(data__month=int(mes))
+    if tipo:
+        transacoes = transacoes.filter(tipo_id=int(tipo))
+    if categoria:
+        transacoes = transacoes.filter(categoria_id=int(categoria))
+
+    tipos = Tipo.objects.all()
+    categorias = Categoria.objects.all()
+    print(f'transacoes: {transacoes}')
+
+    return render(request, 'cal/lista_transacoes.html', {
+        'transacoes': transacoes,
+        'tipos': tipos,
+        'categorias': categorias,
+    })

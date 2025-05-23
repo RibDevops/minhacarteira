@@ -9,6 +9,33 @@ from .models import Transacao
 from django import forms
 from cal.models import Categoria
 
+from .models import MetaCategoria
+
+class MetaCategoriaForm(forms.ModelForm):
+    class Meta:
+        model = MetaCategoria
+        fields = ['categoria', 'limite', 'mes', 'ano']
+        widgets = {
+            'categoria': forms.Select(attrs={'class': 'form-control'}),
+            'limite': forms.NumberInput(attrs={'class': 'form-control'}),
+            'mes': forms.NumberInput(attrs={'class': 'form-control', 'min': 1, 'max': 12}),
+            'ano': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
+
+# from .models import MetaCategoria
+
+# class MetaCategoriaForm(forms.ModelForm):
+#     class Meta:
+#         model = MetaCategoria
+#         fields = ['categoria', 'limite', 'mes', 'ano']
+#         widgets = {
+#             'categoria': forms.Select(attrs={'class': 'form-control'}),
+#             'limite': forms.NumberInput(attrs={'class': 'form-control'}),
+#             'mes': forms.NumberInput(attrs={'class': 'form-control', 'min': 1, 'max': 12}),
+#             'ano': forms.NumberInput(attrs={'class': 'form-control'}),
+#         }
+
+
 class CategoriaForm(forms.ModelForm):
     class Meta:
         model = Categoria

@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Metas por Categoria{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+  <h2 class="mb-4">Metas do mês: {{ mes_atual }}</h2>
+  <!-- Navegação de meses -->
+<div class="d-flex justify-content-between flex-wrap mb-3 gap-2">
+  <a href="?mes={{ mes_anterior.month }}&ano={{ mes_anterior.year }}" class="btn btn-outline-primary">
+    <i class="bi bi-arrow-left-circle"></i> Mês anterior
+  </a>
+  <a href="?mes={{ mes_proximo.month }}&ano={{ mes_proximo.year }}" class="btn btn-outline-primary">
+    Próximo mês <i class="bi bi-arrow-right-circle"></i>
+  </a>
+</div>
+
+
+
+  <!-- ✅ Formulário de nova meta -->
+  <form method="POST" class="mb-4">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Salvar Nova Meta</button>
+  </form>
+
+  {% if dados %}
+    {% for d in dados %}
+      <div class="card mb-4">
+        <div class="card-header bg-light">
+          <strong>{{ d.categoria }}</strong> — Usou R$ {{ d.gasto|floatformat:2 }} do seu limite de R$ {{ d.limite|floatformat:2 }}
+        </div>
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col-md-5 text-center">
+              <canvas id="pizza{{ d.id }}" width="30" height="30" style="width: 30px; height: 30px;"></canvas>
+
+            </div>
+            <div class="col-md-7">
+              <div class="progress mb-2">
+                <div class="progress-bar bg-{{ d.status }}" style="width: {{ d.percentual }}%">
+                  {{ d.percentual }}%
+                </div>
+              </div>
+              {% if d.transacoes %}
+                <ul class="list-group list-group-sm">
+                  {% for t in d.transacoes %}
+                    <li class="list-group-item py-1">
+                      {{ t.data }} - {{ t.titulo }} — <strong>R$ {{ t.valor }}</strong>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% else %}
+                <p class="text-muted">Nenhuma transação nesta categoria.</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>Nenhuma meta cadastrada para este mês.</p>
+  {% endif %}
+</div>
+
+<!-- ✅ Chart.js para gerar os gráficos -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+{% for d in dados %}
+const ctx{{ d.id }} = document.getElementById('pizza{{ d.id }}').getContext('2d');
+new Chart(ctx{{ d.id }}, {
+    type: 'doughnut',
+    data: {
+        labels: ['Gasto', 'Restante'],
+        datasets: [{
+            data: [{{ d.gasto }}, {{ d.restante|floatformat:2 }}],
+            backgroundColor: ['#dc3545', '#198754']
+        }]
+    },
+    options: {
+        plugins: {
+            legend: {
+                display: true,
+                position: 'bottom'
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return `${context.label}: R$ ${context.raw.toFixed(2)}`;
+                    }
+                }
+            }
+        }
+    }
+});
+{% endfor %}
+</script>
+{% endblock %}

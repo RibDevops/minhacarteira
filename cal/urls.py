@@ -11,6 +11,7 @@ from django.contrib.auth import views as auth_views
 from django.urls import path
 from .views import views_tipo
 from .views import views_user
+from .views import views_meta
 
 from django.urls import path
 
@@ -57,6 +58,9 @@ urlpatterns = [
     path('usuarios/desativar_usuario/<int:user_id>/', views_user.desativar_usuario, name='desativar_usuario'),
 
     path('contato/', views_user.contato, name='contato'),
+
+    path('metas/', views_meta.metas_dashboard, name='metas_categoria'),
+
 
 ]
 
