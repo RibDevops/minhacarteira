@@ -66,30 +66,44 @@ class CategoriaForm(forms.ModelForm):
         }
 
 
+from django import forms
+from django.forms import ModelForm, DateInput
+from .models import Transacao
+from datetime import date
 
 class TransacaoForm(ModelForm):
     class Meta:
         model = Transacao
         fields = ['tipo', 'titulo', 'categoria', 'valor', 'data', 'parcelas']
         widgets = {
-            'data': DateInput(attrs={'type': 'date'}),
+            'data': DateInput(
+                attrs={
+                    'type': 'date',
+                    'class': 'form-control'
+                },
+                format='%Y-%m-%d'  # Formato obrigatório para input date
+            ),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Define o valor inicial para a data atual
-        self.fields['data'].initial = date.today().strftime('%Y-%m-%d')
         
-        # Configura os placeholders e classes CSS
+        # Configura o valor inicial da data corretamente
+        if self.instance.pk and self.instance.data:
+            self.initial['data'] = self.instance.data.strftime('%Y-%m-%d')
+        elif not self.instance.pk:
+            self.initial['data'] = date.today().strftime('%Y-%m-%d')
+        
+        # Configurações dos outros campos
         self.fields['titulo'].widget.attrs.update({
             'placeholder': 'ex: Mercado, Salário, Bitcoin',
             'class': 'form-control'
         })
-        self.fields['valor'].widget.attrs['class'] = 'form-control'
-        self.fields['data'].widget.attrs['class'] = 'form-control'
-        self.fields['tipo'].widget.attrs['class'] = 'form-control'
-        self.fields['parcelas'].widget.attrs['class'] = 'form-control'
-        self.fields['categoria'].widget.attrs['class'] = 'form-control'
+        
+        for field in ['valor', 'tipo', 'parcelas', 'categoria']:
+            self.fields[field].widget.attrs['class'] = 'form-control'
+
+
 
 
 

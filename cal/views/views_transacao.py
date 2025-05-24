@@ -40,16 +40,21 @@ def excluir_transacao_lista(request, pk):
     transacao.delete()
     return redirect('cal:listar_transacoes')
 
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, get_object_or_404
+from ..models import Transacao
+from ..forms import TransacaoForm
+
 @login_required
-def transacao_editar(request, pk=None):
-    instancia = get_object_or_404(Transacao, pk=pk, user=request.user) if pk else Transacao(user=request.user)
+def transacao_editar(request, pk):
+    instancia = get_object_or_404(Transacao, pk=pk, user=request.user)
     form = TransacaoForm(request.POST or None, instance=instancia)
 
     if request.method == 'POST' and form.is_valid():
         form.save()
         return redirect('cal:transacoes_mes')
 
-    return render(request, 'cal/event.html', {'form': form})
+    return render(request, 'cal/transacao_editar.html', {'form': form})
 
 
 # def transacao_view(request):

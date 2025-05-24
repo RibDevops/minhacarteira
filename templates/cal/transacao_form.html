@@ -5,7 +5,8 @@
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Salvar</button>
+    
     <a href="{% url 'cal:calendar' %}" class="btn btn-danger">Cancelar</a>
+    <button type="submit" class="btn btn-primary">Salvar</button>
   </form>
 {% endblock %}
