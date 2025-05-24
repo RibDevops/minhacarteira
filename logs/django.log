@@ -1562,3 +1562,515 @@ WARNING 2025-05-24 10:17:10,329 basehttp "GET /static/css/style.css HTTP/1.1" 40
 WARNING 2025-05-24 10:17:11,456 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
 WARNING 2025-05-24 10:17:58,935 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
 WARNING 2025-05-24 10:18:00,288 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 10:27:43,711 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 10:28:15,956 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 10:32:03,791 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 10:32:05,014 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 10:32:06,501 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 10:32:07,122 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+ERROR 2025-05-24 10:32:35,403 log Internal Server Error: /metas/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 101, in metas_dashboard
+    return render(request, 'cal/metas_dashboard.html', {
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 299, in do_extends
+    nodelist = parser.parse()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 862, in do_for
+    nodelist_loop = parser.parse(
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 489, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 487, in parse
+    filter_expression = self.compile_filter(token.contents)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 609, in compile_filter
+    return FilterExpression(token, self)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 705, in __init__
+    filter_func = parser.find_filter(filter_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 615, in find_filter
+    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
+django.template.exceptions.TemplateSyntaxError: Invalid filter: 'type'
+ERROR 2025-05-24 10:32:35,407 basehttp "GET /metas/ HTTP/1.1" 500 276602
+WARNING 2025-05-24 10:32:35,512 log Not Found: /favicon.ico
+WARNING 2025-05-24 10:32:53,560 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 10:32:55,372 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 10:32:56,472 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 10:33:41,931 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 10:33:42,953 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 10:33:44,264 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 10:33:45,710 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 10:45:02,390 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 10:47:52,889 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 10:48:05,702 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 10:48:07,062 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 10:51:20,240 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 10:58:54,586 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 10:58:55,768 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 10:59:10,506 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 10:59:12,122 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 11:02:07,630 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 11:02:17,050 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 11:03:04,150 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 11:03:05,285 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 11:03:06,313 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 11:03:30,077 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 11:03:31,164 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 11:03:50,719 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 11:04:44,139 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+ERROR 2025-05-24 11:07:32,638 log Internal Server Error: /metas/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 103, in metas_dashboard
+    return render(request, 'cal/metas_dashboard.html', {
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 299, in do_extends
+    nodelist = parser.parse()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 862, in do_for
+    nodelist_loop = parser.parse(
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 489, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 487, in parse
+    filter_expression = self.compile_filter(token.contents)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 609, in compile_filter
+    return FilterExpression(token, self)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 705, in __init__
+    filter_func = parser.find_filter(filter_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 615, in find_filter
+    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
+django.template.exceptions.TemplateSyntaxError: Invalid filter: 'float'
+ERROR 2025-05-24 11:07:32,640 basehttp "GET /metas/ HTTP/1.1" 500 231615
+WARNING 2025-05-24 11:07:32,773 log Not Found: /favicon.ico
+ERROR 2025-05-24 11:07:33,610 log Internal Server Error: /metas/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 103, in metas_dashboard
+    return render(request, 'cal/metas_dashboard.html', {
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 299, in do_extends
+    nodelist = parser.parse()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 862, in do_for
+    nodelist_loop = parser.parse(
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 489, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 487, in parse
+    filter_expression = self.compile_filter(token.contents)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 609, in compile_filter
+    return FilterExpression(token, self)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 705, in __init__
+    filter_func = parser.find_filter(filter_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 615, in find_filter
+    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
+django.template.exceptions.TemplateSyntaxError: Invalid filter: 'float'
+ERROR 2025-05-24 11:07:33,611 basehttp "GET /metas/ HTTP/1.1" 500 231615
+ERROR 2025-05-24 11:09:01,523 log Internal Server Error: /metas/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 106, in metas_dashboard
+    return render(request, 'cal/metas_dashboard.html', {
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 299, in do_extends
+    nodelist = parser.parse()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 862, in do_for
+    nodelist_loop = parser.parse(
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 489, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 487, in parse
+    filter_expression = self.compile_filter(token.contents)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 609, in compile_filter
+    return FilterExpression(token, self)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 705, in __init__
+    filter_func = parser.find_filter(filter_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 615, in find_filter
+    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
+django.template.exceptions.TemplateSyntaxError: Invalid filter: 'float'
+ERROR 2025-05-24 11:09:01,525 basehttp "GET /metas/ HTTP/1.1" 500 231615
+ERROR 2025-05-24 11:10:04,749 log Internal Server Error: /metas/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 106, in metas_dashboard
+    return render(request, 'cal/metas_dashboard.html', {
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 299, in do_extends
+    nodelist = parser.parse()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 862, in do_for
+    nodelist_loop = parser.parse(
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 489, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 487, in parse
+    filter_expression = self.compile_filter(token.contents)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 609, in compile_filter
+    return FilterExpression(token, self)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 705, in __init__
+    filter_func = parser.find_filter(filter_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 615, in find_filter
+    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
+django.template.exceptions.TemplateSyntaxError: Invalid filter: 'float'
+ERROR 2025-05-24 11:10:04,750 basehttp "GET /metas/ HTTP/1.1" 500 234862
+ERROR 2025-05-24 11:10:05,729 log Internal Server Error: /metas/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 106, in metas_dashboard
+    return render(request, 'cal/metas_dashboard.html', {
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 299, in do_extends
+    nodelist = parser.parse()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 862, in do_for
+    nodelist_loop = parser.parse(
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 489, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 487, in parse
+    filter_expression = self.compile_filter(token.contents)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 609, in compile_filter
+    return FilterExpression(token, self)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 705, in __init__
+    filter_func = parser.find_filter(filter_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 615, in find_filter
+    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
+django.template.exceptions.TemplateSyntaxError: Invalid filter: 'float'
+ERROR 2025-05-24 11:10:05,731 basehttp "GET /metas/ HTTP/1.1" 500 234862
+WARNING 2025-05-24 11:10:17,854 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 11:10:48,688 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 11:10:49,825 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 11:10:50,992 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 11:10:51,678 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 11:10:56,649 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 11:17:19,380 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 11:17:21,672 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 11:17:24,002 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 11:18:49,155 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+ERROR 2025-05-24 11:27:15,172 log Internal Server Error: /metas/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 136, in metas_dashboard
+    for meta in metas:
+NameError: name 'metas' is not defined
+ERROR 2025-05-24 11:27:15,173 basehttp "GET /metas/ HTTP/1.1" 500 73651
+WARNING 2025-05-24 11:27:15,335 log Not Found: /favicon.ico
+ERROR 2025-05-24 11:29:48,454 log Internal Server Error: /metas/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 135, in metas_dashboard
+    metas = MetaCategoria.objects.filter(user=user, mes=mes, ano=ano)
+NameError: name 'user' is not defined
+ERROR 2025-05-24 11:29:48,455 basehttp "GET /metas/ HTTP/1.1" 500 73706
+WARNING 2025-05-24 11:29:48,558 log Not Found: /favicon.ico
+ERROR 2025-05-24 11:29:49,369 log Internal Server Error: /metas/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 135, in metas_dashboard
+    metas = MetaCategoria.objects.filter(user=user, mes=mes, ano=ano)
+NameError: name 'user' is not defined
+ERROR 2025-05-24 11:29:49,370 basehttp "GET /metas/ HTTP/1.1" 500 73706
+WARNING 2025-05-24 11:31:47,387 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 11:31:53,011 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 11:31:53,687 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 11:32:21,831 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+ERROR 2025-05-24 11:34:33,222 log Internal Server Error: /metas/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 271, in metas_dashboard
+    return render(request, 'cal/metas_dashboard.html', context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 299, in do_extends
+    nodelist = parser.parse()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 862, in do_for
+    nodelist_loop = parser.parse(
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 489, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 487, in parse
+    filter_expression = self.compile_filter(token.contents)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 609, in compile_filter
+    return FilterExpression(token, self)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 705, in __init__
+    filter_func = parser.find_filter(filter_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 615, in find_filter
+    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
+django.template.exceptions.TemplateSyntaxError: Invalid filter: 'floatval'
+ERROR 2025-05-24 11:34:33,225 basehttp "GET /metas/ HTTP/1.1" 500 227560
+WARNING 2025-05-24 11:34:33,365 log Not Found: /favicon.ico
+WARNING 2025-05-24 11:35:50,302 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 11:39:18,243 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 11:39:21,169 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 11:39:22,086 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 11:39:42,166 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 11:41:27,685 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853

@@ -1,32 +1,39 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
+
 {% block title %}Metas por Categoria{% endblock %}
 
 {% block content %}
-
-
 <div class="container my-4">
   <h2 class="mb-4">Metas do mês: {{ mes_atual }}</h2>
 
   <!-- Navegação de meses -->
-<div class="d-flex justify-content-between flex-wrap mb-3 gap-2">
-  <a href="?mes={{ mes_anterior.month }}&ano={{ mes_anterior.year }}" class="btn btn-outline-primary">
-    <i class="bi bi-arrow-left-circle"></i> Mês anterior
-  </a>
-  <a href="?mes={{ mes_proximo.month }}&ano={{ mes_proximo.year }}" class="btn btn-outline-primary">
-    Próximo mês <i class="bi bi-arrow-right-circle"></i>
-  </a>
-</div>
+  <div class="d-flex justify-content-between flex-wrap mb-3 gap-2">
+    <a href="?mes={{ mes_anterior.month }}&ano={{ mes_anterior.year }}" class="btn btn-outline-primary">
+      <i class="bi bi-arrow-left-circle"></i> Mês anterior
+    </a>
+    <a href="?mes={{ mes_proximo.month }}&ano={{ mes_proximo.year }}" class="btn btn-outline-primary">
+      Próximo mês <i class="bi bi-arrow-right-circle"></i>
+    </a>
+  </div>
 
-
-
-  <!-- ✅ Formulário de nova meta -->
+  <!-- Formulário de nova meta -->
   <form method="POST" class="mb-4">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit" class="btn btn-success">Salvar Nova Meta</button>
   </form>
 
+  <!-- Gráfico geral -->
+  <div class="mb-5">
+    <h4 class="mb-2">Resumo Geral das Metas</h4>
+    <div style="height: 300px;">
+      <canvas id="graficoGeralMetas"></canvas>
+    </div>
+  </div>
+
+  <!-- Metas individuais -->
   {% if dados %}
     {% for d in dados %}
       <div class="card mb-4">
@@ -36,8 +43,7 @@
         <div class="card-body">
           <div class="row align-items-center">
             <div class="col-md-5 text-center">
-              <canvas id="pizza{{ d.id }}" width="30" height="30" style="width: 30px; height: 30px;"></canvas>
-
+              <canvas id="pizza{{ d.id }}" width="80" height="80"></canvas>
             </div>
             <div class="col-md-7">
               <div class="progress mb-2">
@@ -49,7 +55,7 @@
                 <ul class="list-group list-group-sm">
                   {% for t in d.transacoes %}
                     <li class="list-group-item py-1">
-                      {{ t.data }} - {{ t.titulo }} — <strong>R$ {{ t.valor }}</strong>
+                      {{ t.data|date:"d/m/Y" }} - {{ t.titulo }} — <strong>R$ {{ t.valor|floatformat:2 }}</strong>
                     </li>
                   {% endfor %}
                 </ul>
@@ -66,36 +72,69 @@
   {% endif %}
 </div>
 
-<!-- ✅ Chart.js para gerar os gráficos -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Exporta dados JSON para o gráfico geral -->
+
+{{ grafico_valores|json_script:"grafico-metas-valores" }}
+{{ grafico_labels|json_script:"grafico-metas-labels" }}
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+
 <script>
-{% for d in dados %}
-const ctx{{ d.id }} = document.getElementById('pizza{{ d.id }}').getContext('2d');
-new Chart(ctx{{ d.id }}, {
-    type: 'doughnut',
-    data: {
-        labels: ['Gasto', 'Restante'],
+  document.addEventListener("DOMContentLoaded", function () {
+    // Gráfico geral
+    const labels = JSON.parse(document.getElementById("grafico-metas-labels").textContent);
+    const valores = JSON.parse(document.getElementById("grafico-metas-valores").textContent);
+    const cores = labels.map((_, i) => `hsl(${i * 45}, 70%, 60%)`);
+
+    const ctx = document.getElementById("graficoGeralMetas").getContext("2d");
+    new Chart(ctx, {
+      type: "doughnut",
+      data: {
+        labels: labels,
         datasets: [{
-            data: [{{ d.gasto }}, {{ d.restante|floatformat:2 }}],
-            backgroundColor: ['#dc3545', '#198754']
+          data: valores,
+          backgroundColor: cores,
+          borderColor: "#fff",
+          borderWidth: 2
         }]
+      },
+      options: {
+        plugins: {
+          title: {
+            display: true,
+            text: "Distribuição Geral de Gastos por Categoria"
+          },
+          legend: { position: "bottom" }
+        },
+        responsive: true,
+        maintainAspectRatio: false
+      }
+    });
+
+    // Gráficos individuais por categoria
+{% for d in dados %}
+  new Chart(document.getElementById("pizza{{ d.id }}"), {
+    type: "doughnut",
+    data: {
+      labels: ["Gasto", "Restante"],
+      datasets: [{
+        data: [{{ d.gasto }}, {{ d.restante|floatformat:2 }}],
+        backgroundColor: ["#dc3545", "#dee2e6"],
+        borderColor: "#fff",
+        borderWidth: 1
+      }]
     },
     options: {
-        plugins: {
-            legend: {
-                display: true,
-                position: 'bottom'
-            },
-            tooltip: {
-                callbacks: {
-                    label: function(context) {
-                        return `${context.label}: R$ ${context.raw.toFixed(2)}`;
-                    }
-                }
-            }
-        }
+      plugins: {
+        legend: { display: false }
+      },
+      responsive: true,
+      maintainAspectRatio: false
     }
-});
+  });
 {% endfor %}
+
+  });
 </script>
 {% endblock %}
