@@ -11,16 +11,37 @@ from cal.models import Categoria
 
 from .models import MetaCategoria
 
+
+from datetime import date
+
+ANOS_CHOICES = [(ano, str(ano)) for ano in range(date.today().year, date.today().year + 5)]
+
+
+
+
+
+# Lista de tuplas com meses para usar no select
+MESES_PT = {
+    1: "Janeiro", 2: "Fevereiro", 3: "Março", 4: "Abril",
+    5: "Maio", 6: "Junho", 7: "Julho", 8: "Agosto",
+    9: "Setembro", 10: "Outubro", 11: "Novembro", 12: "Dezembro",
+}
+MESES_CHOICES = [(k, v) for k, v in MESES_PT.items()]
+
 class MetaCategoriaForm(forms.ModelForm):
+    mes = forms.ChoiceField(choices=MESES_CHOICES, label="Mês", widget=forms.Select(attrs={'class': 'form-control'}))
+    ano = forms.ChoiceField(choices=ANOS_CHOICES, label="Ano", widget=forms.Select(attrs={'class': 'form-control'}))
+
+
     class Meta:
         model = MetaCategoria
         fields = ['categoria', 'limite', 'mes', 'ano']
         widgets = {
             'categoria': forms.Select(attrs={'class': 'form-control'}),
             'limite': forms.NumberInput(attrs={'class': 'form-control'}),
-            'mes': forms.NumberInput(attrs={'class': 'form-control', 'min': 1, 'max': 12}),
             'ano': forms.NumberInput(attrs={'class': 'form-control'}),
         }
+
 
 # from .models import MetaCategoria
 
