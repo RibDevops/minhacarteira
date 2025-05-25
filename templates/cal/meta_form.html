@@ -1,13 +1,124 @@
-
 {% extends 'base.html' %}
 
 {% block content %}
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <a href="{% url 'cal:metas_categoria' %}?mes={{ mes }}&ano={{ ano }}" class="btn btn-secondary">Cancelar</a>
-    <button type="submit" class="btn btn-primary">Salvar</button>
+<div class="container mt-4">
+    <h2 class="mb-4">{% if form.instance.pk %}Editar Meta{% else %}Nova Meta{% endif %}</h2>
     
-  </form>
-  {% endblock %}
+    <form method="post" class="needs-validation" novalidate>
+        {% csrf_token %}
+        
+        <div class="row g-3">
+            <!-- Campo Mês/Ano -->
+            <div class="col-md-6">
+                <label for="id_mes_ano" class="form-label">Mês/Ano</label>
+                {{ form.mes_ano }}
+                <div class="invalid-feedback">
+                    Por favor, selecione um mês/ano válido.
+                </div>
+            </div>
+            <p></p>
+            <!-- Campo Categoria -->
+            <div class="col-md-6">
+                <label for="id_categoria" class="form-label">Categoria</label>
+                {{ form.categoria }}
+                <div class="invalid-feedback">
+                    Por favor, selecione uma categoria válida.
+                </div>
+            </div>
+            <p></p>
+            <!-- Campo Limite (Valor Monetário) -->
+            <div class="col-md-6">
+              <label for="id_limite" class="form-label">Valor Limite (R$)</label>
+              <div class="input-group">
+                  <span class="input-group-text">R$</span>
+                  {{ form.limite }}
+              </div>
+              {% if form.limite.errors %}
+                  <div class="invalid-feedback d-block">
+                      {% for error in form.limite.errors %}
+                          {{ error }}
+                      {% endfor %}
+                  </div>
+              {% endif %}
+            </div>
+        
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary me-2">
+                <i class="bi bi-check-circle"></i> Salvar
+            </button>
+            <a href="{% url 'cal:metas_categoria' %}?mes={{ mes|default:'' }}&ano={{ ano|default:'' }}" 
+               class="btn btn-outline-secondary">
+                <i class="bi bi-x-circle"></i> Cancelar
+            </a>
+        </div>
+    </form>
+</div>
+
+<!-- Script de formatação monetária -->
+<script>
+$(document).ready(function() {
+    // Formatação inicial se já houver valor
+    if ($('#id_limite').val()) {
+        formatCurrency($('#id_limite'));
+    }
+    
+    // Formata quando sai do campo
+    $('#id_limite').on('blur', function() {
+        formatCurrency($(this));
+    });
+    
+    // Remove formatação quando entra no campo
+    $('#id_limite').on('focus', function() {
+        $(this).val($(this).val().replace(/\./g, '').replace(',', '.').replace(/[^\d.-]/g, ''));
+    });
+    
+    // Validação do formulário
+    $('form').on('submit', function(e) {
+        // Converte o valor para formato decimal antes de enviar
+        let valor = $('#id_limite').val().replace(/\./g, '').replace(',', '.');
+        $('#id_limite').val(valor);
+    });
+});
+
+/**
+ * Formata um valor numérico como moeda brasileira
+ * @param {jQuery} input - Elemento de input jQuery
+ */
+function formatCurrency(input) {
+    let value = input.val().replace(/\./g, '').replace(',', '.').replace(/[^\d.-]/g, '');
+    
+    if (value && !isNaN(parseFloat(value))) {
+        // Formata como moeda brasileira (1.000,00)
+        let formatted = parseFloat(value).toLocaleString('pt-BR', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+        input.val(formatted);
+    } else if (value === '') {
+        input.val('');
+    } else {
+        // Valor inválido - mantém como está mas mostra feedback
+        input.addClass('is-invalid');
+    }
+}
+</script>
+
+<style>
+.money-input {
+    text-align: right;
+    font-family: monospace;
+}
+.invalid-feedback {
+    display: none;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875em;
+    color: #dc3545;
+}
+.is-invalid ~ .invalid-feedback,
+.is-invalid ~ .invalid-tooltip {
+    display: block;
+}
+</style>
+{% endblock %}

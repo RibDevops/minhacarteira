@@ -454,7 +454,7 @@ def listar_transacoes(request):
 
     tipos = Tipo.objects.all()
     categorias = Categoria.objects.all()
-    print(f'transacoes: {transacoes}')
+    # print(f'transacoes: {transacoes}')
 
     return render(request, 'cal/lista_transacoes.html', {
         'transacoes': transacoes,

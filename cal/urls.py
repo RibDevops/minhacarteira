@@ -64,7 +64,9 @@ urlpatterns = [
 
     path('metas/', views_meta.metas_dashboard, name='metas_categoria'),
     path('metas/nova/', views_meta.meta_adicionar, name='meta_criar'),
-    path('metas/<int:meta_id>/editar/', views_meta.meta_editar, name='meta_editar'),
+    # urls.py
+    path('metas/<int:pk>/editar/', views_meta.meta_editar, name='meta_editar'),
+
     path('metas/<int:meta_id>/excluir/', views_meta.meta_excluir, name='meta_excluir'),
     # path('metas/<int:meta_id>/excluir/', meta_excluir, name='meta_excluir'),
     path('metas/', views_meta.metas_dashboard, name='metas_dashboard'),

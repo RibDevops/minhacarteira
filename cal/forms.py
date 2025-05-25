@@ -34,35 +34,99 @@ from django import forms
 from .models import MetaCategoria
 
 
+from django import forms
+from .models import MetaCategoria
+from datetime import date
+import calendar
+from django.forms import NumberInput
+
+from django import forms
+from .models import MetaCategoria, Categoria
+from datetime import date
+import calendar
+
+from django import forms
+from .models import MetaCategoria, Categoria
+from datetime import date
+import calendar
+
 class MetaCategoriaForm(forms.ModelForm):
-    mes_ano = forms.ChoiceField(label="Mês e Ano")
+    mes_ano = forms.ChoiceField(
+        label="Mês/Ano",
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    
+    # Adicione explicitamente o campo limite
+    limite = forms.DecimalField(
+        label="Valor Limite",
+        max_digits=15,
+        decimal_places=2,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': '0,00'
+        })
+    )
 
     class Meta:
         model = MetaCategoria
         fields = ['categoria', 'limite']
+        widgets = {
+            'categoria': forms.Select(attrs={'class': 'form-select'}),
+        }
 
     def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user', None)  # Pega o user se for passado
+        self.user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
+        
+        # Não remova mais o campo limite
+        self.fields['categoria'].queryset = Categoria.objects.filter(user=self.user)
+        self.fields['mes_ano'].choices = self.get_mes_ano_choices()
 
-        # Estilização com Bootstrap
-        self.fields['categoria'].widget.attrs['class'] = 'form-control'
-        self.fields['limite'].widget.attrs['class'] = 'form-control'
-        self.fields['mes_ano'].widget.attrs['class'] = 'form-control'
+        # Se estiver editando, preencha o valor inicial
+        if self.instance and self.instance.pk:
+            self.fields['limite'].initial = self.instance.limite
 
-        # Geração das opções de mes/ano a partir do mês atual
+    # ... restante do código ...
+
+    def get_mes_ano_choices(self):
+        """Gera opções de mês/ano para os próximos 5 anos"""
         hoje = date.today()
         opcoes = []
+        
         for ano in range(hoje.year, hoje.year + 6):
             for mes in range(1, 13):
                 if ano == hoje.year and mes < hoje.month:
-                    continue  # Ignora meses passados do ano atual
+                    continue  # Pula meses passados do ano atual
+                
                 nome_mes = calendar.month_name[mes]
-                valor = f"{mes:02d}-{ano}"  # Exemplo: 05-2025
-                label = f"{nome_mes} de {ano}"
+                valor = f"{mes:02d}-{ano}"
+                label = f"{nome_mes}/{ano}"
                 opcoes.append((valor, label))
+        
+        return opcoes
 
-        self.fields['mes_ano'].choices = opcoes
+    def clean(self):
+        cleaned_data = super().clean()
+        mes_ano = cleaned_data.get('mes_ano')
+        
+        if mes_ano:
+            mes, ano = map(int, mes_ano.split('-'))
+            cleaned_data['mes'] = mes
+            cleaned_data['ano'] = ano
+            
+            # Verifica se meta já existe
+            if self.instance.pk is None:  # Apenas para novas metas
+                existe = MetaCategoria.objects.filter(
+                    user=self.user,
+                    categoria=cleaned_data.get('categoria'),
+                    mes=mes,
+                    ano=ano
+                ).exists()
+                
+                if existe:
+                    raise forms.ValidationError("Já existe uma meta para esta categoria no mês/ano selecionado.")
+        
+        return cleaned_data
 
         # Se sua model Categoria tem um campo `user`, descomente:
         # if user:

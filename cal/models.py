@@ -17,22 +17,27 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
-class Categoria(models.Model):
-    nome = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.nome
-
 from django.db import models
 from django.contrib.auth.models import User
+
+class Categoria(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    nome = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return self.nome
 
 class MetaCategoria(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
-    limite = models.DecimalField(max_digits=10, decimal_places=2)
-    mes = models.IntegerField()
-    ano = models.IntegerField()
-
+    limite = models.DecimalField(max_digits=15, decimal_places=2)
+    mes = models.PositiveIntegerField()  # 1-12
+    ano = models.PositiveIntegerField()
+    
+    class Meta:
+        unique_together = ['user', 'categoria', 'mes', 'ano']
+        ordering = ['ano', 'mes', 'categoria']
+    
     def __str__(self):
         return f"{self.categoria} - {self.mes}/{self.ano}: R$ {self.limite}"
 

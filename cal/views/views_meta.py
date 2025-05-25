@@ -112,48 +112,64 @@ from ..forms import MetaCategoriaForm
 from ..models import MetaCategoria
 
 
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+
+
+
 @login_required
 def meta_adicionar(request):
     if request.method == 'POST':
         form = MetaCategoriaForm(request.POST, user=request.user)
+        
         if form.is_valid():
-            categoria = form.cleaned_data['categoria']
-            limite = form.cleaned_data['limite']
-            mes_ano = form.cleaned_data['mes_ano']
-            mes, ano = map(int, mes_ano.split('-'))
-
-            existe = MetaCategoria.objects.filter(user=request.user, categoria=categoria, mes=mes, ano=ano).exists()
-            if existe:
-                messages.warning(request, "Meta já existe para essa categoria neste mês.")
+            meta = form.save(commit=False)
+            meta.user = request.user
+            meta.mes = form.cleaned_data['mes']
+            meta.ano = form.cleaned_data['ano']
+            
+            # Garanta que o limite está sendo passado
+            if 'limite' in form.cleaned_data:
+                meta.limite = form.cleaned_data['limite']
             else:
-                nova_meta = form.save(commit=False)
-                nova_meta.user = request.user
-                nova_meta.mes = mes
-                nova_meta.ano = ano
-                nova_meta.save()
-                messages.success(request, "Meta criada com sucesso.")
+                # Se não estiver, adicione uma mensagem de erro
+                form.add_error('limite', 'Este campo é obrigatório')
+                return render(request, 'cal/meta_form.html', {'form': form})
+            
+            meta.save()
+            messages.success(request, "Meta cadastrada com sucesso!")
             return redirect('cal:metas_categoria')
     else:
         form = MetaCategoriaForm(user=request.user)
-
+    
     return render(request, 'cal/meta_form.html', {'form': form})
-
-
-
-
 
 @login_required
-def meta_editar(request, pk):
+def meta_editar(request, pk):  # Mude de 'meta_id' para 'pk'
     meta = get_object_or_404(MetaCategoria, pk=pk, user=request.user)
+    
     if request.method == 'POST':
         form = MetaCategoriaForm(request.POST, instance=meta, user=request.user)
+        
         if form.is_valid():
             form.save()
-            messages.success(request, "Meta atualizada com sucesso.")
+            messages.success(request, "Meta atualizada com sucesso!")
             return redirect('cal:metas_categoria')
     else:
-        form = MetaCategoriaForm(instance=meta, user=request.user)
-    return render(request, 'cal/meta_form.html', {'form': form})
+        # Pré-popula o campo mes_ano
+        initial = {'mes_ano': f"{meta.mes:02d}-{meta.ano}"}
+        form = MetaCategoriaForm(instance=meta, initial=initial, user=request.user)
+    
+    return render(request, 'cal/meta_form.html', {
+        'form': form,
+        'meta': meta
+    })
+
 
 # @login_required
 # def meta_excluir(request, pk):
