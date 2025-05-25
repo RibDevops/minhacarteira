@@ -87,7 +87,7 @@ def transacao_editar(request, pk):
 #     return render(request, 'cal/transacao_form.html', {'form': form})
 
 
-@login_required
+
 # def transacao_view(request):
 #     form = TransacaoForm(request.POST or None)
 #     print(f'post: {request.POST}')
@@ -100,52 +100,80 @@ def transacao_editar(request, pk):
 #         valor_total = transacao.valor or 0
 
 
+from django.shortcuts import render, redirect
+from decimal import Decimal, InvalidOperation
+from dateutil.relativedelta import relativedelta
+from ..forms import TransacaoForm
+from ..models import Transacao
+
+from django.contrib.auth.decorators import login_required
+
+from django.shortcuts import render, redirect
+from decimal import Decimal, InvalidOperation
+from dateutil.relativedelta import relativedelta
+from ..forms import TransacaoForm
+from ..models import Transacao
+from django.contrib.auth.decorators import login_required
+
+@login_required
 def transacao_view(request):
     form = TransacaoForm(request.POST or None)
+    # print(f'post: {request.POST}')  # Debug da requisição
+
     if request.method == 'POST' and form.is_valid():
         transacao = form.save(commit=False)
         transacao.user = request.user
 
         tipo = transacao.tipo
-        parcelas = form.cleaned_data.get('parcelas') or 1
+        categoria = transacao.categoria
+        data = transacao.data
+        parcelas = int(form.cleaned_data.get('parcelas') or 1)
 
         try:
             valor_total = Decimal(str(transacao.valor)) if transacao.valor else Decimal('0')
         except (TypeError, ValueError, InvalidOperation):
             valor_total = Decimal('0')
 
-        if tipo.id == 3:
-            # Lança uma transação "visual" na data atual
+        valor_parcela = (valor_total / parcelas).quantize(Decimal("0.01"))
+
+        if tipo.id == 3:  # Cartão de crédito
+            # Transação visual no dia da compra
             Transacao.objects.create(
                 user=request.user,
                 tipo=tipo,
+                categoria=categoria,
                 titulo=transacao.titulo,
                 valor=0,
-                data=transacao.data,
+                data=data,
                 parcelas=None,
                 data_fim=None,
             )
+
+            # Parcelas a partir do mês seguinte
             for i in range(parcelas):
                 Transacao.objects.create(
                     user=request.user,
                     tipo=tipo,
-                    titulo=f"{transacao.titulo} ({i+1}/{parcelas})",
-                    valor=valor_total / parcelas,
-                    data=transacao.data + relativedelta(months=i + 1),
+                    categoria=categoria,
+                    titulo=f"{transacao.titulo} ({i + 1}/{parcelas})",
+                    valor=valor_parcela,
+                    data=data + relativedelta(months=i + 1),
                     parcelas=parcelas,
-                    data_fim=transacao.data + relativedelta(months=parcelas),
+                    data_fim=data + relativedelta(months=parcelas),
                 )
-        else:
+
+        else:  # Outros tipos de transação
             if parcelas > 1:
                 for i in range(parcelas):
                     Transacao.objects.create(
                         user=request.user,
                         tipo=tipo,
-                        titulo=f"{transacao.titulo} ({i+1}/{parcelas})",
-                        valor=valor_total / parcelas,
-                        data=transacao.data + relativedelta(months=i),
+                        categoria=categoria,
+                        titulo=f"{transacao.titulo} ({i + 1}/{parcelas})",
+                        valor=valor_parcela,
+                        data=data + relativedelta(months=i),  # inicia na data correta
                         parcelas=parcelas,
-                        data_fim=transacao.data + relativedelta(months=parcelas - 1),
+                        data_fim=data + relativedelta(months=parcelas - 1),
                     )
             else:
                 transacao.valor = valor_total
@@ -154,6 +182,8 @@ def transacao_view(request):
         return redirect('cal:transacoes_mes')
 
     return render(request, 'cal/transacao_form.html', {'form': form})
+
+
 
 
 

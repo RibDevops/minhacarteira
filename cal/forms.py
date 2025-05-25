@@ -14,33 +14,70 @@ from .models import MetaCategoria
 
 from datetime import date
 
-ANOS_CHOICES = [(ano, str(ano)) for ano in range(date.today().year, date.today().year + 5)]
+
+from django import forms
+from .models import MetaCategoria
+from datetime import date
+
+from django import forms
+from .models import MetaCategoria
+
+import calendar
+from datetime import date
+from django import forms
+from .models import MetaCategoria
 
 
+import calendar
+from datetime import date
+from django import forms
+from .models import MetaCategoria
 
-
-
-# Lista de tuplas com meses para usar no select
-MESES_PT = {
-    1: "Janeiro", 2: "Fevereiro", 3: "Março", 4: "Abril",
-    5: "Maio", 6: "Junho", 7: "Julho", 8: "Agosto",
-    9: "Setembro", 10: "Outubro", 11: "Novembro", 12: "Dezembro",
-}
-MESES_CHOICES = [(k, v) for k, v in MESES_PT.items()]
 
 class MetaCategoriaForm(forms.ModelForm):
-    mes = forms.ChoiceField(choices=MESES_CHOICES, label="Mês", widget=forms.Select(attrs={'class': 'form-control'}))
-    ano = forms.ChoiceField(choices=ANOS_CHOICES, label="Ano", widget=forms.Select(attrs={'class': 'form-control'}))
-
+    mes_ano = forms.ChoiceField(label="Mês e Ano")
 
     class Meta:
         model = MetaCategoria
-        fields = ['categoria', 'limite', 'mes', 'ano']
-        widgets = {
-            'categoria': forms.Select(attrs={'class': 'form-control'}),
-            'limite': forms.NumberInput(attrs={'class': 'form-control'}),
-            'ano': forms.NumberInput(attrs={'class': 'form-control'}),
-        }
+        fields = ['categoria', 'limite']
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)  # Pega o user se for passado
+        super().__init__(*args, **kwargs)
+
+        # Estilização com Bootstrap
+        self.fields['categoria'].widget.attrs['class'] = 'form-control'
+        self.fields['limite'].widget.attrs['class'] = 'form-control'
+        self.fields['mes_ano'].widget.attrs['class'] = 'form-control'
+
+        # Geração das opções de mes/ano a partir do mês atual
+        hoje = date.today()
+        opcoes = []
+        for ano in range(hoje.year, hoje.year + 6):
+            for mes in range(1, 13):
+                if ano == hoje.year and mes < hoje.month:
+                    continue  # Ignora meses passados do ano atual
+                nome_mes = calendar.month_name[mes]
+                valor = f"{mes:02d}-{ano}"  # Exemplo: 05-2025
+                label = f"{nome_mes} de {ano}"
+                opcoes.append((valor, label))
+
+        self.fields['mes_ano'].choices = opcoes
+
+        # Se sua model Categoria tem um campo `user`, descomente:
+        # if user:
+        #     self.fields['categoria'].queryset = self.fields['categoria'].queryset.filter(user=user)
+
+        
+
+        # Se quiser filtrar categorias por usuário, só se Categoria tiver campo `user`
+        # self.fields['categoria'].queryset = self.fields['categoria'].queryset.filter(user=user)
+
+        # Se precisar, filtra categorias só do usuário
+        # if user:
+        #     self.fields['categoria'].queryset = self.fields['categoria'].queryset.filter(user=user)
+
+
 
 
 # from .models import MetaCategoria

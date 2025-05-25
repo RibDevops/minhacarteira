@@ -2074,3 +2074,1499 @@ WARNING 2025-05-24 11:39:21,169 basehttp "GET /static/css/style.css HTTP/1.1" 40
 WARNING 2025-05-24 11:39:22,086 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
 WARNING 2025-05-24 11:39:42,166 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
 WARNING 2025-05-24 11:41:27,685 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+ERROR 2025-05-24 13:15:58,533 log Internal Server Error: /metas/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/backends/sqlite3/base.py", line 360, in execute
+    return super().execute(query, params)
+sqlite3.IntegrityError: UNIQUE constraint failed: cal_metacategoria.user_id, cal_metacategoria.categoria_id, cal_metacategoria.mes, cal_metacategoria.ano
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 210, in metas_dashboard
+    nova_meta.save()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/base.py", line 902, in save
+    self.save_base(
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/base.py", line 1008, in save_base
+    updated = self._save_table(
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/base.py", line 1169, in _save_table
+    results = self._do_insert(
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/base.py", line 1210, in _do_insert
+    return manager._insert(
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1864, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1882, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/backends/sqlite3/base.py", line 360, in execute
+    return super().execute(query, params)
+django.db.utils.IntegrityError: UNIQUE constraint failed: cal_metacategoria.user_id, cal_metacategoria.categoria_id, cal_metacategoria.mes, cal_metacategoria.ano
+ERROR 2025-05-24 13:15:58,537 basehttp "POST /metas/ HTTP/1.1" 500 159517
+WARNING 2025-05-24 13:15:58,636 log Not Found: /favicon.ico
+WARNING 2025-05-24 20:05:24,262 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 20:05:25,888 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 20:05:45,771 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 20:14:34,260 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+ERROR 2025-05-24 20:15:34,280 log Internal Server Error: /metas/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 80, in metas_dashboard
+    return render(request, 'cal/metas_dashboard.html', context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 327, in render
+    return nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 243, in render
+    nodelist.append(node.render_annotated(context))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/urls/base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'meta_editar' not found. 'meta_editar' is not a valid view function or pattern name.
+ERROR 2025-05-24 20:15:34,284 basehttp "GET /metas/ HTTP/1.1" 500 237704
+WARNING 2025-05-24 20:15:34,319 log Not Found: /favicon.ico
+ERROR 2025-05-24 20:17:28,143 log Internal Server Error: /metas/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 80, in metas_dashboard
+    return render(request, 'cal/metas_dashboard.html', context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 210, in render
+    return template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 173, in render
+    return self._render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 327, in render
+    return nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/urls/base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'metas_categoria' not found. 'metas_categoria' is not a valid view function or pattern name.
+ERROR 2025-05-24 20:17:28,148 basehttp "GET /metas/ HTTP/1.1" 500 233828
+WARNING 2025-05-24 20:17:28,248 log Not Found: /favicon.ico
+ERROR 2025-05-24 20:18:44,622 log Internal Server Error: /metas/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 80, in metas_dashboard
+    return render(request, 'cal/metas_dashboard.html', context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 327, in render
+    return nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 243, in render
+    nodelist.append(node.render_annotated(context))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/urls/base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'meta_editar' not found. 'meta_editar' is not a valid view function or pattern name.
+ERROR 2025-05-24 20:18:44,625 basehttp "GET /metas/ HTTP/1.1" 500 237704
+WARNING 2025-05-24 20:18:44,718 log Not Found: /favicon.ico
+WARNING 2025-05-24 20:19:22,786 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 20:19:55,381 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 20:20:06,581 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 20:20:09,093 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 20:21:48,036 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 20:22:03,242 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 20:22:04,159 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 20:22:04,624 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 20:23:14,870 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 20:23:16,261 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+ERROR 2025-05-24 20:23:18,227 log Internal Server Error: /metas/nova/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 105, in meta_adicionar
+    return render(request, 'cal/meta_form.html', {'form': form})
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/urls/base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'metas_dashboard' not found. 'metas_dashboard' is not a valid view function or pattern name.
+ERROR 2025-05-24 20:23:18,230 basehttp "GET /metas/nova/ HTTP/1.1" 500 170639
+WARNING 2025-05-24 20:23:18,321 log Not Found: /favicon.ico
+WARNING 2025-05-24 20:23:48,892 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+ERROR 2025-05-24 20:23:49,656 log Internal Server Error: /metas/nova/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 105, in meta_adicionar
+    return render(request, 'cal/meta_form.html', {'form': form})
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/urls/base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'metas_dashboard' not found. 'metas_dashboard' is not a valid view function or pattern name.
+ERROR 2025-05-24 20:23:49,657 basehttp "GET /metas/nova/ HTTP/1.1" 500 171512
+ERROR 2025-05-24 20:23:51,647 log Internal Server Error: /metas/nova/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 105, in meta_adicionar
+    return render(request, 'cal/meta_form.html', {'form': form})
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/urls/base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'metas_dashboard' not found. 'metas_dashboard' is not a valid view function or pattern name.
+ERROR 2025-05-24 20:23:51,648 basehttp "GET /metas/nova/ HTTP/1.1" 500 171512
+WARNING 2025-05-24 20:23:51,679 log Not Found: /favicon.ico
+WARNING 2025-05-24 20:24:18,038 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+ERROR 2025-05-24 20:24:25,120 log Internal Server Error: /metas/nova/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 101, in meta_adicionar
+    return redirect('metas_dashboard')
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 51, in redirect
+    resolve_url(to, *args, **kwargs),
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 184, in resolve_url
+    return reverse(to, args=args, kwargs=kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/urls/base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'metas_dashboard' not found. 'metas_dashboard' is not a valid view function or pattern name.
+ERROR 2025-05-24 20:24:25,121 basehttp "POST /metas/nova/ HTTP/1.1" 500 95064
+WARNING 2025-05-24 20:24:25,182 log Not Found: /favicon.ico
+ERROR 2025-05-24 20:26:21,055 log Internal Server Error: /metas/nova/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 1035, in find_library
+    return parser.libraries[name]
+KeyError: 'widget_tweaks'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 105, in meta_adicionar
+    return render(request, 'cal/meta_form.html', {'form': form})
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 299, in do_extends
+    nodelist = parser.parse()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 299, in do_extends
+    nodelist = parser.parse()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 1097, in load
+    lib = find_library(parser, name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 1037, in find_library
+    raise TemplateSyntaxError(
+django.template.exceptions.TemplateSyntaxError: 'widget_tweaks' is not a registered tag library. Must be one of:
+admin_list
+admin_modify
+admin_urls
+cache
+humanize
+i18n
+l10n
+log
+moeda
+static
+tz
+ERROR 2025-05-24 20:26:21,056 basehttp "GET /metas/nova/ HTTP/1.1" 500 203220
+WARNING 2025-05-24 20:26:21,082 log Not Found: /favicon.ico
+WARNING 2025-05-24 20:26:25,676 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 20:26:26,288 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 20:26:26,831 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+ERROR 2025-05-24 20:26:27,746 log Internal Server Error: /metas/nova/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 1035, in find_library
+    return parser.libraries[name]
+KeyError: 'widget_tweaks'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 105, in meta_adicionar
+    return render(request, 'cal/meta_form.html', {'form': form})
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 299, in do_extends
+    nodelist = parser.parse()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 299, in do_extends
+    nodelist = parser.parse()
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 1097, in load
+    lib = find_library(parser, name)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 1037, in find_library
+    raise TemplateSyntaxError(
+django.template.exceptions.TemplateSyntaxError: 'widget_tweaks' is not a registered tag library. Must be one of:
+admin_list
+admin_modify
+admin_urls
+cache
+humanize
+i18n
+l10n
+log
+moeda
+static
+tz
+ERROR 2025-05-24 20:26:27,747 basehttp "GET /metas/nova/ HTTP/1.1" 500 203220
+WARNING 2025-05-24 20:26:27,834 log Not Found: /favicon.ico
+ERROR 2025-05-24 21:25:38,977 log Internal Server Error: /metas/nova/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 105, in meta_adicionar
+    return render(request, 'cal/meta_form.html', {'form': form})
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/urls/base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'metas_dashboard' not found. 'metas_dashboard' is not a valid view function or pattern name.
+ERROR 2025-05-24 21:25:38,984 basehttp "GET /metas/nova/ HTTP/1.1" 500 169982
+WARNING 2025-05-24 21:25:39,084 log Not Found: /favicon.ico
+ERROR 2025-05-24 21:26:35,643 log Internal Server Error: /metas/nova/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 105, in meta_adicionar
+    return render(request, 'cal/meta_form.html', {'form': form})
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/urls/base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'metas_dashboard' not found. 'metas_dashboard' is not a valid view function or pattern name.
+ERROR 2025-05-24 21:26:35,645 basehttp "GET /metas/nova/ HTTP/1.1" 500 170091
+WARNING 2025-05-24 21:26:35,681 log Not Found: /favicon.ico
+WARNING 2025-05-24 21:26:55,989 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:26:57,910 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:28:51,763 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:28:53,570 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:28:56,645 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:32:04,731 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+ERROR 2025-05-24 21:32:26,587 log Internal Server Error: /metas/nova/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 101, in meta_adicionar
+    return redirect('metas_dashboard')
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 51, in redirect
+    resolve_url(to, *args, **kwargs),
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 184, in resolve_url
+    return reverse(to, args=args, kwargs=kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/urls/base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'metas_dashboard' not found. 'metas_dashboard' is not a valid view function or pattern name.
+ERROR 2025-05-24 21:32:26,588 basehttp "POST /metas/nova/ HTTP/1.1" 500 95107
+WARNING 2025-05-24 21:32:26,653 log Not Found: /favicon.ico
+WARNING 2025-05-24 21:33:30,318 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:33:35,187 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+ERROR 2025-05-24 21:33:40,651 log Internal Server Error: /metas/3/excluir/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+TypeError: meta_excluir() got an unexpected keyword argument 'meta_id'
+ERROR 2025-05-24 21:33:40,652 basehttp "GET /metas/3/excluir/ HTTP/1.1" 500 70135
+WARNING 2025-05-24 21:33:40,726 log Not Found: /favicon.ico
+WARNING 2025-05-24 21:33:48,933 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:33:55,232 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:34:04,210 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+ERROR 2025-05-24 21:34:06,135 log Internal Server Error: /metas/3/excluir/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+TypeError: meta_excluir() got an unexpected keyword argument 'meta_id'
+ERROR 2025-05-24 21:34:06,136 basehttp "GET /metas/3/excluir/ HTTP/1.1" 500 70135
+WARNING 2025-05-24 21:34:06,206 log Not Found: /favicon.ico
+WARNING 2025-05-24 21:35:49,533 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:35:51,551 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:35:57,605 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:35:59,356 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:39:33,029 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:39:34,301 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:39:44,182 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:39:45,874 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:39:48,777 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:39:51,005 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:40:01,137 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:40:06,596 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:40:11,988 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:40:13,548 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+ERROR 2025-05-24 21:40:19,774 log Internal Server Error: /metas/8/excluir/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 139, in meta_excluir
+    return render(request, 'cal/confirmar_exclusao_meta.html', {'meta': meta})
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/urls/base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for '' not found. '' is not a valid view function or pattern name.
+ERROR 2025-05-24 21:40:19,776 basehttp "GET /metas/8/excluir/ HTTP/1.1" 500 170585
+WARNING 2025-05-24 21:40:19,881 log Not Found: /favicon.ico
+ERROR 2025-05-24 21:41:20,120 log Internal Server Error: /metas/8/excluir/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 139, in meta_excluir
+    return render(request, 'cal/confirmar_exclusao_meta.html', {'meta': meta})
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/urls/base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'metas_categoria' with keyword arguments '{'mes': 5, 'ano': 2025}' not found. 1 pattern(s) tried: ['metas/\\Z']
+ERROR 2025-05-24 21:41:20,121 basehttp "GET /metas/8/excluir/ HTTP/1.1" 500 172680
+WARNING 2025-05-24 21:41:20,203 log Not Found: /favicon.ico
+ERROR 2025-05-24 21:41:21,024 log Internal Server Error: /metas/8/excluir/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 139, in meta_excluir
+    return render(request, 'cal/confirmar_exclusao_meta.html', {'meta': meta})
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/urls/base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'metas_categoria' with keyword arguments '{'mes': 5, 'ano': 2025}' not found. 1 pattern(s) tried: ['metas/\\Z']
+ERROR 2025-05-24 21:41:21,025 basehttp "GET /metas/8/excluir/ HTTP/1.1" 500 172680
+WARNING 2025-05-24 21:41:22,763 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+ERROR 2025-05-24 21:41:25,288 log Internal Server Error: /metas/8/excluir/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 139, in meta_excluir
+    return render(request, 'cal/confirmar_exclusao_meta.html', {'meta': meta})
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/urls/base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'metas_categoria' with keyword arguments '{'mes': 5, 'ano': 2025}' not found. 1 pattern(s) tried: ['metas/\\Z']
+ERROR 2025-05-24 21:41:25,289 basehttp "GET /metas/8/excluir/ HTTP/1.1" 500 172680
+WARNING 2025-05-24 21:41:41,071 log Not Found: /favicon.ico
+WARNING 2025-05-24 21:41:43,010 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+ERROR 2025-05-24 21:41:45,288 log Internal Server Error: /metas/1/excluir/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 139, in meta_excluir
+    return render(request, 'cal/confirmar_exclusao_meta.html', {'meta': meta})
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 1016, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/urls/base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'metas_categoria' with keyword arguments '{'mes': 5, 'ano': 2025}' not found. 1 pattern(s) tried: ['metas/\\Z']
+ERROR 2025-05-24 21:41:45,289 basehttp "GET /metas/1/excluir/ HTTP/1.1" 500 172832
+WARNING 2025-05-24 21:41:45,381 log Not Found: /favicon.ico
+WARNING 2025-05-24 21:45:24,954 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:45:28,491 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:45:31,542 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+ERROR 2025-05-24 21:45:35,433 log Internal Server Error: /metas/1/excluir/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 137, in meta_excluir
+    return redirect('cal:metas_categoria', mes=mes, ano=ano)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 51, in redirect
+    resolve_url(to, *args, **kwargs),
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/shortcuts.py", line 184, in resolve_url
+    return reverse(to, args=args, kwargs=kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/urls/base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'metas_categoria' with keyword arguments '{'mes': 5, 'ano': 2025}' not found. 1 pattern(s) tried: ['metas/\\Z']
+ERROR 2025-05-24 21:45:35,434 basehttp "POST /metas/1/excluir/ HTTP/1.1" 500 96315
+WARNING 2025-05-24 21:45:35,484 log Not Found: /favicon.ico
+WARNING 2025-05-24 21:46:37,585 log Not Found: /metas/1/excluir/
+WARNING 2025-05-24 21:46:37,586 basehttp "GET /metas/1/excluir/ HTTP/1.1" 404 11585
+WARNING 2025-05-24 21:46:37,622 log Not Found: /favicon.ico
+WARNING 2025-05-24 21:46:39,389 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:46:40,070 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:46:41,406 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:46:44,076 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:46:47,433 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:48:51,655 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:48:53,922 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:48:58,734 log Not Found: /favicon.ico
+WARNING 2025-05-24 21:48:59,281 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:49:31,312 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:49:32,155 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:49:36,104 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:49:40,504 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:49:41,304 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:49:42,452 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:49:43,384 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:49:51,241 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:49:58,308 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:50:08,245 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:50:15,004 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:50:17,522 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:57:12,736 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:57:14,771 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:57:18,538 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:57:25,856 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+ERROR 2025-05-24 21:57:27,455 log Internal Server Error: /metas/nova/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 108, in meta_adicionar
+    form = MetaCategoriaForm(user=request.user)
+NameError: name 'MetaCategoriaForm' is not defined
+ERROR 2025-05-24 21:57:27,457 basehttp "GET /metas/nova/ HTTP/1.1" 500 74113
+WARNING 2025-05-24 21:57:27,540 log Not Found: /favicon.ico
+ERROR 2025-05-24 21:57:32,261 log Internal Server Error: /metas/nova/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 108, in meta_adicionar
+    form = MetaCategoriaForm(user=request.user)
+NameError: name 'MetaCategoriaForm' is not defined
+ERROR 2025-05-24 21:57:32,262 basehttp "GET /metas/nova/ HTTP/1.1" 500 74113
+WARNING 2025-05-24 21:58:44,418 log Not Found: /favicon.ico
+WARNING 2025-05-24 21:58:44,943 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 21:58:45,797 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+ERROR 2025-05-24 21:58:51,587 log Internal Server Error: /metas/nova/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 108, in meta_adicionar
+    messages.success(request, "Meta criada com sucesso.")
+AttributeError: 'dict' object has no attribute 'success'
+ERROR 2025-05-24 21:58:51,588 basehttp "POST /metas/nova/ HTTP/1.1" 500 76108
+WARNING 2025-05-24 21:58:51,622 log Not Found: /favicon.ico
+WARNING 2025-05-24 22:00:55,188 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:00:55,765 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:00:56,354 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:00:56,996 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:00:58,180 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:01:05,389 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:01:10,933 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+ERROR 2025-05-24 22:01:11,862 log Internal Server Error: /metas/11/excluir/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 159, in meta_excluir
+    return redirect(f"{reverse('cal:metas_dashboard')}?mes={meta.mes}&ano={meta.ano}")
+NameError: name 'reverse' is not defined
+ERROR 2025-05-24 22:01:11,863 basehttp "POST /metas/11/excluir/ HTTP/1.1" 500 74271
+WARNING 2025-05-24 22:01:11,918 log Not Found: /favicon.ico
+WARNING 2025-05-24 22:02:21,540 log Not Found: /metas/11/excluir/
+WARNING 2025-05-24 22:02:21,541 basehttp "GET /metas/11/excluir/ HTTP/1.1" 404 11588
+WARNING 2025-05-24 22:02:21,579 log Not Found: /favicon.ico
+WARNING 2025-05-24 22:02:23,091 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:02:25,078 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:02:26,061 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:02:28,962 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:02:57,160 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:03:05,083 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:03:07,488 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:03:50,515 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:04:52,150 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:04:56,719 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:05:03,176 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:05:08,643 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:07:00,576 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:07:01,158 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:07:02,174 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:07:07,962 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:07:09,607 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:07:23,657 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:07:32,287 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:08:18,340 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:08:29,474 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:10:44,421 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:10:45,472 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:10:46,457 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:10:47,339 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:10:48,331 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:10:49,133 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:10:50,952 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:10:51,819 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:10:53,213 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:10:54,128 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:10:55,133 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:10:56,003 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:10:57,462 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:11:04,153 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:13:07,242 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:13:09,876 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:13:10,558 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:13:17,767 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:13:19,293 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:13:36,599 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:13:48,385 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:19:28,730 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:19:30,875 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:19:31,558 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:19:32,093 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+ERROR 2025-05-24 22:19:33,385 log Internal Server Error: /metas/nova/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 141, in meta_adicionar
+    form = MetaCategoriaForm(user=request.user)
+  File "/home/suporte/dev/minhacarteira/cal/forms.py", line 41, in __init__
+    self.fields['categoria'].queryset = self.fields['categoria'].queryset.filter(user=user)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1491, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1509, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1516, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1643, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1675, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1523, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1330, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1802, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'user' into field. Choices are: id, metacategoria, nome, transacao
+ERROR 2025-05-24 22:19:33,387 basehttp "GET /metas/nova/ HTTP/1.1" 500 118917
+WARNING 2025-05-24 22:19:33,413 log Not Found: /favicon.ico
+WARNING 2025-05-24 22:21:27,940 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:21:29,831 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:21:32,533 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:21:37,584 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:21:38,880 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:21:44,942 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:21:47,821 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+ERROR 2025-05-24 22:21:48,929 log Internal Server Error: /metas/nova/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 141, in meta_adicionar
+    form = MetaCategoriaForm(user=request.user)
+  File "/home/suporte/dev/minhacarteira/cal/forms.py", line 41, in __init__
+    self.fields['categoria'].queryset = self.fields['categoria'].queryset.filter(user=user)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1491, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1509, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/query.py", line 1516, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1643, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1675, in _add_q
+    child_clause, needed_inner = self.build_filter(
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1523, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg, summarize)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1330, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/db/models/sql/query.py", line 1802, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'user' into field. Choices are: id, metacategoria, nome, transacao
+ERROR 2025-05-24 22:21:48,931 basehttp "GET /metas/nova/ HTTP/1.1" 500 118049
+WARNING 2025-05-24 22:21:48,962 log Not Found: /favicon.ico
+WARNING 2025-05-24 22:28:26,134 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:28:38,462 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:28:42,234 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:28:51,043 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:28:54,026 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:28:59,449 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:38:13,412 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:38:14,060 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:38:14,562 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:38:16,201 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+ERROR 2025-05-24 22:40:50,954 log Internal Server Error: /metas/nova/
+Traceback (most recent call last):
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/suporte/dev/minhacarteira/venv/lib/python3.10/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/suporte/dev/minhacarteira/cal/views/views_meta.py", line 137, in meta_adicionar
+    form = MetaCategoriaForm(user=request.user)
+  File "/home/suporte/dev/minhacarteira/cal/forms.py", line 57, in __init__
+    super().__init__(*args, **kwargs)
+TypeError: BaseModelForm.__init__() got an unexpected keyword argument 'user'
+ERROR 2025-05-24 22:40:50,955 basehttp "GET /metas/nova/ HTTP/1.1" 500 78088
+WARNING 2025-05-24 22:40:51,029 log Not Found: /favicon.ico
+WARNING 2025-05-24 22:42:30,452 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:42:31,226 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:42:32,325 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:42:38,035 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:42:44,202 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:43:38,831 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:43:42,323 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:44:10,135 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:44:20,952 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:44:27,057 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:44:30,959 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:44:43,692 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:44:48,274 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:44:49,620 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:44:54,566 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:44:55,696 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:44:59,504 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:45:01,051 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:45:02,041 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:45:02,779 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:45:06,636 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:45:08,617 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:45:11,811 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:45:12,836 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:45:16,191 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:45:18,029 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:45:30,825 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:45:37,136 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:45:38,068 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:46:00,480 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:46:42,411 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:46:43,353 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:46:44,520 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:46:45,303 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:48:42,582 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:48:52,085 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:56:15,671 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:56:23,593 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:59:40,060 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:59:41,062 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:59:41,473 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 22:59:50,157 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:01:00,509 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:01:05,841 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:01:12,987 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:06:44,250 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:06:45,361 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:06:54,717 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:07:03,114 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:07:21,172 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:07:27,600 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:07:31,736 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:07:33,507 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:07:35,389 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:07:37,469 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:07:41,323 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:07:42,505 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:07:43,171 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:07:43,614 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:07:43,910 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:07:44,222 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:07:45,074 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:07:45,494 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:07:45,893 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:07:46,282 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:07:46,812 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:07:47,232 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:07:47,481 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:07:47,880 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:07:49,545 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:07:57,741 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:07:59,925 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:11:57,737 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:11:59,020 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:11:59,623 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:12:01,382 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:12:21,944 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:12:26,482 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:12:27,156 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:12:27,763 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:12:31,181 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:12:47,233 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:12:49,587 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:12:50,970 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:12:52,329 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:12:53,156 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:15:07,755 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:15:09,088 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:15:09,475 log Not Found: /excluir_transacao_lista/17/
+WARNING 2025-05-24 23:15:09,476 basehttp "GET /excluir_transacao_lista/17/ HTTP/1.1" 404 4716
+WARNING 2025-05-24 23:15:09,543 log Not Found: /favicon.ico
+WARNING 2025-05-24 23:15:13,249 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:15:14,269 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:15:14,805 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:15:15,804 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:15:17,517 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:15:34,717 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:15:45,327 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:15:46,644 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:15:47,520 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:15:49,293 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:15:51,131 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:15:51,724 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:15:58,377 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:16:11,043 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:16:13,903 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:17:49,764 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:17:50,773 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:17:51,427 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:17:52,032 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:17:52,647 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:17:53,631 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:17:56,708 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:18:11,269 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:29:44,345 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:31:49,282 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:31:51,997 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:31:54,357 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:31:55,709 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:32:01,339 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:32:02,323 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:32:05,797 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:32:06,700 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:32:12,351 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:32:46,139 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:32:47,417 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:32:50,200 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:32:52,115 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:33:05,498 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:33:10,959 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:33:23,969 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:33:26,770 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:33:28,388 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:33:31,815 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:33:44,844 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:33:47,587 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:33:49,853 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:33:50,459 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:33:52,442 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:33:58,727 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:34:00,861 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:34:04,857 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:34:13,455 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:34:24,002 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:34:26,714 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:34:37,191 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:34:39,281 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:34:55,089 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:35:03,091 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:35:11,781 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:35:18,687 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:36:30,764 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:36:42,531 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:36:44,045 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:36:44,864 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:37:23,434 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:37:53,582 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:38:18,567 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:42:23,348 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:42:28,155 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:42:29,641 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:42:30,660 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:42:31,228 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:42:31,671 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:42:32,290 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:42:32,871 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:42:33,390 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:42:37,135 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:42:38,204 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:42:39,686 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:42:41,319 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:42:47,440 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:42:51,782 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:42:54,200 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:42:58,160 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:43:00,262 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:43:04,240 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:43:06,429 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:43:15,188 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:43:17,373 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:43:20,518 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:43:22,756 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:43:25,721 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:43:28,409 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:43:37,565 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:43:39,855 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:43:57,862 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:43:59,696 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:44:00,742 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:44:01,477 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:44:04,233 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:44:31,998 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:44:49,602 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:45:41,886 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:45:50,734 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:46:02,924 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:46:06,341 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:46:08,239 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:46:13,974 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:46:32,584 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:46:47,409 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:46:54,479 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:46:57,055 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:47:00,225 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:47:12,117 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:47:23,337 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:47:50,673 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:48:39,447 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:48:55,390 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:48:57,311 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:48:58,198 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:49:20,519 basehttp "GET /static/css/style.css HTTP/1.1" 404 1853
+WARNING 2025-05-24 23:49:20,565 log Not Found: /favicon.ico
+WARNING 2025-05-24 23:59:11,524 basehttp "GET /static/img/logo.png HTTP/1.1" 404 1850
+WARNING 2025-05-24 23:59:12,741 basehttp "GET /static/img/logo.png HTTP/1.1" 404 1850

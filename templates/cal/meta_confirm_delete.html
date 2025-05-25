@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+  <h2>Excluir Meta</h2>
+  <p>Tem certeza que deseja excluir a meta da categoria <strong>{{ meta.categoria.nome }}</strong> de {{ meses_pt.meta.mes }} de {{ meta.ano }}?</p>
+  
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Sim, excluir</button>
+    <a href="{% url 'cal:metas_categoria' %}?mes={{ meta.mes }}&ano={{ meta.ano }}" class="btn btn-secondary">Cancelar</a>
+  </form>
+</div>
+{% endblock %}

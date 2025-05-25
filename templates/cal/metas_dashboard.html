@@ -6,6 +6,8 @@
 
 {% block content %}
 <div class="container my-4">
+  <a href="{% url 'cal:meta_criar' %}" class="btn btn-success">Criar Nova Meta</a>
+  <p></p>
   <h2 class="mb-4">Metas do mês: {{ mes_atual }}</h2>
 
   <!-- Navegação de meses -->
@@ -22,23 +24,20 @@
   <form method="POST" class="mb-4">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn btn-success">Salvar Nova Meta</button>
+    
   </form>
 
-  <!-- Gráfico geral -->
-  <div class="mb-5">
-    <h4 class="mb-2">Resumo Geral das Metas</h4>
-    <div style="height: 300px;">
-      <canvas id="graficoGeralMetas"></canvas>
-    </div>
-  </div>
+
 
   <!-- Metas individuais -->
   {% if dados %}
     {% for d in dados %}
       <div class="card mb-4">
         <div class="card-header bg-light">
-          <strong>{{ d.categoria }}</strong> — Usou R$ {{ d.gasto|floatformat:2 }} do seu limite de R$ {{ d.limite|floatformat:2 }}
+          <h5>
+            <a href="{% url 'cal:meta_editar' d.id %}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil-square"></i></a>
+            <a href="{% url 'cal:meta_excluir' d.id %}" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
+          </h5><strong>{{ d.categoria }}</strong> — Usou R$ {{ d.gasto|floatformat:2 }} do seu limite de R$ {{ d.limite|floatformat:2 }}
         </div>
         <div class="card-body">
           <div class="row align-items-center">
@@ -72,10 +71,18 @@
   {% endif %}
 </div>
 
+  <!-- Gráfico geral -->
+  <div class="mb-5">
+    <h4 class="mb-2">Resumo Geral das Metas</h4>
+    <div style="height: 300px;">
+      <canvas id="graficoGeralMetas"></canvas>
+    </div>
+  </div>
 <!-- Exporta dados JSON para o gráfico geral -->
+{{ grafico_labels|json_script:"grafico-metas-labels" }}
 
 {{ grafico_valores|json_script:"grafico-metas-valores" }}
-{{ grafico_labels|json_script:"grafico-metas-labels" }}
+
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>

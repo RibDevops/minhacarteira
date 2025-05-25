@@ -23,6 +23,9 @@ class Categoria(models.Model):
     def __str__(self):
         return self.nome
 
+from django.db import models
+from django.contrib.auth.models import User
+
 class MetaCategoria(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
@@ -30,11 +33,9 @@ class MetaCategoria(models.Model):
     mes = models.IntegerField()
     ano = models.IntegerField()
 
-    class Meta:
-        unique_together = ('user', 'categoria', 'mes', 'ano')
-
     def __str__(self):
-        return f"{self.user.username} - {self.categoria.nome} - {self.mes}/{self.ano}: R$ {self.limite}"
+        return f"{self.categoria} - {self.mes}/{self.ano}: R$ {self.limite}"
+
 
 class Tipo(models.Model):
     descricao = models.CharField(max_length=200, verbose_name="Descrição do tipo")

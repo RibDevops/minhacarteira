@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h3>Confirmação de exclusão</h3>
+  <p>Tem certeza de que deseja excluir a meta da categoria <strong>{{ meta.categoria.nome }}</strong> de <strong>{{ mes_nome }}</strong> de <strong>{{ meta.ano }}</strong>?</p>
+
+  <form method="post">
+    {% csrf_token %}
+    <a href="{% url 'cal:metas_dashboard' %}?mes={{ meta.mes }}&ano={{ meta.ano }}" class="btn btn-secondary">Cancelar</a>
+
+
+    <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+  </form>
+</div>
+{% endblock %}
