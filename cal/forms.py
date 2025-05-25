@@ -79,7 +79,8 @@ class MetaCategoriaForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         
         # Não remova mais o campo limite
-        self.fields['categoria'].queryset = Categoria.objects.filter(user=self.user)
+        # self.fields['categoria'].queryset = Categoria.objects.filter(user=self.user)
+        self.fields['categoria'].queryset = Categoria.objects.all()  # Antes era .filter(user=self.user)
         self.fields['mes_ano'].choices = self.get_mes_ano_choices()
 
         # Se estiver editando, preencha o valor inicial

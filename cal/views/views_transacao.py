@@ -429,22 +429,22 @@ from django.db import connection
 @login_required
 def listar_transacoes(request):
     transacoes = Transacao.objects.filter(user=request.user).order_by('-data')
-    print(connection.queries)
-    print(transacoes)
-    for t in transacoes:
-        print(f"{t.id} | {t.titulo} | {t.valor} | {t.data} | {t.categoria} | {t.tipo}")
+    # print(connection.queries)
+    # print(transacoes)
+    # for t in transacoes:
+        # print(f"{t.id} | {t.titulo} | {t.valor} | {t.data} | {t.categoria} | {t.tipo}")
 
 
     ano = request.GET.get('ano')
-    print(ano)
+    # print(ano)
     mes = request.GET.get('mes')
-    print(mes)
+    # print(mes)
     tipo = request.GET.get('tipo')
     categoria = request.GET.get('categoria')
 
     if ano:
         transacoes = transacoes.filter(data__year=int(ano))
-        print(f'ano_t {transacoes}')
+        # print(f'ano_t {transacoes}')
     if mes:
         transacoes = transacoes.filter(data__month=int(mes))
     if tipo:
