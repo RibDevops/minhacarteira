@@ -188,6 +188,7 @@ class TransacaoForm(ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
         
         # Configura o valor inicial da data corretamente
@@ -204,7 +205,8 @@ class TransacaoForm(ModelForm):
         
         for field in ['valor', 'tipo', 'parcelas', 'categoria']:
             self.fields[field].widget.attrs['class'] = 'form-control'
-
+        if user:
+                self.fields['categoria'].queryset = Categoria.objects.filter(user=user)
 
 
 
