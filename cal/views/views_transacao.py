@@ -108,7 +108,7 @@ def transacao_view(request):
         parcelas = int(form.cleaned_data.get('parcelas') or 1)
 
         # ⚠️ TRATAMENTO DE VALOR COM VÍRGULA
-        valor_input = request.POST.get('valor', '0').replace('.', '').replace(',', '.')
+        valor_input = request.POST.get('valor', '0').replace(',', '.')
         try:
             valor_total = Decimal(valor_input)
         except (InvalidOperation, ValueError):
@@ -117,17 +117,6 @@ def transacao_view(request):
         valor_parcela = (valor_total / parcelas).quantize(Decimal("0.01"))
 
         if tipo.id == 3:  # Cartão de crédito
-            Transacao.objects.create(
-                user=request.user,
-                tipo=tipo,
-                categoria=categoria,
-                titulo=transacao.titulo,
-                valor=0,
-                data=data,
-                parcelas=None,
-                data_fim=None,
-            )
-
             data_compra_str = data.strftime('%d/%m')  # ex: 07/06
 
             for i in range(parcelas):
@@ -141,22 +130,23 @@ def transacao_view(request):
                     parcelas=parcelas,
                     data_fim=data + relativedelta(months=parcelas),
                 )
-        else:
-            if parcelas > 1:
-                for i in range(parcelas):
-                    Transacao.objects.create(
-                        user=request.user,
-                        tipo=tipo,
-                        categoria=categoria,
-                        titulo=f"{transacao.titulo} ({i + 1}/{parcelas})",
-                        valor=valor_parcela,
-                        data=data + relativedelta(months=i),
-                        parcelas=parcelas,
-                        data_fim=data + relativedelta(months=parcelas - 1),
-                    )
+
             else:
-                transacao.valor = valor_total
-                transacao.save()
+                if parcelas > 1:
+                    for i in range(parcelas):
+                        Transacao.objects.create(
+                            user=request.user,
+                            tipo=tipo,
+                            categoria=categoria,
+                            titulo=f"{transacao.titulo} ({i + 1}/{parcelas})",
+                            valor=valor_parcela,
+                            data=data + relativedelta(months=i),
+                            parcelas=parcelas,
+                            data_fim=data + relativedelta(months=parcelas - 1),
+                        )
+        else:
+            transacao.valor = valor_total
+            transacao.save()
 
         return redirect('cal:transacoes_mes')
 
