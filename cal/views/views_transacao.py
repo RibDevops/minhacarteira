@@ -1,27 +1,20 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
-from django.urls import reverse, reverse_lazy
-from django.db.models import Sum
-from django.views.generic.edit import UpdateView
-from datetime import date, datetime, timedelta
-from dateutil.relativedelta import relativedelta
-from django.utils.timezone import make_aware
-from decimal import Decimal
+from datetime import date, datetime
 from collections import defaultdict
-
-from ..models import Categoria, Transacao
-from ..forms import TransacaoForm
-from dateutil.relativedelta import relativedelta
-from ..models import Tipo, Transacao
-from ..forms import TransacaoForm
-from django.shortcuts import render, redirect
-
-from dateutil.relativedelta import relativedelta
-from django.shortcuts import render, redirect
-from ..forms import TransacaoForm
-from ..models import Transacao
-from decimal import Decimal
 from decimal import Decimal, InvalidOperation
+
+from django.contrib.auth.decorators import login_required
+from django.db import connection
+from django.db.models import Sum
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse, reverse_lazy
+from django.utils.timezone import make_aware
+from django.views.generic.edit import UpdateView
+
+from dateutil.relativedelta import relativedelta
+
+from ..forms import TransacaoForm
+from ..models import Categoria, Tipo, Transacao
+
 
 # @login_required
 # def listar_transacoes(request):
@@ -100,25 +93,10 @@ def transacao_editar(request, pk):
 #         valor_total = transacao.valor or 0
 
 
-from django.shortcuts import render, redirect
-from decimal import Decimal, InvalidOperation
-from dateutil.relativedelta import relativedelta
-from ..forms import TransacaoForm
-from ..models import Transacao
-
-from django.contrib.auth.decorators import login_required
-
-from django.shortcuts import render, redirect
-from decimal import Decimal, InvalidOperation
-from dateutil.relativedelta import relativedelta
-from ..forms import TransacaoForm
-from ..models import Transacao
-from django.contrib.auth.decorators import login_required
 
 @login_required
 def transacao_view(request):
     form = TransacaoForm(request.POST or None)
-    # print(f'post: {request.POST}')  # Debug da requisição
 
     if request.method == 'POST' and form.is_valid():
         transacao = form.save(commit=False)
@@ -129,15 +107,16 @@ def transacao_view(request):
         data = transacao.data
         parcelas = int(form.cleaned_data.get('parcelas') or 1)
 
+        # ⚠️ TRATAMENTO DE VALOR COM VÍRGULA
+        valor_input = request.POST.get('valor', '0').replace('.', '').replace(',', '.')
         try:
-            valor_total = Decimal(str(transacao.valor)) if transacao.valor else Decimal('0')
-        except (TypeError, ValueError, InvalidOperation):
+            valor_total = Decimal(valor_input)
+        except (InvalidOperation, ValueError):
             valor_total = Decimal('0')
 
         valor_parcela = (valor_total / parcelas).quantize(Decimal("0.01"))
 
         if tipo.id == 3:  # Cartão de crédito
-            # Transação visual no dia da compra
             Transacao.objects.create(
                 user=request.user,
                 tipo=tipo,
@@ -149,7 +128,6 @@ def transacao_view(request):
                 data_fim=None,
             )
 
-            # Parcelas a partir do mês seguinte
             for i in range(parcelas):
                 Transacao.objects.create(
                     user=request.user,
@@ -161,8 +139,7 @@ def transacao_view(request):
                     parcelas=parcelas,
                     data_fim=data + relativedelta(months=parcelas),
                 )
-
-        else:  # Outros tipos de transação
+        else:
             if parcelas > 1:
                 for i in range(parcelas):
                     Transacao.objects.create(
@@ -171,7 +148,7 @@ def transacao_view(request):
                         categoria=categoria,
                         titulo=f"{transacao.titulo} ({i + 1}/{parcelas})",
                         valor=valor_parcela,
-                        data=data + relativedelta(months=i),  # inicia na data correta
+                        data=data + relativedelta(months=i),
                         parcelas=parcelas,
                         data_fim=data + relativedelta(months=parcelas - 1),
                     )
@@ -182,6 +159,7 @@ def transacao_view(request):
         return redirect('cal:transacoes_mes')
 
     return render(request, 'cal/transacao_form.html', {'form': form})
+
 
 
 
@@ -423,7 +401,7 @@ def resumo_categoria_view(request):
     }
     return render(request, "cal/resumo_categoria.html", contexto)
 
-from django.db import connection
+
 
 
 @login_required
