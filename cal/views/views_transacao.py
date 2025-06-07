@@ -128,12 +128,14 @@ def transacao_view(request):
                 data_fim=None,
             )
 
+            data_compra_str = data.strftime('%d/%m')  # ex: 07/06
+
             for i in range(parcelas):
                 Transacao.objects.create(
                     user=request.user,
                     tipo=tipo,
                     categoria=categoria,
-                    titulo=f"{transacao.titulo} ({i + 1}/{parcelas})",
+                    titulo=f"{transacao.titulo} - ({data_compra_str}) ({i + 1}/{parcelas})",
                     valor=valor_parcela,
                     data=data + relativedelta(months=i + 1),
                     parcelas=parcelas,
