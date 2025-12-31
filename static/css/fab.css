@@ -1,0 +1,64 @@
+/* static/css/fab.css */
+.btn-fab {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-fab:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+}
+
+.btn-fab:active {
+    transform: scale(0.95);
+}
+
+#fab-actions {
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+}
+
+#fab-actions .btn-fab {
+    width: 48px;
+    height: 48px;
+    font-size: 1.2rem;
+}
+
+/* Animação de entrada */
+#fab-actions:not(.d-none) .btn-fab {
+    animation: fadeInUp 0.3s ease forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile: FAB menor */
+@media (max-width: 576px) {
+    .btn-fab {
+        width: 48px;
+        height: 48px;
+        font-size: 1.2rem;
+    }
+    
+    #fab-actions .btn-fab {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+}

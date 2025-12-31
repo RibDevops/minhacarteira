@@ -47,44 +47,6 @@ def next_month(d):
 
 
 @method_decorator(login_required, name='dispatch')
-# class CalendarView(generic.ListView):
-#     model = Transacao
-#     template_name = 'cal/calendar.html'
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         d = get_date(self.request.GET.get('month'))  # data baseada na query string (?month=2025-05)
-
-#         # Transações do mês visualizado
-#         transacoes = Transacao.objects.filter(
-#             user=self.request.user,
-#             data__year=d.year,
-#             data__month=d.month
-#         )
-
-#         total_creditos = transacoes.filter(tipo__is_credito=True).aggregate(total=Sum('valor'))['total'] or 0
-#         total_debitos = transacoes.filter(tipo__is_credito=False).aggregate(total=Sum('valor'))['total'] or 0
-#         saldo_total = total_creditos - total_debitos
-
-
-
-#         # Calendário HTML
-#         cal = Calendar(d.year, d.month)
-#         html_cal = cal.formatmonth(withyear=True, transacoes=transacoes)
-
-#         context.update({
-#             'calendar': mark_safe(html_cal),
-#             'prev_month': prev_month(d),
-#             'next_month': next_month(d),
-#             'month_name': d.strftime("%B"),
-#             'year': d.year,
-#             'total_creditos': total_creditos,
-#             'total_debitos': total_debitos,
-#             'saldo_total': saldo_total,
-#         })
-
-#         return context
-
 
 
 class CalendarView(generic.ListView):
@@ -156,34 +118,4 @@ class CalendarView(generic.ListView):
         return context
 
 
-
-
-
-
-# @method_decorator(login_required, name='dispatch')
-# class CalendarView(generic.ListView):
-#     model = Transacao
-#     template_name = 'cal/calendar.html'
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         d = get_date(self.request.GET.get('month'))
-
-#         transacoes = Transacao.objects.filter(
-#             user=self.request.user,
-#             data__year=d.year,
-#             data__month=d.month
-#         )
-
-#         cal = Calendar(d.year, d.month)
-#         html_cal = cal.formatmonth(withyear=True, transacoes=transacoes)
-
-#         context.update({
-#             'calendar': mark_safe(html_cal),
-#             'prev_month': prev_month(d),
-#             'next_month': next_month(d),
-#             'month_name': d.strftime("%B"),
-#             'year': d.year,
-#         })
-#         return context
 

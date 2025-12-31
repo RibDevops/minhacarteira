@@ -1,13 +1,18 @@
-from django.conf import settings
-from django.db import models
-from django.contrib.auth.models import User
+# ✅ DEPOIS - Organizado
 from datetime import timedelta
-from dateutil.relativedelta import relativedelta
+from decimal import Decimal
+
+from django.conf import settings
+from django.contrib.auth.models import User
+from django.db import models
 from django.urls import reverse
-from encrypted_model_fields.fields import EncryptedCharField, validate_fernet_key
-from encrypted_model_fields.fields import EncryptedDecimalField
-from encrypted_model_fields.fields import EncryptedCharField  # ou mantenha o EncryptedCharField do pacote, se quiser
-from encrypted_model_fields.fields import EncryptedCharField
+
+from dateutil.relativedelta import relativedelta
+from encrypted_model_fields.fields import (
+    EncryptedCharField, 
+    EncryptedDecimalField, 
+    validate_fernet_key
+)
 
 class BaseModel(models.Model):
     id = models.AutoField(primary_key=True)
@@ -16,9 +21,6 @@ class BaseModel(models.Model):
 
     class Meta:
         abstract = True
-
-from django.db import models
-from django.contrib.auth.models import User
 
 class Categoria(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -51,10 +53,6 @@ class Tipo(models.Model):
         # return f"{'Crédito' if self.is_credito else 'Débito'} - {self.descricao}"
         return self.descricao
 
-from decimal import Decimal
-
-from encrypted_model_fields.fields import EncryptedCharField, EncryptedDecimalField
-
 class EncryptedDecimalField(models.Field):
     def __init__(self, *args, max_digits=None, decimal_places=None, **kwargs):
         self.max_digits = max_digits
@@ -69,14 +67,17 @@ class EncryptedDecimalField(models.Field):
     def get_internal_type(self):
         return "CharField"
     
-    # ... (mantenha o resto da implementação igual)
-
     
 class Cartao(models.Model):
     cartao = models.CharField(max_length=100, verbose_name="Nome do cartão")
 
+    class Meta:
+        verbose_name = "Cartão"
+        verbose_name_plural = "Cartões"
+
     def __str__(self):
-        return self.nome
+        return self.cartao
+
 
 class Transacao(BaseModel):
     tipo = models.ForeignKey(Tipo, on_delete=models.PROTECT, verbose_name="Tipo da transação")

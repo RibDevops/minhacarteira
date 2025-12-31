@@ -1,23 +1,26 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
     <div class="container-fluid">
-        <!-- Logo/Brand -->
-        <a class="navbar-brand" href="{% url 'cal:home' %}">
-            {% if user.is_authenticated %}
-            <i class="bi bi-house-fill"></i> </a>
-            <p>
-  <span style="color: rgb(163, 163, 163);">{{ month_name|capfirst }}:</span>
-  <span style="color: {% if saldo_total_nav >= 0 %}green{% else %}red{% endif %};">
-    R$ {{ saldo_total_nav|floatformat:2 }}
-  </span>
-<br>
-  <span style="color: rgb(163, 163, 163);">{{ mes_proximo_nome|capfirst }}:</span>
-  <span style="color: {% if saldo_total_prox_nav >= 0 %}green{% else %}red{% endif %};">
-    R$ {{ saldo_total_prox_nav|floatformat:2 }}
-  </span>
-</p>
+        
+<a class="navbar-brand" href="{% url 'cal:home' %}">
+    <i class="bi bi-house-fill"></i>
+</a>
 
-           
-            {% endif %}
+{% if user.is_authenticated %}
+<div class="navbar-text text-white d-none d-md-block">
+    <small>
+        
+<span class="text-muted">{{ month_name|capfirst }}:</span>
+<span class="{% if saldo_total_nav >= 0 %}text-success{% else %}text-danger{% endif %}">
+
+        <br>
+        <span class="text-muted">{{ mes_proximo_nome|capfirst }}:</span>
+        <span class="{% if saldo_total_prox_nav >= 0 %}text-success{% else %}text-danger{% endif %}">
+            R$ {{ saldo_total_prox_nav|floatformat:2 }}
+        </span>
+    </small>
+</div>
+{% endif %}
+
         <!-- Botão Toggler para Offcanvas -->
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar">
             <span class="navbar-toggler-icon"></span>

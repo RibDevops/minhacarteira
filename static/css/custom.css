@@ -1,0 +1,98 @@
+/* static/css/custom.css */
+
+/* Tabelas responsivas aprimoradas */
+@media (max-width: 767px) {
+    .table-responsive-mobile thead {
+        display: none;
+    }
+    
+    .table-responsive-mobile tbody tr {
+        display: block;
+        margin-bottom: 1rem;
+        border: 1px solid var(--bs-border-color);
+        border-radius: 0.5rem;
+        padding: 0.75rem;
+    }
+    
+    .table-responsive-mobile tbody td {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        border: none;
+    }
+    
+    .table-responsive-mobile tbody td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        margin-right: 1rem;
+    }
+    
+    /* Esconde coluna de ações inline */
+    .table-responsive-mobile .col-actions {
+        justify-content: flex-end;
+    }
+}
+
+/* Cards responsivos */
+.card {
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 576px) {
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .card-body h5 {
+        font-size: 1rem;
+    }
+    
+    .card-body h6 {
+        font-size: 0.875rem;
+    }
+}
+
+/* Espaçamento mobile */
+@media (max-width: 576px) {
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    h1, h2 {
+        font-size: 1.5rem;
+    }
+    
+    .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+}
+
+/* Alertas com animação */
+.alert {
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Auto-dismiss alerts */
+.alert-dismissible {
+    animation: slideDown 0.3s ease, fadeOut 0.5s ease 4.5s forwards;
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}

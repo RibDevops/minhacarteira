@@ -1,2 +1,13 @@
 /venv
 venv
+.env
+*.sqlite3
+__pycache__/
+*.pyc
+*.pyo
+logs/
+*.log
+.DS_Store
+*.swp
+*.bak
+requirements.txt~
