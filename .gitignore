@@ -1,6 +1,6 @@
 /venv
 venv
-.env
+.envp
 *.sqlite3
 __pycache__/
 *.pyc
