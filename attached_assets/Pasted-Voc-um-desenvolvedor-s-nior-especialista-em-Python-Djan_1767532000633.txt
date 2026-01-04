@@ -1,0 +1,59 @@
+Você é um desenvolvedor sênior especialista em Python, Django, performance web e CSS.
+
+Acesse TODO o repositório Git conectado a este projeto e execute as tarefas abaixo de forma sistemática e documentada:
+
+1️⃣ DJANGO – VIEWS E BACKEND
+- Analise todas as views (FBV e/ou CBV).
+- Identifique:
+  - Erros lógicos
+  - Código redundante
+  - Problemas de segurança
+  - Más práticas (ex: queries dentro de loops, uso incorreto de ORM)
+- Otimize performance:
+  - Reduza número de queries (select_related, prefetch_related)
+  - Evite N+1 queries
+  - Sugira cache quando aplicável
+- Refatore o código quando necessário, mantendo compatibilidade com o projeto atual.
+- Aponte trechos críticos com explicação clara do problema e da solução.
+
+2️⃣ DJANGO – ARQUITETURA
+- Verifique:
+  - Separação de responsabilidades (views, services, utils)
+  - Uso adequado de forms, serializers e models
+  - Possíveis melhorias de organização
+- Sugira melhorias sem quebrar funcionalidades existentes.
+
+3️⃣ CSS – ANÁLISE E LIMPEZA
+- Analise todos os arquivos CSS do projeto.
+- Verifique:
+  - Classes duplicadas
+  - Conflitos de seletores
+  - Estilos não utilizados
+  - Especificidade excessiva
+  - Regras sobrescritas sem necessidade
+- Padronize:
+  - Nomes de classes
+  - Organização dos arquivos
+- Otimize o CSS para:
+  - Melhor legibilidade
+  - Melhor manutenção
+  - Menor redundância
+
+4️⃣ FRONTEND – INTEGRAÇÃO COM TEMPLATES DJANGO
+- Verifique se o CSS está coerente com os templates HTML.
+- Identifique classes definidas no CSS que não são usadas no HTML.
+- Identifique classes usadas no HTML que não existem no CSS.
+
+5️⃣ RELATÓRIO FINAL
+- Gere um relatório contendo:
+  - Lista de problemas encontrados
+  - Sugestões de melhoria
+  - Código refatorado (quando aplicável)
+  - Explicações claras e objetivas
+- Não faça alterações destrutivas sem avisar.
+- Sempre explique o motivo técnico de cada mudança.
+
+IMPORTANTE:
+- Não remova funcionalidades.
+- Priorize segurança, performance e legibilidade.
+- Use boas práticas modernas do Django.
