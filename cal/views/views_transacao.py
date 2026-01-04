@@ -216,7 +216,7 @@ def resumo_categoria_view(request):
 
 @login_required
 def listar_transacoes(request):
-    #transacoes = Transacao.objects.filter(user=request.user).order_by('-data')
+    transacoes = Transacao.objects.filter(user=request.user).order_by('-data')
     
     # print(connection.queries)
     # print(transacoes)
