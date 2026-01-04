@@ -6,18 +6,13 @@
 </a>
 
 {% if user.is_authenticated %}
-<div class="navbar-text text-white d-none d-md-block">
-    <small>
-        
-<span class="text-muted">{{ month_name|capfirst }}:</span>
-<span class="{% if saldo_total_nav >= 0 %}text-success{% else %}text-danger{% endif %}">
-
-        <br>
-        <span class="text-muted">{{ mes_proximo_nome|capfirst }}:</span>
-        <span class="{% if saldo_total_prox_nav >= 0 %}text-success{% else %}text-danger{% endif %}">
-            R$ {{ saldo_total_prox_nav|floatformat:2 }}
-        </span>
-    </small>
+<div class="navbar-text d-flex align-items-center me-auto">
+    <span class="badge {% if saldo_total_nav >= 0 %}bg-success{% else %}bg-danger{% endif %} me-1" title="Saldo Atual ({{ month_name|capfirst }})">
+        {{ saldo_total_nav|floatformat:0 }}
+    </span>
+    <span class="badge {% if saldo_total_prox_nav >= 0 %}bg-info{% else %}bg-warning{% endif %} text-dark" title="Saldo Próximo Mês ({{ mes_proximo_nome|capfirst }})">
+        {{ saldo_total_prox_nav|floatformat:0 }}
+    </span>
 </div>
 {% endif %}
 
