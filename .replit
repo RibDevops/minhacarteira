@@ -1,0 +1,47 @@
+modules = ["nodejs-20", "web", "python-3.12"]
+[agent]
+expertMode = true
+
+[nix]
+channel = "stable-25_05"
+packages = ["cargo", "libffi", "libiconv", "libxcrypt", "openssl", "pgadmin4", "pkg-config", "rustc"]
+
+[userenv]
+
+[userenv.shared]
+SECRET_KEY = "xluqps7$id5einf4*h_8v1_)6@$-#tu(e!#52!r1e4!wfi(4at"
+FERNET_SECRET_KEY = "je_5pWh1KhhYg_J_4VqICUP1Y-y08Z42J2G9LcvyCbw="
+DEBUG = "True"
+ALLOWED_HOSTS = "*"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Django Server"
+
+[[workflows.workflow]]
+name = "Django Server"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python manage.py runserver 0.0.0.0:5000"
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
+[[ports]]
+localPort = 5000
+externalPort = 80
+
+[deployment]
+deploymentTarget = "autoscale"
+run = ["gunicorn", "--bind=0.0.0.0:5000", "--reuse-port", "core.wsgi:application"]

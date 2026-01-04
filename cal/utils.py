@@ -8,9 +8,13 @@ import locale
 import decimal
 
 
-
-
-locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')
+try:
+    locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')
+except locale.Error:
+    try:
+        locale.setlocale(locale.LC_TIME, 'pt_BR')
+    except locale.Error:
+        pass  # Use default locale if Portuguese not available
 
 class Calendar(calendar.HTMLCalendar):
     def __init__(self, year=None, month=None):
