@@ -13,7 +13,7 @@ def dashboard(request):
     saldo = credito - debito
     estado = "Crédito" if saldo >= 0 else "Débito"
 
-    return render(request, 'dashboard.html', {
+    return render(request, 'cal/dashboard.html', {
         'saldo_total': saldo,
         'total_creditos': credito,
         'total_debitos': debito,

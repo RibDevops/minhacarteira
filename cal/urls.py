@@ -1,6 +1,6 @@
 from django import views
 from django.urls import path
-from cal.views import views_categoria
+from cal.views import views_categoria, views_dashboard
 from cal.views.views_cal import CalendarView
 from cal.views.views_user import *
 from cal.views.views_transacao import *
@@ -19,7 +19,8 @@ from django.urls import path
 app_name = 'cal'
 
 urlpatterns = [
-    path('', views_user.home, name='home'),
+    path('', views_dashboard.dashboard, name='home'),
+    path('dashboard/', views_dashboard.dashboard, name='dashboard'),
     
     # path('', CalendarView.as_view(), name='calendar'),
     path('calendar/', CalendarView.as_view(), name='calendar'),
