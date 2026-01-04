@@ -5,24 +5,10 @@ from django.views import generic
 from django.utils.safestring import mark_safe
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from ..models import Transacao
-from ..utils import Calendar
-from django.utils.timezone import make_aware
-from django.utils.safestring import mark_safe
-from django.views import generic
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
 from django.db.models import Sum
-from datetime import datetime
 from dateutil.relativedelta import relativedelta
-
 from cal.models import Transacao
-# from cal.utils import Calendar, get_date, prev_month, next_month  # suas funções utilitárias
 from cal.utils import Calendar
-from datetime import date
-from calendar import monthrange
-from django.utils.safestring import mark_safe
-from django.db.models import Sum
 
 def get_date(req_month):
     if req_month:
@@ -83,7 +69,7 @@ class CalendarView(generic.ListView):
         transacoes_prox_mes = Transacao.objects.filter(
             user=user,
             data__year=proximo_ano,
-            data__month=d.month + 1
+            data__month=proximo_mes
         )
         # print(transacoes_prox_mes)
         total_creditos_prox = transacoes_prox_mes.filter(tipo__is_credito=True).aggregate(total=Sum('valor'))['total'] or 0
