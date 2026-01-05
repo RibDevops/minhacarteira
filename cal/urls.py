@@ -19,7 +19,7 @@ from django.urls import path
 app_name = 'cal'
 
 urlpatterns = [
-    path('', views_dashboard.dashboard, name='home'),
+    path('', views_user.home, name='home'),
     path('dashboard/', views_dashboard.dashboard, name='dashboard'),
     
     # path('', CalendarView.as_view(), name='calendar'),
