@@ -189,25 +189,53 @@ def transacoes_mes_view(request):
 
 @login_required
 def resumo_categoria_view(request):
-    transacoes = Transacao.objects.filter(user=request.user)
+    ano = int(request.GET.get('ano', date.today().year))
+    mes = int(request.GET.get('mes', date.today().month))
 
-    dados_resumo = transacoes.values("tipo__descricao", "tipo__is_credito").annotate(total=Sum("valor"))
+    data_inicio = make_aware(datetime(ano, mes, 1))
+    data_fim = make_aware(datetime(ano, mes, 1) + relativedelta(months=1))
 
-    labels = []
-    valores = []
-    cores = []
+    transacoes = Transacao.objects.filter(
+        user=request.user,
+        data__gte=data_inicio,
+        data__lt=data_fim
+    )
 
-    for item in dados_resumo:
-        tipo = item["tipo__descricao"]
-        total = float(item["total"])
-        labels.append(tipo)
-        valores.append(total)
-        cores.append("#4CAF50" if item["tipo__is_credito"] else "#F44336")
+    # Dados para o gráfico de pizza por Categoria (apenas Débitos)
+    dados_categoria = transacoes.filter(tipo__is_credito=False).values("categoria__nome").annotate(total=Sum("valor")).order_by('-total')
+    
+    cat_labels = [item["categoria__nome"] or "Sem Categoria" for item in dados_categoria]
+    cat_valores = [float(item["total"]) for item in dados_categoria]
+
+    # Dados para o gráfico de pizza por Tipo (Crédito vs Débito)
+    dados_tipo = transacoes.values("tipo__descricao", "tipo__is_credito").annotate(total=Sum("valor"))
+    
+    tipo_labels = []
+    tipo_valores = []
+    tipo_cores = []
+
+    for item in dados_tipo:
+        tipo_labels.append(item["tipo__descricao"])
+        tipo_valores.append(float(item["total"]))
+        tipo_cores.append("#4CAF50" if item["tipo__is_credito"] else "#F44336")
+
+    # Totais para os cards
+    total_creditos = transacoes.filter(tipo__is_credito=True).aggregate(Sum('valor'))['valor__sum'] or 0
+    total_debitos = transacoes.filter(tipo__is_credito=False).aggregate(Sum('valor'))['valor__sum'] or 0
+    saldo = total_creditos - total_debitos
 
     contexto = {
-        "labels": labels,
-        "valores": valores,
-        "cores": cores,
+        "cat_labels": cat_labels,
+        "cat_valores": cat_valores,
+        "tipo_labels": tipo_labels,
+        "tipo_valores": tipo_valores,
+        "tipo_cores": tipo_cores,
+        "total_creditos": total_creditos,
+        "total_debitos": total_debitos,
+        "saldo": saldo,
+        "mes_atual": date(ano, mes, 1),
+        "mes_anterior": date(ano, mes, 1) - relativedelta(months=1),
+        "mes_proximo": date(ano, mes, 1) + relativedelta(months=1),
     }
     return render(request, "cal/resumo_categoria.html", contexto)
 

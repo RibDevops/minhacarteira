@@ -1,40 +1,130 @@
 {% extends 'base.html' %}
 {% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="bi bi-pie-chart"></i> Balanço Geral por Mês</h2>
+        <div class="btn-group shadow-sm">
+            <a href="?mes={{ mes_anterior.month }}&ano={{ mes_anterior.year }}" class="btn btn-outline-primary border-2">
+                <i class="bi bi-chevron-left"></i> {{ mes_anterior|date:"M/Y" }}
+            </a>
+            <span class="btn btn-primary fw-bold px-4 d-flex align-items-center">
+                {{ mes_atual|date:"F Y"|upper }}
+            </span>
+            <a href="?mes={{ mes_proximo.month }}&ano={{ mes_proximo.year }}" class="btn btn-outline-primary border-2">
+                {{ mes_proximo|date:"M/Y" }} <i class="bi bi-chevron-right"></i>
+            </a>
+        </div>
+    </div>
 
-<h2 class="mb-4">Resumo por Categoria</h2>
+    <!-- Cards de Resumo -->
+    <div class="row mb-4 g-3">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm bg-success text-white">
+                <div class="card-body py-4">
+                    <h6 class="card-title opacity-75 mb-0">Total Créditos</h6>
+                    <h3 class="fw-bold mb-0">R$ {{ total_creditos|floatformat:2 }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm bg-danger text-white">
+                <div class="card-body py-4">
+                    <h6 class="card-title opacity-75 mb-0">Total Débitos</h6>
+                    <h3 class="fw-bold mb-0">R$ {{ total_debitos|floatformat:2 }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm {% if saldo >= 0 %}bg-primary{% else %}bg-warning text-dark{% endif %} text-white">
+                <div class="card-body py-4">
+                    <h6 class="card-title opacity-75 mb-0">Saldo Mensal</h6>
+                    <h3 class="fw-bold mb-0">R$ {{ saldo|floatformat:2 }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<div class="container text-center">
-  <canvas id="graficoResumo" height="30"></canvas>
+    <div class="row">
+        <!-- Gráfico por Categoria (Débitos) -->
+        <div class="col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title mb-4 fw-bold text-center text-primary border-bottom pb-2">Distribuição de Gastos por Categoria</h5>
+                    <div style="max-height: 400px; position: relative;">
+                        <canvas id="chartCategoria"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráfico por Tipo -->
+        <div class="col-md-6 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title mb-4 fw-bold text-center text-primary border-bottom pb-2">Crédito vs Débito</h5>
+                    <div style="max-height: 300px; position: relative; display: inline-block; width: 100%;">
+                        <canvas id="chartTipo"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
+<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-  const ctxResumo = document.getElementById('graficoResumo');
-  new Chart(ctxResumo, {
-    type: 'bar',
-    data: {
-      labels: {{ labels|safe }},
-      datasets: [{
-        label: 'Total por Categoria',
-        data: {{ valores|safe }},
-        backgroundColor: {{ cores|safe }},
-        borderWidth: 1
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          display: false
+    // Gráfico de Pizza por Categoria
+    const ctxCat = document.getElementById('chartCategoria').getContext('2d');
+    new Chart(ctxCat, {
+        type: 'doughnut',
+        data: {
+            labels: {{ cat_labels|safe }},
+            datasets: [{
+                data: {{ cat_valores|safe }},
+                backgroundColor: [
+                    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', 
+                    '#FF9F40', '#8AC926', '#1982C4', '#6A4C93', '#F9844A'
+                ],
+                hoverOffset: 15,
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: { padding: 20, font: { size: 12 } }
+                }
+            }
         }
-      },
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
-    }
-  });
-</script>
+    });
 
+    // Gráfico de Pizza por Tipo
+    const ctxTipo = document.getElementById('chartTipo').getContext('2d');
+    new Chart(ctxTipo, {
+        type: 'pie',
+        data: {
+            labels: {{ tipo_labels|safe }},
+            datasets: [{
+                data: {{ tipo_valores|safe }},
+                backgroundColor: {{ tipo_cores|safe }},
+                hoverOffset: 15,
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: { padding: 20, font: { size: 12 } }
+                }
+            }
+        }
+    });
+</script>
 {% endblock %}
