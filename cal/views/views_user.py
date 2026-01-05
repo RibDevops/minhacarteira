@@ -6,17 +6,36 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.admin.views.decorators import staff_member_required
 
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+
 @login_required
 def perfil_usuario(request):
     if request.method == 'POST':
-        form = UsuarioUpdateForm(request.POST, instance=request.user)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Perfil atualizado com sucesso!')
-            return redirect('cal:perfil')
+        if 'perfil_submit' in request.POST:
+            form = UsuarioUpdateForm(request.POST, instance=request.user)
+            password_form = PasswordChangeForm(request.user)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Perfil atualizado com sucesso!')
+                return redirect('cal:perfil')
+        elif 'password_submit' in request.POST:
+            form = UsuarioUpdateForm(instance=request.user)
+            password_form = PasswordChangeForm(request.user, request.POST)
+            if password_form.is_valid():
+                user = password_form.save()
+                update_session_auth_hash(request, user)
+                messages.success(request, 'Senha alterada com sucesso!')
+                return redirect('cal:perfil')
     else:
         form = UsuarioUpdateForm(instance=request.user)
-    return render(request, 'usuarios/form_usuario.html', {'form': form, 'titulo': 'Meu Perfil'})
+        password_form = PasswordChangeForm(request.user)
+    
+    return render(request, 'usuarios/form_usuario.html', {
+        'form': form, 
+        'password_form': password_form,
+        'titulo': 'Meu Perfil'
+    })
 
 @login_required
 def editar_usuario(request, user_id):
