@@ -28,8 +28,12 @@
             <input type="password" name="password" id="password" class="form-control" placeholder="Digite sua senha">
         </div>
 
-        <div class="d-grid gap-2 mb-2">
+        <div class="d-grid gap-2 mb-3">
             <button type="submit" class="btn btn-primary">Entrar</button>
+        </div>
+
+        <div class="text-center mb-2">
+            <a href="{% url 'cal:password_reset' %}" class="text-muted small">Esqueci minha senha</a>
         </div>
 
         <div class="text-center">

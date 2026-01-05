@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card bg-success text-white mb-4 shadow">
+                <div class="card-body text-center">
+                    <h5 class="card-title"><i class="bi bi-arrow-up-circle"></i> Total Créditos</h5>
+                    <h3 class="card-text">R$ {{ total_creditos|floatformat:2 }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-danger text-white mb-4 shadow">
+                <div class="card-body text-center">
+                    <h5 class="card-title"><i class="bi bi-arrow-down-circle"></i> Total Débitos</h5>
+                    <h3 class="card-text">R$ {{ total_debitos|floatformat:2 }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card {% if saldo_total >= 0 %}bg-primary{% else %}bg-warning text-dark{% endif %} text-white mb-4 shadow">
+                <div class="card-body text-center">
+                    <h5 class="card-title"><i class="bi bi-bank"></i> Saldo Total ({{ estado }})</h5>
+                    <h3 class="card-text">R$ {{ saldo_total|floatformat:2 }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+            <span><i class="bi bi-list-ul"></i> Últimas Transações</span>
+            <div class="m-0">
+                <a href="{% url 'cal:transacao_nova' %}" class="btn btn-sm btn-light"><i class="bi bi-plus-lg"></i> Nova</a>
+                <a href="{% url 'cal:listar_transacoes' %}" class="btn btn-sm btn-outline-light">Ver todas</a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Data</th>
+                            <th>Título</th>
+                            <th class="text-end">Valor</th>
+                            <th class="text-center">Tipo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for t in transacoes|slice:":10" %}
+                        <tr>
+                            <td>{{ t.data|date:"d/m/Y" }}</td>
+                            <td>{{ t.titulo }}</td>
+                            <td class="text-end {% if t.tipo.is_credito %}text-success{% else %}text-danger{% endif %} fw-bold">
+                                R$ {{ t.valor|floatformat:2 }}
+                            </td>
+                            <td class="text-center"><span class="badge rounded-pill bg-secondary">{{ t.tipo.descricao }}</span></td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center text-muted py-4">Nenhuma transação encontrada.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

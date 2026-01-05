@@ -1,6 +1,26 @@
 /* static/css/custom.css */
 
 /* Tabelas responsivas aprimoradas */
+.table-responsive {
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.table thead th {
+    background-color: #f8f9fa;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.table tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+    transition: background-color 0.2s ease;
+}
+
 @media (max-width: 767px) {
     .table-responsive-mobile thead {
         display: none;
@@ -35,7 +55,15 @@
 
 /* Cards responsivos */
 .card {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    border: none;
+    border-radius: 0.75rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1) !important;
 }
 
 @media (max-width: 576px) {
@@ -47,8 +75,8 @@
         font-size: 1rem;
     }
     
-    .card-body h6 {
-        font-size: 0.875rem;
+    .card-body h3 {
+        font-size: 1.5rem;
     }
 }
 
@@ -69,8 +97,46 @@
     }
 }
 
-/* Alertas com animação */
+/* FAB Labels */
+.btn-fab {
+    position: relative;
+    width: 56px;
+    height: 56px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}
+
+.fab-label {
+    position: absolute;
+    right: 70px;
+    background: rgba(0, 0, 0, 0.75);
+    color: white;
+    padding: 5px 12px;
+    border-radius: 5px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    transform: translateX(10px);
+}
+
+.btn-fab:hover .fab-label {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.dark-mode .fab-label {
+    background: rgba(255, 255, 255, 0.9);
+    color: #1a1a2e;
+}
+
 .alert {
+    border-radius: 0.5rem;
+    border: none;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.05);
     animation: slideDown 0.3s ease;
 }
 

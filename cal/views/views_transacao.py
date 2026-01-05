@@ -2,10 +2,9 @@ from datetime import date, datetime
 from collections import defaultdict
 from decimal import Decimal, InvalidOperation
 from django.contrib.auth.decorators import login_required
-from django.db import connection
 from django.db.models import Sum
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 from django.utils.timezone import make_aware
 from django.views.generic.edit import UpdateView
 from dateutil.relativedelta import relativedelta
@@ -13,10 +12,6 @@ from ..forms import TransacaoForm
 from ..models import Categoria, Tipo, Transacao
 from django.contrib import messages
 from django.views.decorators.http import require_POST
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect, get_object_or_404
-from ..models import Transacao
-from ..forms import TransacaoForm
 
 @login_required
 @require_POST
@@ -168,8 +163,13 @@ def transacoes_mes_view(request):
     totais_categoria = [float(item['total']) for item in dados_por_categoria]
 
     # Totais
-    total_creditos = transacoes.filter(tipo__is_credito=True).aggregate(Sum('valor'))['valor__sum'] or 0
-    total_debitos = transacoes.filter(tipo__is_credito=False).aggregate(Sum('valor'))['valor__sum'] or 0
+    from django.db import models
+    totais = transacoes.aggregate(
+        total_creditos=Sum('valor', filter=models.Q(tipo__is_credito=True)),
+        total_debitos=Sum('valor', filter=models.Q(tipo__is_credito=False))
+    )
+    total_creditos = totais['total_creditos'] or 0
+    total_debitos = totais['total_debitos'] or 0
     saldo_total = total_creditos - total_debitos
 
     contexto = {
@@ -216,7 +216,7 @@ def resumo_categoria_view(request):
 
 @login_required
 def listar_transacoes(request):
-    #transacoes = Transacao.objects.filter(user=request.user).order_by('-data')
+    transacoes = Transacao.objects.filter(user=request.user).order_by('-data')
     
     # print(connection.queries)
     # print(transacoes)

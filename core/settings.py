@@ -10,11 +10,10 @@ FERNET_SECRET_KEY = config('FERNET_SECRET_KEY')
 
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = config(
-    'ALLOWED_HOSTS',
-    default='127.0.0.1',
-    cast=lambda v: [s.strip() for s in v.split(',')]
-)
+ALLOWED_HOSTS = ['*']
+
+CSRF_TRUSTED_ORIGINS = ['https://*.replit.dev', 'https://*.repl.co']
+X_FRAME_OPTIONS = 'ALLOWALL'
 
 
 
@@ -131,12 +130,15 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# default static files settings for PythonAnywhere.
-# see https://help.pythonanywhere.com/pages/DjangoStaticFiles for more info
-MEDIA_ROOT = '/home/minhacarteira/core/media'
+# Static and Media files
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
-STATIC_ROOT = '/home/minhacarteira/core/static'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
+
+# Email configuration for password reset
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'no-reply@minhacarteira.com'
 
 
 

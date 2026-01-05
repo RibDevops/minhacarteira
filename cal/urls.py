@@ -1,6 +1,6 @@
 from django import views
 from django.urls import path
-from cal.views import views_categoria
+from cal.views import views_categoria, views_dashboard
 from cal.views.views_cal import CalendarView
 from cal.views.views_user import *
 from cal.views.views_transacao import *
@@ -19,7 +19,8 @@ from django.urls import path
 app_name = 'cal'
 
 urlpatterns = [
-    path('', views_user.home, name='home'),
+    path('', views_dashboard.dashboard, name='home'),
+    path('dashboard/', views_dashboard.dashboard, name='dashboard'),
     
     # path('', CalendarView.as_view(), name='calendar'),
     path('calendar/', CalendarView.as_view(), name='calendar'),
@@ -58,25 +59,19 @@ urlpatterns = [
     path('usuarios/desativar_usuario/<int:user_id>/', views_user.desativar_usuario, name='desativar_usuario'),
 
     path('contato/', views_user.contato, name='contato'),
+    path('perfil/', views_user.perfil_usuario, name='perfil'),
 
-    # path('metas/', views_meta.metas_dashboard, name='metas_categoria'),
-
-
+    # Metas
     path('metas/', views_meta.metas_dashboard, name='metas_categoria'),
     path('metas/nova/', views_meta.meta_adicionar, name='meta_criar'),
-    # urls.py
     path('metas/<int:pk>/editar/', views_meta.meta_editar, name='meta_editar'),
-
     path('metas/<int:meta_id>/excluir/', views_meta.meta_excluir, name='meta_excluir'),
-    # path('metas/<int:meta_id>/excluir/', meta_excluir, name='meta_excluir'),
-    path('metas/', views_meta.metas_dashboard, name='metas_dashboard'),
 
-
-
-
-
-
-
+    # Reset de senha nativo
+    path('password-reset/', auth_views.PasswordResetView.as_view(template_name='usuarios/password_reset.html', email_template_name='usuarios/password_reset_email.html', success_url=reverse_lazy('cal:password_reset_done')), name='password_reset'),
+    path('password-reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='usuarios/password_reset_done.html'), name='password_reset_done'),
+    path('password-reset-confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='usuarios/password_reset_confirm.html', success_url=reverse_lazy('cal:password_reset_complete')), name='password_reset_confirm'),
+    path('password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(template_name='usuarios/password_reset_complete.html'), name='password_reset_complete'),
 ]
 
 
