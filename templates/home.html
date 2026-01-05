@@ -1,68 +1,73 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
- <!-- Page content -->
-
 <div class="container mt-5">
-  <section class="text-center mb-4">
-    <h2>Bem-vindo à sua <strong>Carteira Digital</strong></h2>
-    <p class="lead">Gerencie seus gastos de forma simples, visual e segura.</p>
-    <img src="{% static 'img/logo.png' %}" 
-           
-         
-           width="150">
-  </section>
-
-  <ul class="list-group mb-4">
-    <li class="list-group-item">
-      📆 <strong>Compras por Dia:</strong> Visualize seus gastos organizados no calendário mensal.
-    </li>
-    <li class="list-group-item">
-      💸 <strong>Nova Transação:</strong> Registre despesas ou receitas com rapidez e praticidade.
-    </li>
-    <li class="list-group-item">
-      📊 <strong>Balanço Mensal:</strong> Acompanhe seus totais mensais e entenda melhor sua vida financeira.
-    </li>
-    <li class="list-group-item">
-      📱 <strong>Interface Responsiva:</strong> Compatível com celular, tablet e computador.
-    </li>
-    <li class="list-group-item">
-      🔘 <strong>Menu Rápido (Botão Flutuante):</strong>
-      <ul class="mt-2 mb-0">
-        <li>💰 <strong>Adicionar Transação</strong></li>
-        <li>📅 <strong>Acessar o Calendário</strong></li>
-        <li>📊 <strong>Ver o Resumo Mensal</strong></li>
-        <li>🌙 <strong>Ativar o Modo Escuro</strong></li>
-      </ul>
-    </li>
-  </ul>
-
-  <div class="alert alert-info text-center" role="alert">
-    🔐 <strong>Segurança dos Dados:</strong> Todas as transações são armazenadas com criptografia, garantindo sua privacidade e proteção.
+  <div class="row align-items-center">
+    <div class="col-lg-6 text-center text-lg-start mb-5 mb-lg-0">
+      <h1 class="display-4 fw-bold text-primary mb-3">Minha Carteira Digital</h1>
+      <p class="lead mb-4">Gerencie suas finanças de forma simples, visual e com total privacidade. Controle seus gastos, defina metas e acompanhe sua evolução mensal.</p>
+      <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-lg-start">
+        {% if user.is_authenticated %}
+          <a href="{% url 'cal:dashboard' %}" class="btn btn-primary btn-lg px-4 gap-3"><i class="bi bi-speedometer2"></i> Ir para o Dashboard</a>
+          <a href="{% url 'cal:calendar' %}" class="btn btn-outline-secondary btn-lg px-4"><i class="bi bi-calendar3"></i> Ver Calendário</a>
+        {% else %}
+          <a href="{% url 'login' %}" class="btn btn-primary btn-lg px-4 gap-3">Começar Agora</a>
+          <a href="{% url 'cal:manual_publico' %}" class="btn btn-outline-secondary btn-lg px-4">Ver Manual</a>
+        {% endif %}
+      </div>
+    </div>
+    <div class="col-lg-6 text-center">
+      <img src="{% static 'img/logo.png' %}" class="img-fluid rounded-4 shadow-lg mb-4" alt="SGC Logo" style="max-width: 300px; animation: float 6s ease-in-out infinite;">
+    </div>
   </div>
 
-  <div class="text-center">
-    {% if user.is_authenticated %}
-      <a href="{% url 'cal:calendar' %}" class="btn btn-primary">Ver Calendário</a>
-    {% else %}
-      <a href="{% url 'login' %}" class="btn btn-outline-success">Fazer Login</a>
-    {% endif %}
+  <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+    <div class="feature col">
+      <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3 rounded-3 px-3 py-2">
+        <i class="bi bi-shield-lock"></i>
+      </div>
+      <h3 class="fs-4 fw-bold">100% Seguro</h3>
+      <p>Seus dados são protegidos com criptografia de ponta a ponta. Sua privacidade é nossa prioridade número um.</p>
+    </div>
+    <div class="feature col">
+      <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-success bg-gradient fs-2 mb-3 rounded-3 px-3 py-2">
+        <i class="bi bi-lightning"></i>
+      </div>
+      <h3 class="fs-4 fw-bold">Rápido e Prático</h3>
+      <p>Registre movimentações em segundos através do nosso menu flutuante inteligente disponível em qualquer página.</p>
+    </div>
+    <div class="feature col">
+      <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-warning bg-gradient fs-2 mb-3 rounded-3 px-3 py-2">
+        <i class="bi bi-graph-up-arrow"></i>
+      </div>
+      <h3 class="fs-4 fw-bold">Metas Inteligentes</h3>
+      <p>Defina orçamentos para categorias específicas e receba alertas visuais sobre seu progresso mensal.</p>
+    </div>
+  </div>
+
+  <div class="p-5 mb-4 bg-light rounded-3 shadow-sm border">
+    <div class="container-fluid py-5 text-center">
+      <h2 class="display-6 fw-bold">Novas Funcionalidades</h2>
+      <p class="col-md-8 mx-auto fs-5 text-muted">Implementamos o fluxo de reset de senha seguro, perfil personalizado e manual interativo para melhor sua experiência.</p>
+      <a href="{% url 'cal:manual_publico' %}" class="btn btn-outline-primary btn-lg">Explorar Manual Completo</a>
+    </div>
   </div>
 </div>
 
-<footer class="wrapper style1 text-center py-4">
-  <div class="inner">
+<style>
+@keyframes float {
+  0% { transform: translatey(0px); }
+  50% { transform: translatey(-20px); }
+  100% { transform: translatey(0px); }
+}
+</style>
+
+<footer class="text-center py-5 border-top">
+  <div class="container">
     <a href="https://ribdev.netlify.app/" target="_blank">
-      <img src="{% static 'img/rib.png' %}" 
-           class="img-thumbnail mx-auto d-block" 
-           alt="RIBDEV" 
-           width="100">
+      <img src="{% static 'img/rib.png' %}" class="img-thumbnail opacity-75" alt="RIBDEV" width="80">
     </a>
+    <p class="text-muted small mt-2">&copy; 2026 Minha Carteira Digital. Desenvolvido por RIBDEV.</p>
   </div>
 </footer>
-
- 
 {% endblock %}
-
-
-
