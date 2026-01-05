@@ -61,6 +61,12 @@ urlpatterns = [
     path('contato/', views_user.contato, name='contato'),
     path('perfil/', views_user.perfil_usuario, name='perfil'),
 
+    # Metas
+    path('metas/', views_meta.metas_dashboard, name='metas_categoria'),
+    path('metas/nova/', views_meta.meta_adicionar, name='meta_criar'),
+    path('metas/<int:pk>/editar/', views_meta.meta_editar, name='meta_editar'),
+    path('metas/<int:meta_id>/excluir/', views_meta.meta_excluir, name='meta_excluir'),
+
     # Reset de senha nativo
     path('password-reset/', auth_views.PasswordResetView.as_view(template_name='usuarios/password_reset.html', success_url=reverse_lazy('cal:password_reset_done')), name='password_reset'),
     path('password-reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='usuarios/password_reset_done.html'), name='password_reset_done'),

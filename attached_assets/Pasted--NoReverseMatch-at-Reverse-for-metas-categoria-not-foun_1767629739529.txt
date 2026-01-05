@@ -1,0 +1,46 @@
+
+NoReverseMatch at /
+
+Reverse for 'metas_categoria' not found. 'metas_categoria' is not a valid view function or pattern name.
+
+Request Method: 	GET
+Request URL: 	http://1217578f-736e-48a2-9e67-f9df879dc218-00-e0qe1rq47byw.worf.replit.dev/
+Django Version: 	5.2.1
+Exception Type: 	NoReverseMatch
+Exception Value: 	
+
+Reverse for 'metas_categoria' not found. 'metas_categoria' is not a valid view function or pattern name.
+
+Exception Location: 	/home/runner/workspace/.pythonlibs/lib/python3.12/site-packages/django/urls/resolvers.py, line 831, in _reverse_with_prefix
+Raised during: 	cal.views.views_dashboard.dashboard
+Python Executable: 	/nix/store/h097imm3w6dpx10qynrd2sz9fks2wbq8-python3-3.12.11/bin/python
+Python Version: 	3.12.11
+Python Path: 	
+
+['/home/runner/workspace',
+ '/nix/store/zz7i75jb78idaz0rb1y1i4rzdyxq28vf-sitecustomize/lib/python/site-packages',
+ '/nix/store/dlz9jb8127sn1mj7986p9s8r3nxjlcl7-python3.12-pip-25.0.1/lib/python3.12/site-packages',
+ '/nix/store/h097imm3w6dpx10qynrd2sz9fks2wbq8-python3-3.12.11/lib/python312.zip',
+ '/nix/store/h097imm3w6dpx10qynrd2sz9fks2wbq8-python3-3.12.11/lib/python3.12',
+ '/nix/store/h097imm3w6dpx10qynrd2sz9fks2wbq8-python3-3.12.11/lib/python3.12/lib-dynload',
+ '/home/runner/workspace/.pythonlibs/lib/python3.12/site-packages',
+ '/nix/store/h097imm3w6dpx10qynrd2sz9fks2wbq8-python3-3.12.11/lib/python3.12/site-packages',
+ '/home/runner/workspace/.pythonlibs/lib/python3.12/site-packages',
+ '/nix/store/x1zyfp26gnxkbbspkwhh3f9n13r3z18p-python3.12-setuptools-80.7.1/lib/python3.12/site-packages']
+
+Server time: 	Mon, 05 Jan 2026 13:15:24 -0300
+Error during template rendering
+
+In template /home/runner/workspace/templates/navbar.html, error at line 51
+Reverse for 'metas_categoria' not found. 'metas_categoria' is not a valid view function or pattern name.
+41 	    <a class="nav-link" href="{% url 'cal:transacao_nova' %}">
+42 	      <i class="bi bi-plus-circle"></i> Registrar movimentação
+43 	    </a>
+44 	  </li>
+45 	  <li class="nav-item">
+46 	    <a class="nav-link" href="{% url 'cal:transacoes_mes' %}">
+47 	      <i class="bi bi-bar-chart-line"></i> Balanço mensal
+48 	    </a>
+49 	  </li>
+50 	  <li class="nav-item">
+51 	    <a class="nav-link" href="{% url 'cal:metas_categoria' %}">
