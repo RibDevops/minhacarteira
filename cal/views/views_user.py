@@ -144,3 +144,6 @@ def home(request):
 
 def contato(request):
     return render(request, 'contato.html')
+
+def manual_publico(request):
+    return render(request, 'manual_publico.html')

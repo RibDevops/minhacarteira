@@ -60,6 +60,7 @@ urlpatterns = [
 
     path('contato/', views_user.contato, name='contato'),
     path('perfil/', views_user.perfil_usuario, name='perfil'),
+    path('manual/', views_user.manual_publico, name='manual_publico'),
 
     # Metas
     path('metas/', views_meta.metas_dashboard, name='metas_categoria'),
