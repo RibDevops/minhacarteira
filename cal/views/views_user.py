@@ -64,9 +64,64 @@ def resetar_senha(request, user_id):
     return render(request, 'usuarios/form_usuario.html', {'form': form, 'titulo': 'Resetar Senha'})
 
 
+@login_required
+@staff_member_required
+def listar_usuarios(request):
+    usuarios = User.objects.all().order_by('username')
+    return render(request, 'usuarios/listar.html', {'usuarios': usuarios})
+
+@login_required
+@staff_member_required
+def adicionar_usuario(request):
+    if request.method == 'POST':
+        form = UsuarioForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Usuário adicionado com sucesso!')
+            return redirect('cal:listar_usuarios')
+    else:
+        form = UsuarioForm()
+    return render(request, 'usuarios/form_usuario.html', {'form': form, 'titulo': 'Adicionar Usuário'})
+
+@login_required
+@staff_member_required
+def excluir_usuario(request, user_id):
+    if request.user.id == user_id:
+        messages.error(request, 'Você não pode excluir sua própria conta!')
+        return redirect('cal:listar_usuarios')
+    
+    if request.method == 'POST':
+        usuario = get_object_or_404(User, id=user_id)
+        usuario.delete()
+        messages.success(request, 'Usuário excluído com sucesso!')
+    return redirect('cal:listar_usuarios')
+
+@login_required
+@staff_member_required
+def resetar_senha(request, user_id):
+    usuario = get_object_or_404(User, id=user_id)
+    if request.method == 'POST':
+        form = UsuarioPasswordResetForm(request.POST)
+        if form.is_valid():
+            usuario.set_password(form.cleaned_data['new_password'])
+            usuario.save()
+            messages.success(request, 'Senha redefinida com sucesso!')
+            return redirect('cal:listar_usuarios')
+    else:
+        form = UsuarioPasswordResetForm()
+    return render(request, 'usuarios/form_usuario.html', {'form': form, 'titulo': 'Resetar Senha'})
+
+@login_required
+@staff_member_required
+def desativar_usuario(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    user.is_active = False
+    user.save()
+    messages.success(request, "Usuário desativado com sucesso.")
+    return redirect('cal:listar_usuarios')
+
 def home(request):
     return render(request, 'home.html', {})
-
 
 def contato(request):
     return render(request, 'contato.html')
