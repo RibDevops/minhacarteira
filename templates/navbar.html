@@ -87,9 +87,13 @@
                     
                 </ul>
 
-                <!-- Botão Sair/Login alinhado à direita -->
                 <ul class="navbar-nav ms-auto">
                     {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'cal:perfil' %}">
+                            <i class="bi bi-person-circle"></i> Perfil
+                        </a>
+                    </li>
                     <li class="nav-link">
                         <span class="navbar-text me-3">
                           Olá, {{ user.username }}

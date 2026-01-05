@@ -202,6 +202,11 @@ class UsuarioUpdateForm(forms.ModelForm):
         model = User
         fields = ['username', 'email', 'first_name', 'last_name']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
 class UsuarioPasswordResetForm(forms.ModelForm):
     new_password = forms.CharField(widget=forms.PasswordInput, label="Nova Senha")
 
