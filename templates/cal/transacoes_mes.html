@@ -2,109 +2,149 @@
 {% load humanize %}
 
 {% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="bi bi-cash-coin"></i> Balanço Mensal</h2>
+        <div class="btn-group shadow-sm">
+            <a href="?mes={{ mes_anterior.month }}&ano={{ mes_anterior.year }}" class="btn btn-outline-primary border-2">
+                <i class="bi bi-chevron-left"></i> {{ mes_anterior|date:"M/Y" }}
+            </a>
+            <span class="btn btn-primary fw-bold px-4 d-flex align-items-center">
+                {{ mes_atual|date:"F Y"|upper }}
+            </span>
+            <a href="?mes={{ mes_proximo.month }}&ano={{ mes_proximo.year }}" class="btn btn-outline-primary border-2">
+                {{ mes_proximo|date:"M/Y" }} <i class="bi bi-chevron-right"></i>
+            </a>
+        </div>
+    </div>
 
-<h2 class="mt-3 mb-4">
-  <i class="bi bi-cash-coin"></i> Transações - {{ mes_atual|date:"F \d\e Y" }}
-</h2>
+    <!-- Cards de Resumo -->
+    <div class="row mb-4 g-3">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm bg-success text-white">
+                <div class="card-body py-4">
+                    <h6 class="card-title opacity-75 mb-0">Total Créditos</h6>
+                    <h3 class="fw-bold mb-0">R$ {{ total_creditos|floatformat:2 }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm bg-danger text-white">
+                <div class="card-body py-4">
+                    <h6 class="card-title opacity-75 mb-0">Total Débitos</h6>
+                    <h3 class="fw-bold mb-0">R$ {{ total_debitos|floatformat:2 }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm {% if saldo_total >= 0 %}bg-primary{% else %}bg-warning text-dark{% endif %} text-white">
+                <div class="card-body py-4">
+                    <h6 class="card-title opacity-75 mb-0">Saldo Mensal</h6>
+                    <h3 class="fw-bold mb-0">R$ {{ saldo_total|floatformat:2 }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<!-- Dashboard Resumido -->
-<div class="row text-center mb-4">
-  <div class="col-md-3 col-sm-6 mb-2">
-    <div class="card bg-success text-white shadow rounded">
-      <div class="card-body p-2">
-        <h5 class="mb-1">Saldo Atual</h5>
-        <h6 class="mb-0">R$ {{ saldo_total|floatformat:2 }}</h6>
-      </div>
+    <!-- Gráficos -->
+    <div class="row mb-4">
+        <div class="col-md-6 mb-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title text-center text-primary mb-3">Resumo por Tipo</h5>
+                    <canvas id="chartTipo" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title text-center text-primary mb-3">Resumo por Categoria</h5>
+                    <canvas id="chartCategoria" height="200"></canvas>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-  <div class="col-md-3 col-sm-6 mb-2">
-    <div class="card bg-primary text-white shadow rounded">
-      <div class="card-body p-2">
-        <h5 class="mb-1">Total de Créditos</h5>
-        <h6 class="mb-0">R$ {{ total_creditos|floatformat:2 }}</h6>
-      </div>
+
+    <!-- Tabela -->
+    <div class="card border-0 shadow-sm overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0 align-middle">
+                <thead class="bg-dark text-white">
+                    <tr>
+                        <th class="px-4 py-3">Título</th>
+                        <th class="py-3">Categoria</th>
+                        <th class="py-3 text-end">Valor</th>
+                        <th class="py-3 px-4 text-center">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transacao in transacoes %}
+                    <tr>
+                        <td class="px-4">
+                            <div class="d-flex align-items-center">
+                                {% if transacao.tipo.is_credito %}
+                                <i class="bi bi-plus-circle-fill text-success me-2"></i>
+                                {% else %}
+                                <i class="bi bi-dash-circle-fill text-danger me-2"></i>
+                                {% endif %}
+                                {{ transacao.titulo }}
+                            </div>
+                            <small class="text-muted">{{ transacao.data|date:"d/m/Y" }}</small>
+                        </td>
+                        <td><span class="badge bg-light text-dark border">{{ transacao.categoria.nome|default:"-" }}</span></td>
+                        <td class="text-end fw-bold {% if transacao.tipo.is_credito %}text-success{% else %}text-danger{% endif %}">
+                            R$ {{ transacao.valor|floatformat:2 }}
+                        </td>
+                        <td class="text-center px-4">
+                            <div class="btn-group btn-group-sm">
+                                <a href="{% url 'cal:transacao_editar' transacao.id %}" class="btn btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                                <form action="{% url 'cal:transacao_excluir' transacao.id %}" method="post" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Confirma?');"><i class="bi bi-trash"></i></button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="4" class="text-center py-4 text-muted">Nenhuma transação.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-  </div>
-  <div class="col-md-3 col-sm-6 mb-2">
-    <div class="card bg-danger text-white shadow rounded">
-      <div class="card-body p-2">
-        <h5 class="mb-1">Total de Débitos</h5>
-        <h6 class="mb-0">R$ {{ total_debitos|floatformat:2 }}</h6>
-      </div>
-    </div>
-  </div>
 </div>
 
-<!-- Navegação de meses -->
-<div class="d-flex justify-content-between flex-wrap mb-3 gap-2">
-  <a href="?mes={{ mes_anterior.month }}&ano={{ mes_anterior.year }}" class="btn btn-outline-primary">
-    <i class="bi bi-arrow-left-circle"></i> Mês anterior
-  </a>
-  <a href="?mes={{ mes_proximo.month }}&ano={{ mes_proximo.year }}" class="btn btn-outline-primary">
-    Próximo mês <i class="bi bi-arrow-right-circle"></i>
-  </a>
-</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctxTipo = document.getElementById('chartTipo').getContext('2d');
+    new Chart(ctxTipo, {
+        type: 'pie',
+        data: {
+            labels: {{ grafico_labels|safe }},
+            datasets: [{
+                data: {{ grafico_valores|safe }},
+                backgroundColor: ['#4CAF50', '#F44336', '#2196F3', '#FF9800'],
+                borderWidth: 0
+            }]
+        },
+        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+    });
 
-<!-- Tabela -->
-<div class="table-responsive">
-  <table class="table table-striped mt-4 align-middle">
-    <thead class="table-dark">
-      <tr>
-        <th>#</th>
-        <th>Título</th>
-        <th>Categoria</th>
-        <th>Valor</th>
-        <th>Data</th>
-        <th>Ações</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for transacao in transacoes %}
-      <tr>
-        <td>{{ transacao.id }}</td>
-        <td>
-          {% if transacao.tipo.is_credito %}
-            <i class="bi bi-plus-circle text-success"></i>
-          {% else %}
-            <i class="bi bi-dash-circle text-danger"></i>
-          {% endif %}
-          {{ transacao.titulo }}
-        </td>
-        <td>
-          {{ transacao.categoria.nome|default:"-" }}
-        </td>
-        <td>
-          <span class="{% if transacao.tipo.is_credito %}text-success{% else %}text-danger{% endif %}">
-            {% if transacao.tipo.is_credito %}+{% else %}-{% endif %}
-            R$ {{ transacao.valor|floatformat:2 }}
-          </span>
-        </td>
-        <td>{{ transacao.data|date:"d \d\e F \d\e Y" }}</td>
-        <td>
-          <a href="{% url 'cal:transacao_editar' transacao.id %}" class="btn btn-sm btn-outline-primary" title="Editar">
-            <i class="bi bi-pencil-square"></i>
-          </a>
-          <form action="{% url 'cal:transacao_excluir' transacao.id %}" method="post" style="display:inline;">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-sm btn-danger" title="Excluir" onclick="return confirm('Confirma exclusão?');">
-              <i class="bi bi-trash"></i>
-            </button>
-          </form>
-        </td>
-      </tr>
-      {% empty %}
-      <tr><td colspan="6">Nenhuma transação este mês.</td></tr>
-      {% endfor %}
-    </tbody>
-    <tfoot>
-      <tr class="table-info">
-        <td colspan="3"><strong>Total:</strong></td>
-        <td colspan="3">
-          <strong>R$ {{ saldo_total|floatformat:2 }}</strong>
-        </td>
-      </tr>
-    </tfoot>
-  </table>
-</div>
+    const ctxCat = document.getElementById('chartCategoria').getContext('2d');
+    new Chart(ctxCat, {
+        type: 'doughnut',
+        data: {
+            labels: {{ grafico_categorias|safe }},
+            datasets: [{
+                data: {{ grafico_totais_categoria|safe }},
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
+                borderWidth: 0
+            }]
+        },
+        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+    });
+</script>
+{% endblock %}
 
 {% endblock %}

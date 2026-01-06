@@ -1,162 +1,134 @@
 {% extends 'base.html' %}
-{% load static %}
-{% load humanize %}
-
-{% block title %}Metas por Categoria{% endblock %}
-
 {% block content %}
-<div class="container my-4">
-  <a href="{% url 'cal:meta_criar' %}" class="btn btn-success">Criar Nova Meta</a>
-  <p></p>
-  <h2 class="mb-4">Metas do mês: {{ mes_atual }}</h2>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="bi bi-bullseye"></i> Metas por Categoria</h2>
+        <div class="btn-group shadow-sm">
+            <a href="?mes={{ mes_anterior.month }}&ano={{ mes_anterior.year }}" class="btn btn-outline-primary border-2">
+                <i class="bi bi-chevron-left"></i> {{ mes_anterior|date:"M/Y" }}
+            </a>
+            <span class="btn btn-primary fw-bold px-4 d-flex align-items-center">
+                {{ mes_atual|upper }}
+            </span>
+            <a href="?mes={{ mes_proximo.month }}&ano={{ mes_proximo.year }}" class="btn btn-outline-primary border-2">
+                {{ mes_proximo|date:"M/Y" }} <i class="bi bi-chevron-right"></i>
+            </a>
+        </div>
+    </div>
 
-  <!-- Navegação de meses -->
-  <div class="d-flex justify-content-between flex-wrap mb-3 gap-2">
-    <a href="?mes={{ mes_anterior.month }}&ano={{ mes_anterior.year }}" class="btn btn-outline-primary">
-      <i class="bi bi-arrow-left-circle"></i> Mês anterior
-    </a>
-    <a href="?mes={{ mes_proximo.month }}&ano={{ mes_proximo.year }}" class="btn btn-outline-primary">
-      Próximo mês <i class="bi bi-arrow-right-circle"></i>
-    </a>
-  </div>
+    <div class="d-flex justify-content-end mb-4">
+        <a href="{% url 'cal:meta_criar' %}" class="btn btn-success px-4 shadow-sm"><i class="bi bi-plus-lg"></i> Criar Nova Meta</a>
+    </div>
 
+    <div class="row mb-5">
+        <!-- Resumo Geral -->
+        <div class="col-lg-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-center text-primary mb-4 border-bottom pb-2">Distribuição de Gastos por Meta</h5>
+                    <div style="height: 300px;">
+                        <canvas id="graficoGeralMetas"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<form method="POST" class="mb-4">
-    {% csrf_token %}
-    {% for field in form %}
-    <div class="mb-3">
-        <label for="{{ field.id_for_label }}" class="form-label">
-            {{ field.label }}
-            {% if field.field.required %}<span class="text-danger">*</span>{% endif %}
-        </label>
-        {{ field }}
-        {% if field.help_text %}
-        <small class="form-text text-muted">{{ field.help_text }}</small>
-        {% endif %}
-        {% for error in field.errors %}
-        <div class="invalid-feedback d-block">{{ error }}</div>
+    <div class="row g-4">
+        {% for d in dados %}
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold">{{ d.categoria }}</h5>
+                    <div class="btn-group btn-group-sm">
+                        <a href="{% url 'cal:meta_editar' d.id %}" class="btn btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                        <a href="{% url 'cal:meta_excluir' d.id %}" class="btn btn-outline-danger"><i class="bi bi-trash"></i></a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-5">
+                            <div style="height: 120px;">
+                                <canvas id="pizza{{ d.id }}"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-7">
+                            <div class="mb-3">
+                                <span class="small text-muted d-block">Gasto: <strong>R$ {{ d.gasto|floatformat:2 }}</strong></span>
+                                <span class="small text-muted d-block">Limite: <strong>R$ {{ d.limite|floatformat:2 }}</strong></span>
+                            </div>
+                            <div class="progress" style="height: 20px;">
+                                <div class="progress-bar bg-{{ d.status }} progress-bar-striped progress-bar-animated" style="width: {{ d.percentual }}%">
+                                    {{ d.percentual }}%
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% if d.transacoes %}
+                    <div class="mt-3">
+                        <button class="btn btn-link btn-sm p-0 text-decoration-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ d.id }}">
+                            <i class="bi bi-list-ul"></i> Ver transações
+                        </button>
+                        <div class="collapse mt-2" id="collapse{{ d.id }}">
+                            <ul class="list-group list-group-flush small">
+                                {% for t in d.transacoes %}
+                                <li class="list-group-item px-0 py-1 d-flex justify-content-between">
+                                    <span>{{ t.titulo }}</span>
+                                    <span class="fw-bold">R$ {{ t.valor|floatformat:2 }}</span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5 text-muted">
+            <i class="bi bi-bullseye display-4 d-block mb-3"></i>
+            Nenhuma meta cadastrada para este mês.
+        </div>
         {% endfor %}
     </div>
-    {% endfor %}
-    <button type="submit" class="btn btn-primary">Salvar</button>
-</form>
-
-
-
-
-  <!-- Metas individuais -->
-  {% if dados %}
-    {% for d in dados %}
-      <div class="card mb-4">
-        <div class="card-header bg-light">
-          <h5>
-            <a href="{% url 'cal:meta_editar' d.id %}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil-square"></i></a>
-            <a href="{% url 'cal:meta_excluir' d.id %}" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></a>
-          </h5><strong>{{ d.categoria }}</strong> — Usou R$ {{ d.gasto|floatformat:2 }} do seu limite de R$ {{ d.limite|floatformat:2 }}
-        </div>
-        <div class="card-body">
-          <div class="row align-items-center">
-            <div class="col-md-5 text-center">
-              <canvas id="pizza{{ d.id }}" width="80" height="80"></canvas>
-            </div>
-            <div class="col-md-7">
-              <div class="progress mb-2">
-                <div class="progress-bar bg-{{ d.status }}" style="width: {{ d.percentual }}%">
-                  {{ d.percentual }}%
-                </div>
-              </div>
-              {% if d.transacoes %}
-                <ul class="list-group list-group-sm">
-                  {% for t in d.transacoes %}
-                    <li class="list-group-item py-1">
-                      {{ t.data|date:"d/m/Y" }} - {{ t.titulo }} — <strong>R$ {{ t.valor|floatformat:2 }}</strong>
-                    </li>
-                  {% endfor %}
-                </ul>
-              {% else %}
-                <p class="text-muted">Nenhuma transação nesta categoria.</p>
-              {% endif %}
-            </div>
-          </div>
-        </div>
-      </div>
-    {% endfor %}
-  {% else %}
-    <p>Nenhuma meta cadastrada para este mês.</p>
-  {% endif %}
 </div>
 
-  <!-- Gráfico geral -->
-  <div class="mb-5">
-    <h4 class="mb-2">Resumo Geral das Metas</h4>
-    <div style="height: 300px;">
-      <canvas id="graficoGeralMetas"></canvas>
-    </div>
-  </div>
-<!-- Exporta dados JSON para o gráfico geral -->
-{{ grafico_labels|json_script:"grafico-metas-labels" }}
-
-{{ grafico_valores|json_script:"grafico-metas-valores" }}
-
-
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    // Gráfico geral
-    const labels = JSON.parse(document.getElementById("grafico-metas-labels").textContent);
-    const valores = JSON.parse(document.getElementById("grafico-metas-valores").textContent);
-    const cores = labels.map((_, i) => `hsl(${i * 45}, 70%, 60%)`);
+    document.addEventListener("DOMContentLoaded", function () {
+        // Gráfico geral
+        const labels = {{ grafico_labels|safe }};
+        const valores = {{ grafico_valores|safe }};
+        const ctx = document.getElementById("graficoGeralMetas").getContext("2d");
+        new Chart(ctx, {
+            type: "doughnut",
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: valores,
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
+                    borderWidth: 0
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: "bottom" } } }
+        });
 
-    const ctx = document.getElementById("graficoGeralMetas").getContext("2d");
-    new Chart(ctx, {
-      type: "doughnut",
-      data: {
-        labels: labels,
-        datasets: [{
-          data: valores,
-          backgroundColor: cores,
-          borderColor: "#fff",
-          borderWidth: 2
-        }]
-      },
-      options: {
-        plugins: {
-          title: {
-            display: true,
-            text: "Distribuição Geral de Gastos por Categoria"
-          },
-          legend: { position: "bottom" }
-        },
-        responsive: true,
-        maintainAspectRatio: false
-      }
+        // Gráficos individuais
+        {% for d in dados %}
+        new Chart(document.getElementById("pizza{{ d.id }}"), {
+            type: "pie",
+            data: {
+                labels: ["Gasto", "Restante"],
+                datasets: [{
+                    data: [{{ d.gasto }}, {{ d.restante|floatformat:2 }}],
+                    backgroundColor: ["#dc3545", "#e9ecef"],
+                    borderWidth: 0
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+        });
+        {% endfor %}
     });
-
-    // Gráficos individuais por categoria
-{% for d in dados %}
-  new Chart(document.getElementById("pizza{{ d.id }}"), {
-    type: "doughnut",
-    data: {
-      labels: ["Gasto", "Restante"],
-      datasets: [{
-        data: [{{ d.gasto }}, {{ d.restante|floatformat:2 }}],
-        backgroundColor: ["#dc3545", "#dee2e6"],
-        borderColor: "#fff",
-        borderWidth: 1
-      }]
-    },
-    options: {
-      plugins: {
-        legend: { display: false }
-      },
-      responsive: true,
-      maintainAspectRatio: false
-    }
-  });
-{% endfor %}
-
-  });
 </script>
 {% endblock %}
