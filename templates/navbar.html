@@ -44,24 +44,24 @@
   </li>
   <li class="nav-item">
     <a class="nav-link" href="{% url 'cal:transacoes_mes' %}">
-      <i class="bi bi-bar-chart-fill"></i> Balanço mensal
+      <i class="bi bi-bar-chart-fill"></i> Mês
     </a>
   </li>
   <li class="nav-item">
     <a class="nav-link" href="{% url 'cal:metas_categoria' %}">
-      <i class="bi bi-target"></i> Minhas metas
+      <i class="bi bi-bullseye"></i> Meta
     </a>
   </li>
   <li class="nav-item">
     <a class="nav-link" href="{% url 'cal:resumo_categoria' %}">
-      <i class="bi bi-pie-chart-fill"></i> Balanço geral
+      <i class="bi bi-pie-chart-fill"></i> Balanço
     </a>
   </li>
   <li class="nav-item">
     <a class="nav-link" href="{% url 'cal:categorias' %}"><i class="bi bi-tags-fill"></i> Categorias</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="{% url 'cal:listar_transacoes' %}"><i class="bi bi-list-ul"></i> Lista geral</a>
+    <a class="nav-link" href="{% url 'cal:listar_transacoes' %}"><i class="bi bi-list-ul"></i> Lista</a>
   </li>
                     {% endif %}
                     {% if user.is_authenticated and user.is_staff %}
