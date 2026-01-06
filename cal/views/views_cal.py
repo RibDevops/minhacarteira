@@ -84,6 +84,11 @@ class CalendarView(generic.ListView):
         cal = Calendar(d.year, d.month)
         html_cal = cal.formatmonth(withyear=True, transacoes=transacoes_mes_atual)
 
+        # Datas para o btn-group padrão
+        mes_atual_date = date(d.year, d.month, 1)
+        mes_anterior_date = mes_atual_date - relativedelta(months=1)
+        mes_proximo_date = mes_atual_date + relativedelta(months=1)
+
         context.update({
             'calendar': mark_safe(html_cal),
             'prev_month': prev_month(d),
@@ -93,6 +98,11 @@ class CalendarView(generic.ListView):
             'total_creditos': total_creditos,
             'total_debitos': total_debitos,
             'saldo_total': saldo_total,
+            
+            # Adiciona datas para o novo btn-group
+            'mes_atual': mes_atual_date,
+            'mes_anterior': mes_anterior_date,
+            'mes_proximo': mes_proximo_date,
 
             # Adiciona dados do próximo mês
             'saldo_total_prox': saldo_total_prox,
