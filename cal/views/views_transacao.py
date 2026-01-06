@@ -31,15 +31,14 @@ def excluir_transacao_lista(request, pk):
 @login_required
 def transacao_editar(request, pk):
     instancia = get_object_or_404(Transacao, pk=pk, user=request.user)
-    #form = TransacaoForm(request.POST or None, instance=instancia)
     form = TransacaoForm(request.POST or None, instance=instancia, user=request.user)
-
 
     if request.method == 'POST' and form.is_valid():
         form.save()
-        return redirect('cal:transacoes_mes')
+        messages.success(request, 'Transação atualizada com sucesso!')
+        return redirect('cal:calendar')
 
-    return render(request, 'cal/transacao_editar.html', {'form': form})
+    return render(request, 'cal/transacao_editar.html', {'form': form, 'titulo': 'Editar Transação'})
 
 
 @login_required
