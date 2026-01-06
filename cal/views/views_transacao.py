@@ -31,15 +31,14 @@ def excluir_transacao_lista(request, pk):
 @login_required
 def transacao_editar(request, pk):
     instancia = get_object_or_404(Transacao, pk=pk, user=request.user)
-    #form = TransacaoForm(request.POST or None, instance=instancia)
     form = TransacaoForm(request.POST or None, instance=instancia, user=request.user)
-
 
     if request.method == 'POST' and form.is_valid():
         form.save()
-        return redirect('cal:transacoes_mes')
+        messages.success(request, 'Transação atualizada com sucesso!')
+        return redirect('cal:calendar')
 
-    return render(request, 'cal/transacao_editar.html', {'form': form})
+    return render(request, 'cal/transacao_editar.html', {'form': form, 'titulo': 'Editar Transação'})
 
 
 @login_required
@@ -244,37 +243,37 @@ def resumo_categoria_view(request):
 
 @login_required
 def listar_transacoes(request):
-    transacoes = Transacao.objects.filter(user=request.user).order_by('-data')
+    hoje = date.today()
+    ano = int(request.GET.get('ano', hoje.year))
+    mes = int(request.GET.get('mes', hoje.month))
     
-    # print(connection.queries)
-    # print(transacoes)
-    # for t in transacoes:
-        # print(f"{t.id} | {t.titulo} | {t.valor} | {t.data} | {t.categoria} | {t.tipo}")
+    data_inicio = make_aware(datetime(ano, mes, 1))
+    data_fim = make_aware(datetime(ano, mes, 1) + relativedelta(months=1))
+    
+    transacoes = Transacao.objects.filter(
+        user=request.user,
+        data__gte=data_inicio,
+        data__lt=data_fim
+    ).select_related('tipo', 'categoria').order_by('-data')
 
+    tipo_filtro = request.GET.get('tipo')
+    categoria_filtro = request.GET.get('categoria')
 
-    ano = request.GET.get('ano')
-    # print(ano)
-    mes = request.GET.get('mes')
-    # print(mes)
-    tipo = request.GET.get('tipo')
-    categoria = request.GET.get('categoria')
-
-    if ano:
-        transacoes = transacoes.filter(data__year=int(ano))
-        # print(f'ano_t {transacoes}')
-    if mes:
-        transacoes = transacoes.filter(data__month=int(mes))
-    if tipo:
-        transacoes = transacoes.filter(tipo_id=int(tipo))
-    if categoria:
-        transacoes = transacoes.filter(categoria_id=int(categoria))
+    if tipo_filtro:
+        transacoes = transacoes.filter(tipo_id=int(tipo_filtro))
+    if categoria_filtro:
+        transacoes = transacoes.filter(categoria_id=int(categoria_filtro))
 
     tipos = Tipo.objects.all()
     categorias = Categoria.objects.all()
-    # print(f'transacoes: {transacoes}')
 
-    return render(request, 'cal/lista_transacoes.html', {
+    contexto = {
         'transacoes': transacoes,
         'tipos': tipos,
         'categorias': categorias,
-    })
+        'mes_atual': date(ano, mes, 1),
+        'mes_anterior': date(ano, mes, 1) - relativedelta(months=1),
+        'mes_proximo': date(ano, mes, 1) + relativedelta(months=1),
+    }
+
+    return render(request, 'cal/lista_transacoes.html', contexto)
