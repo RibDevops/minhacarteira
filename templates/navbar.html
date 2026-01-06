@@ -39,17 +39,17 @@
   </li>
   <li class="nav-item">
     <a class="nav-link" href="{% url 'cal:transacao_nova' %}">
-      <i class="bi bi-plus-circle"></i> Registrar movimentação
+      <i class="bi bi-plus-circle-fill"></i> Registrar
     </a>
   </li>
   <li class="nav-item">
     <a class="nav-link" href="{% url 'cal:transacoes_mes' %}">
-      <i class="bi bi-bar-chart-line"></i> Balanço mensal
+      <i class="bi bi-bar-chart-fill"></i> Balanço mensal
     </a>
   </li>
   <li class="nav-item">
     <a class="nav-link" href="{% url 'cal:metas_categoria' %}">
-      <i class="bi bi-bullseye"></i> Metas mensais
+      <i class="bi bi-target"></i> Minhas metas
     </a>
   </li>
   <li class="nav-item">
@@ -57,17 +57,12 @@
       <i class="bi bi-pie-chart-fill"></i> Balanço geral
     </a>
   </li>
-
   <li class="nav-item">
-                        <a class="nav-link" href="{% url 'cal:categorias' %}"><i class="bi bi-grid-1x2"></i> Categoria</a>
-                    </li>
-  
-
-                    
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'cal:listar_transacoes' %}"><i class="bi bi-card-checklist"></i> Lista geral</a>
-                    </li>
+    <a class="nav-link" href="{% url 'cal:categorias' %}"><i class="bi bi-tags-fill"></i> Categorias</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'cal:listar_transacoes' %}"><i class="bi bi-list-ul"></i> Lista geral</a>
+  </li>
                     {% endif %}
                     {% if user.is_authenticated and user.is_staff %}
                     <li class="nav-item">
