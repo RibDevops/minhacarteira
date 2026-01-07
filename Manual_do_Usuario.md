@@ -89,6 +89,12 @@ Planeje quanto você quer gastar em cada área da sua vida.
 ## 7. Perfil e Segurança
 Mantenha seus dados atualizados e sua conta segura.
 
+### 🔐 Privacidade de Dados (Criptografia)
+O sistema utiliza criptografia de nível bancário (**AES-256**) para proteger seus dados sensíveis diretamente no banco de dados. Isso garante que, mesmo em caso de acesso não autorizado ao servidor, suas informações permaneçam ilegíveis.
+- **Títulos das Transações:** O nome que você dá aos seus gastos é criptografado.
+- **Valores Financeiros:** Todos os valores inseridos são armazenados de forma protegida.
+- **Observações:** Suas anotações pessoais são completamente privadas.
+
 **Meu Perfil:**
 1. Clique no seu nome no topo da tela e selecione "Perfil".
 2. Você pode alterar seu nome e e-mail.
