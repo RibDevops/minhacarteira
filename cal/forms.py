@@ -102,7 +102,7 @@ class CategoriaForm(forms.ModelForm):
 class TransacaoForm(ModelForm):
     class Meta:
         model = Transacao
-        fields = ['tipo', 'titulo', 'categoria', 'valor', 'data', 'parcelas']
+        fields = ['tipo', 'cartao', 'titulo', 'categoria', 'valor', 'data', 'parcelas', 'observacoes']
         widgets = {
             'data': DateInput(
                 attrs={
@@ -129,10 +129,13 @@ class TransacaoForm(ModelForm):
             'class': 'form-control'
         })
         
-        for field in ['valor', 'tipo', 'parcelas', 'categoria']:
-            self.fields[field].widget.attrs['class'] = 'form-control'
+        for field in ['valor', 'tipo', 'parcelas', 'categoria', 'cartao', 'observacoes']:
+            if field in self.fields:
+                self.fields[field].widget.attrs['class'] = 'form-control'
+        
         if user:
-                self.fields['categoria'].queryset = Categoria.objects.filter(user=user)
+            self.fields['categoria'].queryset = Categoria.objects.filter(user=user)
+            self.fields['cartao'].queryset = Cartao.objects.filter(user=user)
 
 
 class UserRegisterForm(forms.ModelForm):
@@ -157,14 +160,42 @@ from .models import Tipo
 class TipoForm(forms.ModelForm):
     class Meta:
         model = Tipo
-        fields = ['descricao', 'is_credito']
+        fields = ['descricao', 'is_credito', 'dia_fechamento', 'adia_mes']
         widgets = {
             'descricao': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'ex: Salário, Compra'}),
             'is_credito': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'dia_fechamento': forms.NumberInput(attrs={'class': 'form-control', 'min': 0, 'max': 31}),
+            'adia_mes': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
         labels = {
             'descricao': 'Descrição',
             'is_credito': 'É crédito?',
+            'dia_fechamento': 'Dia de Fechamento (Cartão)',
+            'adia_mes': 'Adiar Mês?',
+        }
+
+
+from .models import Cartao
+
+class CartaoForm(forms.ModelForm):
+    limite = forms.DecimalField(
+        label="Limite Total",
+        max_digits=10,
+        decimal_places=2,
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '0,00'})
+    )
+    dia_fechamento = forms.IntegerField(
+        label="Dia de Fechamento",
+        min_value=1,
+        max_value=31,
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ex: 10'})
+    )
+
+    class Meta:
+        model = Cartao
+        fields = ['cartao']
+        widgets = {
+            'cartao': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex: Nubank, Visa...'}),
         }
 
 

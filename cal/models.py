@@ -71,7 +71,10 @@ class EncryptedDecimalField(models.Field):
     
     
 class Cartao(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     cartao = models.CharField(max_length=100, verbose_name="Nome do cartão")
+    limite = models.DecimalField(max_digits=10, decimal_places=2, default=0, verbose_name="Limite do cartão")
+    dia_fechamento = models.PositiveIntegerField(default=1, verbose_name="Dia de fechamento")
 
     class Meta:
         verbose_name = "Cartão"
@@ -83,6 +86,7 @@ class Cartao(models.Model):
 
 class Transacao(BaseModel):
     tipo = models.ForeignKey(Tipo, on_delete=models.PROTECT, verbose_name="Tipo da transação")
+    cartao = models.ForeignKey(Cartao, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Cartão utilizado")
     categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True, blank=True)
     # titulo = EncryptedCharField(models.CharField(max_length=200, verbose_name="Título"))
     titulo = EncryptedCharField(max_length=200, verbose_name="Título")
