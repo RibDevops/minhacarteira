@@ -51,6 +51,7 @@ def transacao_view(request):
         transacao.user = request.user
 
         tipo = transacao.tipo
+        forma_pagamento = transacao.forma_pagamento
         categoria = transacao.categoria
         data = transacao.data
         parcelas = int(form.cleaned_data.get('parcelas') or 1)
@@ -64,40 +65,30 @@ def transacao_view(request):
 
         valor_parcela = (valor_total / parcelas).quantize(Decimal("0.01"))
 
-        data_compra_str = data.strftime('%d/%m')
-
-        # Lógica Inteligente de Data para Cartões
+        # Lógica de data baseada na forma de pagamento e cartão
         data_base_parcela = data
-        if tipo.dia_fechamento > 0:
-            # Se o dia da compra for >= ao dia de fechamento, a parcela cai no mês subsequente ao padrão
-            if data.day >= tipo.dia_fechamento:
+        if transacao.cartao and transacao.cartao.dia_fechamento > 0:
+            if data.day >= transacao.cartao.dia_fechamento:
                 data_base_parcela = data + relativedelta(months=1)
             
-            # Se for cartão de crédito (ID 3 ou similar) ou tiver 'adia_mes', o padrão é já começar no mês seguinte
-            if tipo.id == 3 or tipo.adia_mes:
+            if transacao.cartao.is_credito:
                 data_base_parcela = data_base_parcela + relativedelta(months=1)
 
-        if tipo.is_credito:
-            if not transacao.cartao:
-                messages.error(request, "Para transações de Crédito, selecione um cartão.")
-                return render(request, 'cal/transacao_form.html', {'form': form})
-            
-            # Lógica de parcelamento inteligente
+        if forma_pagamento.exige_cartao:
             for i in range(parcelas):
-                data_parcela = data_base_parcela + relativedelta(months=i)
                 Transacao.objects.create(
                     user=request.user,
                     tipo=tipo,
+                    forma_pagamento=forma_pagamento,
                     cartao=transacao.cartao,
                     categoria=categoria,
                     titulo=f"{transacao.titulo} ({i + 1}/{parcelas})" if parcelas > 1 else transacao.titulo,
                     valor=valor_parcela,
-                    data=data_parcela,
+                    data=data_base_parcela + relativedelta(months=i),
                     parcelas=parcelas,
                     data_fim=data_base_parcela + relativedelta(months=parcelas - 1),
                 )
         else:
-            # Débito: Garante que não tenha cartão e não tenha parcelas (regra simples)
             transacao.cartao = None
             transacao.data = data_base_parcela
             transacao.valor = valor_total

@@ -1,0 +1,148 @@
+📌 PROMPT PARA O REPLIT (FREE)
+
+O arquivo models.py já foi atualizado e contém novas classes e alterações estruturais.
+Seu trabalho é ajustar os demais arquivos do projeto para que passem a usar corretamente os novos models e campos, sem alterar regras que não sejam necessárias.
+
+⚠️ REGRAS IMPORTANTES
+
+NÃO usar modo autônomo
+
+NÃO criar arquivos novos sem necessidade
+
+NÃO remover funcionalidades existentes
+
+NÃO usar a palavra “refatorar”
+
+Manter compatibilidade com o funcionamento atual
+
+Aplicar apenas ajustes obrigatórios
+
+Continuar compatível com plano FREE
+
+📦 ALTERAÇÕES JÁ EXISTENTES NO MODELS.PY
+
+Considere que o projeto agora possui:
+
+Classe Tipo
+
+Apenas dois registros possíveis:
+
+Crédito (Entrada)
+
+Débito (Saída)
+
+Usada como natureza contábil
+
+Nova classe FormaPagamento
+
+Débito (à vista)
+
+Crédito (a prazo – exige cartão)
+
+Dinheiro
+
+Pix
+
+Campo exige_cartao define se o cartão é obrigatório
+
+Classe Cartao
+
+Representa cartão de crédito
+
+Campo is_credito indica que gera débito contábil
+
+Usada apenas quando a forma de pagamento exigir cartão
+
+Classe Transacao
+
+Agora possui:
+
+tipo → natureza contábil
+
+forma_pagamento
+
+cartao (opcional)
+
+O preenchimento de cartao depende da forma_pagamento
+
+🛠️ O QUE VOCÊ DEVE FAZER
+
+Analise o projeto e ajuste os arquivos abaixo, conforme existirem:
+
+✅ forms.py
+
+Atualizar formulários de transação para:
+
+Usar FormaPagamento
+
+Exigir cartao somente quando forma_pagamento.exige_cartao == True
+
+Limpar cartao quando a forma de pagamento não exigir
+
+Manter validações já existentes
+
+✅ views.py
+
+Ajustar:
+
+create
+
+update
+
+filtros
+
+relatórios
+
+Garantir que:
+
+tipo continue sendo corretamente atribuído
+
+forma_pagamento seja salva corretamente
+
+cartao seja opcional
+
+✅ admin.py
+
+Atualizar listas, filtros e formulários para:
+
+Tipo
+
+FormaPagamento
+
+Cartao
+
+Transacao
+
+✅ templates
+
+Atualizar formulários HTML:
+
+Campo Forma de Pagamento (combobox)
+
+Campo Cartão visível apenas quando necessário
+
+NÃO criar novo layout
+
+Apenas ajustar campos e labels
+
+✅ fixtures ou dados iniciais (se existirem)
+
+Garantir que existam registros iniciais para:
+
+Tipo: Crédito e Débito
+
+FormaPagamento: Débito, Crédito, Dinheiro, Pix
+
+🎯 OBJETIVO FINAL
+
+O sistema deve funcionar exatamente como antes do ponto de vista do usuário
+
+Agora usando corretamente:
+
+Tipo como natureza contábil
+
+FormaPagamento como meio de pagamento
+
+Cartao apenas quando aplicável
+
+Nenhum erro de migração, importação ou formulário

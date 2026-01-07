@@ -164,18 +164,14 @@ from .models import Tipo
 class TipoForm(forms.ModelForm):
     class Meta:
         model = Tipo
-        fields = ['descricao', 'is_credito', 'dia_fechamento', 'adia_mes']
+        fields = ['codigo', 'descricao']
         widgets = {
-            'descricao': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'ex: Salário, Compra'}),
-            'is_credito': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'dia_fechamento': forms.NumberInput(attrs={'class': 'form-control', 'min': 0, 'max': 31}),
-            'adia_mes': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'descricao': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'ex: Entrada, Saída'}),
+            'codigo': forms.Select(attrs={'class': 'form-select'}),
         }
         labels = {
+            'codigo': 'Código Contábil',
             'descricao': 'Descrição',
-            'is_credito': 'É crédito?',
-            'dia_fechamento': 'Dia de Fechamento (Cartão)',
-            'adia_mes': 'Adiar Mês?',
         }
 
 
@@ -197,9 +193,10 @@ class CartaoForm(forms.ModelForm):
 
     class Meta:
         model = Cartao
-        fields = ['cartao']
+        fields = ['nome', 'limite', 'dia_fechamento', 'is_credito']
         widgets = {
-            'cartao': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex: Nubank, Visa...'}),
+            'nome': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex: Nubank, Visa...'}),
+            'is_credito': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
 
 

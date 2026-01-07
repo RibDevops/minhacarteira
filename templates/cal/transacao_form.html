@@ -48,21 +48,22 @@
 
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
-                    const tipoSelect = document.querySelector('select[name="tipo"]');
+                    const formaPgtoSelect = document.querySelector('select[name="forma_pagamento"]');
                     const divCartao = document.getElementById('div_cartao');
                     
+                    // Mapeamento de formas que exigem cartão (vinda do backend ou hardcoded baseado no texto)
                     function toggleCartao() {
-                        if (!tipoSelect) return;
-                        const selectedText = tipoSelect.options[tipoSelect.selectedIndex].text;
-                        if (selectedText.includes('Crédito')) {
+                        if (!formaPgtoSelect) return;
+                        const selectedText = formaPgtoSelect.options[formaPgtoSelect.selectedIndex].text.toLowerCase();
+                        if (selectedText.includes('crédito')) {
                             divCartao.style.display = 'block';
                         } else {
                             divCartao.style.display = 'none';
                         }
                     }
                     
-                    if (tipoSelect) {
-                        tipoSelect.addEventListener('change', toggleCartao);
+                    if (formaPgtoSelect) {
+                        formaPgtoSelect.addEventListener('change', toggleCartao);
                         toggleCartao(); // Inicial
                     }
                 });
