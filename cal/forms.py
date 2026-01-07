@@ -136,6 +136,10 @@ class TransacaoForm(ModelForm):
         if user:
             self.fields['categoria'].queryset = Categoria.objects.filter(user=user)
             self.fields['cartao'].queryset = Cartao.objects.filter(user=user)
+            self.fields['tipo'].queryset = Tipo.objects.all()
+            
+            # Ajuste de exibição para simplificar Débito/Crédito
+            self.fields['tipo'].label_from_instance = lambda obj: f"{'Crédito' if obj.is_credito else 'Débito'} - {obj.descricao}"
 
 
 class UserRegisterForm(forms.ModelForm):

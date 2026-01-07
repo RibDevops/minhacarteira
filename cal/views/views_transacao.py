@@ -77,35 +77,31 @@ def transacao_view(request):
             if tipo.id == 3 or tipo.adia_mes:
                 data_base_parcela = data_base_parcela + relativedelta(months=1)
 
-        if tipo.id == 3:  # Cartão de crédito (Mantendo retrocompatibilidade de ID se necessário)
+        if tipo.is_credito:
+            if not transacao.cartao:
+                messages.error(request, "Para transações de Crédito, selecione um cartão.")
+                return render(request, 'cal/transacao_form.html', {'form': form})
+            
+            # Lógica de parcelamento inteligente
             for i in range(parcelas):
+                data_parcela = data_base_parcela + relativedelta(months=i)
                 Transacao.objects.create(
                     user=request.user,
                     tipo=tipo,
+                    cartao=transacao.cartao,
                     categoria=categoria,
-                    titulo=f"{transacao.titulo} - ({data_compra_str}) ({i + 1}/{parcelas})",
+                    titulo=f"{transacao.titulo} ({i + 1}/{parcelas})" if parcelas > 1 else transacao.titulo,
                     valor=valor_parcela,
-                    data=data_base_parcela + relativedelta(months=i),
+                    data=data_parcela,
                     parcelas=parcelas,
                     data_fim=data_base_parcela + relativedelta(months=parcelas - 1),
                 )
         else:
-            if parcelas > 1:
-                for i in range(parcelas):
-                    Transacao.objects.create(
-                        user=request.user,
-                        tipo=tipo,
-                        categoria=categoria,
-                        titulo=f"{transacao.titulo} ({i + 1}/{parcelas})",
-                        valor=valor_parcela,
-                        data=data_base_parcela + relativedelta(months=i),
-                        parcelas=parcelas,
-                        data_fim=data_base_parcela + relativedelta(months=parcelas - 1),
-                    )
-            else:
-                transacao.data = data_base_parcela
-                transacao.valor = valor_total
-                transacao.save()
+            # Débito: Garante que não tenha cartão e não tenha parcelas (regra simples)
+            transacao.cartao = None
+            transacao.data = data_base_parcela
+            transacao.valor = valor_total
+            transacao.save()
 
         return redirect('cal:transacoes_mes')
 
