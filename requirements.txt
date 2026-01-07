@@ -44,3 +44,4 @@ six
 sqlparse
 typing_extensions
 gunicorn
+cryptography

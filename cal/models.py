@@ -91,6 +91,7 @@ class Transacao(BaseModel):
     data = models.DateField(verbose_name="Data da transação")
     parcelas = models.IntegerField(null=True, blank=True, verbose_name="Quantidade de parcelas")
     data_fim = models.DateField(null=True, blank=True, verbose_name="Data da última parcela")
+    observacoes = EncryptedCharField(max_length=500, null=True, blank=True, verbose_name="Observações (Criptografadas)")
 
     def get_html_url(self):
         url = reverse('cal:transacao_update', args=[self.id])  # isso cria o link para editar

@@ -108,7 +108,7 @@ def get_absolute_url(self):
 
 class TransacaoUpdateView(UpdateView):
     model = Transacao
-    fields = ['tipo', 'titulo', 'valor', 'data', 'parcelas']
+    fields = ['tipo', 'titulo', 'valor', 'data', 'parcelas', 'observacoes']
     template_name = 'cal/transacao_form.html'  # crie esse template se ainda não existir
     success_url = reverse_lazy('cal:calendar')  # ou outra URL para onde redirecionar depois da edição
 
