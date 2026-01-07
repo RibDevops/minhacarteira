@@ -8,7 +8,7 @@ from django.urls import reverse_lazy
 from django.utils.timezone import make_aware
 from django.views.generic.edit import UpdateView
 from dateutil.relativedelta import relativedelta
-from ..forms import TransacaoForm
+from ..forms import TransacaoForm, CartaoForm
 from ..models import Categoria, Tipo, Transacao, Cartao
 from django.contrib import messages
 from django.views.decorators.http import require_POST
@@ -251,6 +251,24 @@ def resumo_categoria_view(request):
 
 
 
+
+@login_required
+def cartao_novo(request):
+    """
+    View para adicionar um novo cartão.
+    """
+    if request.method == 'POST':
+        form = CartaoForm(request.POST)
+        if form.is_valid():
+            cartao = form.save(commit=False)
+            cartao.user = request.user
+            cartao.save()
+            messages.success(request, 'Cartão adicionado com sucesso!')
+            return redirect('cal:cartoes_resumo')
+    else:
+        form = CartaoForm()
+    
+    return render(request, 'cal/cartao_form.html', {'form': form, 'titulo': 'Novo Cartão'})
 
 @login_required
 def cartoes_resumo_view(request):
