@@ -47,16 +47,16 @@
     </div>
 
     <!-- Tabela -->
-    <div class="card border-0 shadow-sm overflow-hidden">
-        <div class="table-responsive">
-            <table class="table table-hover mb-0 align-middle">
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="table-responsive" style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+            <table class="table table-hover mb-0 align-middle" style="min-width: 600px;">
                 <thead class="bg-primary text-white">
                     <tr>
-                        <th class="px-4 py-3">Data</th>
+                        <th class="px-4 py-3" style="width: 120px;">Data</th>
                         <th class="py-3">Título</th>
-                        <th class="py-3">Categoria</th>
-                        <th class="py-3">Valor</th>
-                        <th class="py-3 text-center">Ações</th>
+                        <th class="py-3" style="width: 150px;">Categoria</th>
+                        <th class="py-3 text-end" style="width: 120px;">Valor</th>
+                        <th class="py-3 px-4 text-center" style="width: 100px;">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -74,12 +74,10 @@
                             </div>
                         </td>
                         <td><span class="badge bg-light text-dark border">{{ transacao.categoria.nome|default:"-" }}</span></td>
-                        <td>
-                            <span class="fw-bold {% if transacao.tipo.is_credito %}text-success{% else %}text-danger{% endif %}">
-                                R$ {{ transacao.valor|floatformat:2 }}
-                            </span>
+                        <td class="text-end fw-bold {% if transacao.tipo.is_credito %}text-success{% else %}text-danger{% endif %}">
+                            R$ {{ transacao.valor|floatformat:2 }}
                         </td>
-                        <td class="text-center">
+                        <td class="text-center px-4">
                             <div class="btn-group btn-group-sm">
                                 <a href="{% url 'cal:transacao_editar' transacao.id %}" class="btn btn-outline-primary" title="Editar">
                                     <i class="bi bi-pencil"></i>
