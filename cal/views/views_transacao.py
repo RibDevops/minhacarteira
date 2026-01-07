@@ -253,8 +253,38 @@ def resumo_categoria_view(request):
 
 
 @login_required
-def listar_transacoes(request):
-    hoje = date.today()
+def cartoes_resumo_view(request):
+    """
+    View simples para exibir o consumo total de cada cartão do usuário.
+    """
+    cartoes = Cartao.objects.filter(user=request.user)
+    
+    labels = []
+    consumo_valores = []
+    limite_valores = []
+    
+    for c in cartoes:
+        # Soma transações do mês atual vinculadas a este cartão
+        hoje = date.today()
+        consumo = Transacao.objects.filter(
+            user=request.user,
+            cartao=c,
+            data__month=hoje.month,
+            data__year=hoje.year
+        ).aggregate(total=Sum('valor'))['total'] or 0
+        
+        labels.append(c.cartao)
+        consumo_valores.append(float(consumo))
+        limite_valores.append(float(c.limite))
+        
+    contexto = {
+        'labels': labels,
+        'consumo': consumo_valores,
+        'limites': limite_valores,
+        'cartoes': cartoes,
+    }
+    return render(request, 'cal/cartoes_resumo.html', contexto)
+
     ano = int(request.GET.get('ano', hoje.year))
     mes = int(request.GET.get('mes', hoje.month))
     
