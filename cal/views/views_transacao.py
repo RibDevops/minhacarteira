@@ -299,9 +299,6 @@ def listar_transacoes(request):
         data__gte=data_inicio,
         data__lt=data_fim
     ).select_related('tipo', 'categoria').order_by('-data')
-        data__gte=data_inicio,
-        data__lt=data_fim
-    ).select_related('tipo', 'categoria').order_by('-data')
 
     tipo_filtro = request.GET.get('tipo')
     categoria_filtro = request.GET.get('categoria')
