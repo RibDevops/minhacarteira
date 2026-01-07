@@ -48,6 +48,8 @@ class Tipo(models.Model):
     descricao = models.CharField(max_length=200, verbose_name="Descrição do tipo")
     categoria = models.CharField(max_length=200, verbose_name="Categoria")
     is_credito = models.BooleanField(default=False, verbose_name="É crédito?")
+    dia_fechamento = models.PositiveIntegerField(default=0, help_text="Para cartões: dia que a fatura fecha. 0 se não for cartão.")
+    adia_mes = models.BooleanField(default=False, help_text="Se marcado, transações após o fechamento vão para o mês subsequente.")
 
     def __str__(self):
         # return f"{'Crédito' if self.is_credito else 'Débito'} - {self.descricao}"

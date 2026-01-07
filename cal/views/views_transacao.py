@@ -66,8 +66,18 @@ def transacao_view(request):
 
         data_compra_str = data.strftime('%d/%m')
 
-        if tipo.id == 3:  # Cartão de crédito
-            # Parcelas começam no mês seguinte
+        # Lógica Inteligente de Data para Cartões
+        data_base_parcela = data
+        if tipo.dia_fechamento > 0:
+            # Se o dia da compra for >= ao dia de fechamento, a parcela cai no mês subsequente ao padrão
+            if data.day >= tipo.dia_fechamento:
+                data_base_parcela = data + relativedelta(months=1)
+            
+            # Se for cartão de crédito (ID 3 ou similar) ou tiver 'adia_mes', o padrão é já começar no mês seguinte
+            if tipo.id == 3 or tipo.adia_mes:
+                data_base_parcela = data_base_parcela + relativedelta(months=1)
+
+        if tipo.id == 3:  # Cartão de crédito (Mantendo retrocompatibilidade de ID se necessário)
             for i in range(parcelas):
                 Transacao.objects.create(
                     user=request.user,
@@ -75,9 +85,9 @@ def transacao_view(request):
                     categoria=categoria,
                     titulo=f"{transacao.titulo} - ({data_compra_str}) ({i + 1}/{parcelas})",
                     valor=valor_parcela,
-                    data=data + relativedelta(months=i + 1),
+                    data=data_base_parcela + relativedelta(months=i),
                     parcelas=parcelas,
-                    data_fim=data + relativedelta(months=parcelas),
+                    data_fim=data_base_parcela + relativedelta(months=parcelas - 1),
                 )
         else:
             if parcelas > 1:
@@ -88,11 +98,12 @@ def transacao_view(request):
                         categoria=categoria,
                         titulo=f"{transacao.titulo} ({i + 1}/{parcelas})",
                         valor=valor_parcela,
-                        data=data + relativedelta(months=i),
+                        data=data_base_parcela + relativedelta(months=i),
                         parcelas=parcelas,
-                        data_fim=data + relativedelta(months=parcelas - 1),
+                        data_fim=data_base_parcela + relativedelta(months=parcelas - 1),
                     )
             else:
+                transacao.data = data_base_parcela
                 transacao.valor = valor_total
                 transacao.save()
 
