@@ -285,6 +285,9 @@ def cartoes_resumo_view(request):
     }
     return render(request, 'cal/cartoes_resumo.html', contexto)
 
+@login_required
+def listar_transacoes(request):
+    hoje = date.today()
     ano = int(request.GET.get('ano', hoje.year))
     mes = int(request.GET.get('mes', hoje.month))
     
@@ -293,6 +296,9 @@ def cartoes_resumo_view(request):
     
     transacoes = Transacao.objects.filter(
         user=request.user,
+        data__gte=data_inicio,
+        data__lt=data_fim
+    ).select_related('tipo', 'categoria').order_by('-data')
         data__gte=data_inicio,
         data__lt=data_fim
     ).select_related('tipo', 'categoria').order_by('-data')
