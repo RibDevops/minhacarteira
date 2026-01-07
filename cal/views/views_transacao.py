@@ -9,7 +9,7 @@ from django.utils.timezone import make_aware
 from django.views.generic.edit import UpdateView
 from dateutil.relativedelta import relativedelta
 from ..forms import TransacaoForm
-from ..models import Categoria, Tipo, Transacao
+from ..models import Categoria, Tipo, Transacao, Cartao
 from django.contrib import messages
 from django.views.decorators.http import require_POST
 
