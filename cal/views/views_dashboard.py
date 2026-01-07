@@ -8,8 +8,8 @@ def dashboard(request):
     user = request.user
     transacoes = Transacao.objects.filter(user=user).select_related('tipo', 'categoria').order_by('-data')
 
-    credito = transacoes.filter(tipo__is_credito=True).aggregate(total=Sum('valor'))['total'] or 0
-    debito = transacoes.filter(tipo__is_credito=False).aggregate(total=Sum('valor'))['total'] or 0
+    credito = transacoes.filter(tipo__codigo='C').aggregate(total=Sum('valor'))['total'] or 0
+    debito = transacoes.filter(tipo__codigo='D').aggregate(total=Sum('valor'))['total'] or 0
 
     saldo = credito - debito
     estado = "Crédito" if saldo >= 0 else "Débito"
