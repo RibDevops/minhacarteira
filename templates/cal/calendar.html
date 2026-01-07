@@ -6,16 +6,16 @@
 {% block content %}
 <div class="container my-4">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div class="btn-group shadow-sm">
-            <a href="{% url 'cal:calendar' %}?month={{ mes_anterior.year }}-{{ mes_anterior.month }}" class="btn btn-outline-primary border-2">
-                <i class="bi bi-chevron-left"></i> {{ mes_anterior|date:"M/Y" }}
+    <div class="d-flex justify-content-center justify-content-md-between align-items-center mb-4 flex-wrap gap-3">
+        <div class="btn-group shadow-sm w-100 w-md-auto">
+            <a href="{% url 'cal:calendar' %}?month={{ mes_anterior.year }}-{{ mes_anterior.month }}" class="btn btn-outline-primary border-2 px-2 px-md-3">
+                <i class="bi bi-chevron-left"></i> {{ mes_anterior|date:"M/y" }}
             </a>
-            <span class="btn btn-primary fw-bold px-4 d-flex align-items-center">
+            <span class="btn btn-primary fw-bold px-3 px-md-4 d-flex align-items-center justify-content-center flex-grow-1">
                 {{ mes_atual|date:"F Y"|upper }}
             </span>
-            <a href="{% url 'cal:calendar' %}?month={{ mes_proximo.year }}-{{ mes_proximo.month }}" class="btn btn-outline-primary border-2">
-                {{ mes_proximo|date:"M/Y" }} <i class="bi bi-chevron-right"></i>
+            <a href="{% url 'cal:calendar' %}?month={{ mes_proximo.year }}-{{ mes_proximo.month }}" class="btn btn-outline-primary border-2 px-2 px-md-3">
+                {{ mes_proximo|date:"M/y" }} <i class="bi bi-chevron-right"></i>
             </a>
         </div>
     </div>
@@ -23,41 +23,41 @@
     <!-- Resumo Rápido -->
     <div class="row mb-4 g-2">
         <div class="col-6 col-md-3">
-            <div class="card border-0 shadow-sm bg-success text-white">
-                <div class="card-body p-2 text-center">
-                    <small class="d-block opacity-75">Créditos</small>
-                    <span class="fw-bold">R$ {{ total_creditos|floatformat:2 }}</span>
+            <div class="card border-0 shadow-sm bg-success text-white h-100">
+                <div class="card-body p-2 text-center d-flex flex-column justify-content-center">
+                    <small class="d-block opacity-75 small-label">Créditos</small>
+                    <span class="fw-bold currency-text">R$ {{ total_creditos|floatformat:2 }}</span>
                 </div>
             </div>
         </div>
         <div class="col-6 col-md-3">
-            <div class="card border-0 shadow-sm bg-danger text-white">
-                <div class="card-body p-2 text-center">
-                    <small class="d-block opacity-75">Débitos</small>
-                    <span class="fw-bold">R$ {{ total_debitos|floatformat:2 }}</span>
+            <div class="card border-0 shadow-sm bg-danger text-white h-100">
+                <div class="card-body p-2 text-center d-flex flex-column justify-content-center">
+                    <small class="d-block opacity-75 small-label">Débitos</small>
+                    <span class="fw-bold currency-text">R$ {{ total_debitos|floatformat:2 }}</span>
                 </div>
             </div>
         </div>
         <div class="col-6 col-md-3">
-            <div class="card border-0 shadow-sm bg-primary text-white">
-                <div class="card-body p-2 text-center">
-                    <small class="d-block opacity-75">Saldo</small>
-                    <span class="fw-bold">R$ {{ saldo_total|floatformat:2 }}</span>
+            <div class="card border-0 shadow-sm bg-primary text-white h-100">
+                <div class="card-body p-2 text-center d-flex flex-column justify-content-center">
+                    <small class="d-block opacity-75 small-label">Saldo</small>
+                    <span class="fw-bold currency-text">R$ {{ saldo_total|floatformat:2 }}</span>
                 </div>
             </div>
         </div>
         <div class="col-6 col-md-3">
-            <div class="card border-0 shadow-sm bg-info text-white">
-                <div class="card-body p-2 text-center">
-                    <small class="d-block opacity-75">Prev. Próximo</small>
-                    <span class="fw-bold">R$ {{ saldo_total_prox|floatformat:2 }}</span>
+            <div class="card border-0 shadow-sm bg-info text-white h-100">
+                <div class="card-body p-2 text-center d-flex flex-column justify-content-center">
+                    <small class="d-block opacity-75 small-label">Próximo</small>
+                    <span class="fw-bold currency-text">R$ {{ saldo_total_prox|floatformat:2 }}</span>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-        <div class="table-responsive">
+        <div class="table-responsive" style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
             {{ calendar|safe }}
         </div>
     </div>
@@ -67,23 +67,24 @@
 <style>
     .calendar {
         width: 100%;
+        min-width: 600px; /* Garante que o calendário não esprema demais no mobile e permita scroll */
         border-collapse: collapse;
         background: #fff;
     }
     .calendar th {
-        padding: 15px;
+        padding: 12px 5px;
         text-align: center;
         background-color: #f8f9fa;
         color: #495057;
         font-weight: 600;
         border-bottom: 2px solid #dee2e6;
         text-transform: uppercase;
-        font-size: 0.85rem;
+        font-size: 0.75rem;
     }
     .calendar td {
         width: 14.28%;
-        height: 120px;
-        padding: 10px;
+        height: 100px;
+        padding: 5px;
         vertical-align: top;
         border: 1px solid #f1f3f5;
         transition: background 0.2s;
@@ -98,9 +99,9 @@
     .calendar .date {
         font-weight: bold;
         color: #adb5bd;
-        font-size: 1.1rem;
+        font-size: 0.9rem;
         display: block;
-        margin-bottom: 8px;
+        margin-bottom: 5px;
     }
     .calendar td.today .date {
         color: #228be6;
@@ -111,40 +112,43 @@
         margin: 0;
     }
     .calendar li {
-        margin-bottom: 4px;
+        margin-bottom: 3px;
     }
     .calendar li a {
         display: block;
-        padding: 4px 8px;
+        padding: 2px 4px;
         border-radius: 4px;
         background-color: #f1f3f5;
         color: #495057;
         text-decoration: none;
-        font-size: 0.75rem;
+        font-size: 0.65rem;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         transition: all 0.2s;
-        border-left: 3px solid #dee2e6;
+        border-left: 2px solid #dee2e6;
     }
-    .calendar li a:hover {
-        background-color: #e9ecef;
-        transform: translateX(3px);
-    }
-    /* Estilos para créditos e débitos no calendário poderiam ser adicionados aqui se o model suportasse cores */
     
-    @media (max-width: 768px) {
-        .calendar td {
-            height: 90px;
-            padding: 5px;
-        }
-        .calendar .date {
-            font-size: 0.9rem;
-        }
-        .calendar li a {
-            font-size: 0.65rem;
-            padding: 2px 4px;
-        }
+    /* Ajustes específicos para Mobile */
+    .small-label { font-size: 0.7rem; }
+    .currency-text { font-size: 0.85rem; }
+
+    @media (min-width: 768px) {
+        .calendar td { height: 120px; padding: 10px; }
+        .calendar .date { font-size: 1.1rem; }
+        .calendar li a { font-size: 0.75rem; padding: 4px 8px; border-left-width: 3px; }
+        .calendar th { font-size: 0.85rem; padding: 15px; }
+        .currency-text { font-size: 1rem; }
+        .small-label { font-size: 0.85rem; }
+    }
+
+    /* Força barra de rolagem visível se necessário */
+    .table-responsive::-webkit-scrollbar {
+        height: 6px;
+    }
+    .table-responsive::-webkit-scrollbar-thumb {
+        background: #dee2e6;
+        border-radius: 10px;
     }
 </style>
 {% endblock %}
