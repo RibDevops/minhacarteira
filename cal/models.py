@@ -35,7 +35,7 @@ class Categoria(models.Model):
     nome = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.nome
+        return str(self.nome)
 
 
 # ======================================================
@@ -80,7 +80,7 @@ class Tipo(models.Model):
     descricao = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.descricao
+        return str(self.descricao)
 
 
 # ======================================================
@@ -114,7 +114,7 @@ class FormaPagamento(models.Model):
     )
 
     def __str__(self):
-        return self.descricao
+        return str(self.descricao)
 
 
 # ======================================================
@@ -137,7 +137,7 @@ class Cartao(models.Model):
         verbose_name_plural = "Cartões"
 
     def __str__(self):
-        return self.nome
+        return str(self.nome)
 
 
 # ======================================================
