@@ -34,7 +34,7 @@ class Categoria(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     nome = models.CharField(max_length=100)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.nome)
 
 
@@ -79,7 +79,7 @@ class Tipo(models.Model):
 
     descricao = models.CharField(max_length=50)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.descricao)
 
 
@@ -113,7 +113,7 @@ class FormaPagamento(models.Model):
         help_text="Se marcado, esta forma de pagamento exige cartão."
     )
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.descricao)
 
 
@@ -136,7 +136,7 @@ class Cartao(models.Model):
         verbose_name = "Cartão"
         verbose_name_plural = "Cartões"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.nome)
 
 
