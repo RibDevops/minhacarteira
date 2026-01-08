@@ -44,9 +44,9 @@ def login_view(request):  # ✅ Evite sobrescrever 'login'
         
         if user:
             login_django(request, user)
-            return redirect('cal:home')  # Ou qualquer nome de rota
+            return redirect('cal:home')
         else:
-            messages.error(request, 'Usuário ou senha incorretos.')
+            messages.error(request, 'Usuário ou senha inválidos. Por favor, tente novamente.')
             return redirect('login')
 
 from django.contrib.auth.views import LogoutView

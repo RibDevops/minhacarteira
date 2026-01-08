@@ -17,8 +17,13 @@ def saldos_mensais(request):
         data__month=hoje.month
     )
     # print(f'transacoes_mes: {transacoes_mes}')
-    total_creditos = transacoes_mes.filter(tipo__codigo='C').aggregate(total=Sum('valor'))['total'] or 0
-    total_debitos = transacoes_mes.filter(tipo__codigo='D').aggregate(total=Sum('valor'))['total'] or 0
+    try:
+        total_creditos = transacoes_mes.filter(tipo__codigo='C').aggregate(total=Sum('valor'))['total'] or 0
+        total_debitos = transacoes_mes.filter(tipo__codigo='D').aggregate(total=Sum('valor'))['total'] or 0
+    except Exception as e:
+        total_creditos = 0
+        total_debitos = 0
+        print(f"Erro ao calcular saldos no context processor: {e}")
     saldo_total = total_creditos - total_debitos
     # print(f'saldo_total: {saldo_total}')
 
