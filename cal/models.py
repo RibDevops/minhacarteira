@@ -73,6 +73,7 @@ class Tipo(models.Model):
     codigo = models.CharField(
         max_length=1,
         choices=TIPO_CHOICES,
+        default=DEBITO,
         unique=True
     )
 
@@ -153,7 +154,9 @@ class Transacao(BaseModel):
     forma_pagamento = models.ForeignKey(
         FormaPagamento,
         on_delete=models.PROTECT,
-        verbose_name="Forma de pagamento"
+        verbose_name="Forma de pagamento",
+        null=True,
+        blank=True
     )
 
     cartao = models.ForeignKey(
