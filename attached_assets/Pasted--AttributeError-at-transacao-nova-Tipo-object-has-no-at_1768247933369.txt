@@ -1,0 +1,46 @@
+
+AttributeError at /transacao/nova/
+
+'Tipo' object has no attribute 'is_credito'
+
+Request Method: 	GET
+Request URL: 	http://65c40cc3-fb51-4697-acf6-f64181c5be2c-00-1odkxrxla16aa.picard.replit.dev/transacao/nova/
+Django Version: 	6.0.1
+Exception Type: 	AttributeError
+Exception Value: 	
+
+'Tipo' object has no attribute 'is_credito'
+
+Exception Location: 	/home/runner/workspace/cal/forms.py, line 142, in <lambda>
+Raised during: 	cal.views.views_transacao.transacao_view
+Python Executable: 	/nix/store/h097imm3w6dpx10qynrd2sz9fks2wbq8-python3-3.12.11/bin/python
+Python Version: 	3.12.11
+Python Path: 	
+
+['/home/runner/workspace',
+ '/nix/store/zz7i75jb78idaz0rb1y1i4rzdyxq28vf-sitecustomize/lib/python/site-packages',
+ '/nix/store/dlz9jb8127sn1mj7986p9s8r3nxjlcl7-python3.12-pip-25.0.1/lib/python3.12/site-packages',
+ '/nix/store/h097imm3w6dpx10qynrd2sz9fks2wbq8-python3-3.12.11/lib/python312.zip',
+ '/nix/store/h097imm3w6dpx10qynrd2sz9fks2wbq8-python3-3.12.11/lib/python3.12',
+ '/nix/store/h097imm3w6dpx10qynrd2sz9fks2wbq8-python3-3.12.11/lib/python3.12/lib-dynload',
+ '/home/runner/workspace/.pythonlibs/lib/python3.12/site-packages',
+ '/nix/store/h097imm3w6dpx10qynrd2sz9fks2wbq8-python3-3.12.11/lib/python3.12/site-packages',
+ '/home/runner/workspace/.pythonlibs/lib/python3.12/site-packages',
+ '/nix/store/x1zyfp26gnxkbbspkwhh3f9n13r3z18p-python3.12-setuptools-80.7.1/lib/python3.12/site-packages']
+
+Server time: 	Mon, 12 Jan 2026 16:58:40 -0300
+Error during template rendering
+
+In template /home/runner/workspace/templates/cal/transacao_form.html, error at line 41
+'Tipo' object has no attribute 'is_credito'
+31 	              </ul>
+32 	            </div>
+33 	          {% endif %}
+34 	
+35 	          <form method="post" novalidate>
+36 	            {% csrf_token %}
+37 	            <div class="row g-2 g-md-3">
+38 	              {% for field in form %}
+39 	                <div class="col-12 col-md-6 mb-2" id="div_{{ field.name }}">
+40 	                  <label for="{{ field.id_for_label }}" class="form-label fw-bold small text-muted text-uppercase mb-1">{{ field.label }}</label>
+41 	                  {{ field }}

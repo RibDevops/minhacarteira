@@ -139,7 +139,7 @@ class TransacaoForm(ModelForm):
             self.fields['tipo'].queryset = Tipo.objects.all()
             
             # Ajuste de exibição para simplificar Débito/Crédito
-            self.fields['tipo'].label_from_instance = lambda obj: f"{'Crédito' if obj.is_credito else 'Débito'} - {obj.descricao}"
+            self.fields['tipo'].label_from_instance = lambda obj: f"{'Crédito' if obj.codigo == 'C' else 'Débito'} - {obj.descricao}"
 
 
 class UserRegisterForm(forms.ModelForm):
