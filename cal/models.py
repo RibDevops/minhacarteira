@@ -31,11 +31,24 @@ class BaseModel(models.Model):
 # ======================================================
 
 class Categoria(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     nome = models.CharField(max_length=100)
+    is_global = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = "Categoria"
+        verbose_name_plural = "Categorias"
+        ordering = ['nome']
 
     def __str__(self) -> str:
-        return str(self.nome)
+        prefix = "[GLOBAL] " if self.is_global else ""
+        return f"{prefix}{self.nome}"
+
+    @classmethod
+    def get_for_user(cls, user):
+        """Retorna apenas as categorias ativas do usuário."""
+        return cls.objects.filter(user=user, is_active=True)
 
 
 # ======================================================
