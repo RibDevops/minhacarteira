@@ -74,7 +74,7 @@ def transacao_view(request):
             if transacao.cartao.is_credito:
                 data_base_parcela = data_base_parcela + relativedelta(months=1)
 
-        if forma_pagamento.exige_cartao:
+        if forma_pagamento and forma_pagamento.exige_cartao:
             for i in range(parcelas):
                 Transacao.objects.create(
                     user=request.user,
