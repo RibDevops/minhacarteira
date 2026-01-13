@@ -61,7 +61,10 @@ urlpatterns = [
     path('contato/', views_user.contato, name='contato'),
     path('perfil/', views_user.perfil_usuario, name='perfil'),
     path('cartoes/resumo/', cartoes_resumo_view, name='cartoes_resumo'),
-    path('cartoes/novo/', cartao_novo, name='cartao_novo'),
+    path('cartao/novo/', cartao_novo, name='cartao_novo'),
+    path('cartao/editar/<int:pk>/', cartao_editar, name='cartao_editar'),
+    path('cartao/excluir/<int:pk>/', cartao_excluir, name='cartao_excluir'),
+    path('cartao/alternar-status/<int:pk>/', cartao_alternar_status, name='cartao_alternar_status'),
     path('manual/', views_user.manual_publico, name='manual_publico'),
 
     # Metas

@@ -144,6 +144,7 @@ class Cartao(models.Model):
         default=True,
         help_text="Cartão de crédito (gera débito contábil)"
     )
+    is_active = models.BooleanField(default=True, verbose_name="Ativo")
 
     class Meta:
         verbose_name = "Cartão"

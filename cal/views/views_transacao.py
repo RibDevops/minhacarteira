@@ -257,6 +257,34 @@ def cartao_novo(request):
     return render(request, 'cal/cartao_form.html', {'form': form, 'titulo': 'Novo Cartão'})
 
 @login_required
+def cartao_editar(request, pk):
+    cartao = get_object_or_404(Cartao, pk=pk, user=request.user)
+    form = CartaoForm(request.POST or None, instance=cartao)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        messages.success(request, 'Cartão atualizado com sucesso!')
+        return redirect('cal:cartoes_resumo')
+    return render(request, 'cal/cartao_form.html', {'form': form, 'titulo': 'Editar Cartão'})
+
+@login_required
+@require_POST
+def cartao_excluir(request, pk):
+    cartao = get_object_or_404(Cartao, pk=pk, user=request.user)
+    cartao.delete()
+    messages.success(request, 'Cartão excluído com sucesso!')
+    return redirect('cal:cartoes_resumo')
+
+@login_required
+@require_POST
+def cartao_alternar_status(request, pk):
+    cartao = get_object_or_404(Cartao, pk=pk, user=request.user)
+    cartao.is_active = not cartao.is_active
+    cartao.save()
+    status = "ativado" if cartao.is_active else "desativado"
+    messages.success(request, f'Cartão {status} com sucesso!')
+    return redirect('cal:cartoes_resumo')
+
+@login_required
 def cartoes_resumo_view(request):
     """
     View simples para exibir o consumo total de cada cartão do usuário.

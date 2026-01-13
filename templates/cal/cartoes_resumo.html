@@ -13,28 +13,48 @@
 
     <div class="row">
         <div class="col-lg-8 mx-auto">
-            <div class="card border-0 shadow-sm p-4">
-                <h5 class="card-title text-center mb-4">Consumo Mensal vs Limite</h5>
-                <canvas id="chartCartoes" height="250"></canvas>
-            </div>
-            
-            <div class="mt-4">
-                <h5 class="mb-3">Detalhes</h5>
+            <div class="mt-2">
+                <h5 class="mb-3">Meus Cartões</h5>
                 {% for c in cartoes %}
-                <div class="card border-0 shadow-sm mb-2 p-3">
+                <div class="card border-0 shadow-sm mb-3 p-3 {% if not c.is_active %}opacity-50 bg-light{% endif %}">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <span class="fw-bold">{{ c.cartao }}</span>
-                            <small class="text-muted d-block">Fecha dia: {{ c.dia_fechamento }}</small>
+                            <h6 class="fw-bold mb-1">{{ c.nome }}</h6>
+                            <small class="text-muted d-block">
+                                <i class="bi bi-calendar-event"></i> Fecha dia: {{ c.dia_fechamento }}
+                                | <i class="bi bi-credit-card"></i> {{ c.get_is_credito_display }}
+                            </small>
+                            <span class="d-block small text-muted mt-1">Limite: R$ {{ c.limite|floatformat:2 }}</span>
                         </div>
                         <div class="text-end">
-                            <span class="d-block small text-muted">Limite: R$ {{ c.limite|floatformat:2 }}</span>
+                            <div class="btn-group btn-group-sm">
+                                <a href="{% url 'cal:cartao_editar' c.id %}" class="btn btn-outline-primary" title="Editar">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <form action="{% url 'cal:cartao_alternar_status' c.id %}" method="post" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn {% if c.is_active %}btn-outline-warning{% else %}btn-outline-success{% endif %}" title="{% if c.is_active %}Desativar{% else %}Ativar{% endif %}">
+                                        <i class="bi {% if c.is_active %}bi-eye-slash{% else %}bi-eye{% endif %}"></i>
+                                    </button>
+                                </form>
+                                <form action="{% url 'cal:cartao_excluir' c.id %}" method="post" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Excluir este cartão apagará o vínculo com as transações. Confirma?');" title="Excluir">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
                 {% empty %}
-                <p class="text-center text-muted">Nenhum cartão cadastrado.</p>
+                <p class="text-center text-muted py-4">Nenhum cartão cadastrado.</p>
                 {% endfor %}
+            </div>
+
+            <div class="card border-0 shadow-sm p-4 mt-4">
+                <h5 class="card-title text-center mb-4">Dashboard: Consumo Mensal vs Limite</h5>
+                <canvas id="chartCartoes" height="250"></canvas>
             </div>
         </div>
     </div>
