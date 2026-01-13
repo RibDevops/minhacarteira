@@ -67,32 +67,31 @@ def transacao_view(request):
 
         # Lógica de data baseada na forma de pagamento e cartão
         data_base_parcela = data
-        if transacao.cartao and transacao.cartao.dia_fechamento > 0:
-            if data.day >= transacao.cartao.dia_fechamento:
-                data_base_parcela = data + relativedelta(months=1)
-            
-            if transacao.cartao.is_credito:
-                data_base_parcela = data_base_parcela + relativedelta(months=1)
-
-        if forma_pagamento and forma_pagamento.exige_cartao:
-            for i in range(parcelas):
-                Transacao.objects.create(
-                    user=request.user,
-                    tipo=tipo,
-                    forma_pagamento=forma_pagamento,
-                    cartao=transacao.cartao,
-                    categoria=categoria,
-                    titulo=f"{transacao.titulo} ({i + 1}/{parcelas})" if parcelas > 1 else transacao.titulo,
-                    valor=valor_parcela,
-                    data=data_base_parcela + relativedelta(months=i),
-                    parcelas=parcelas,
-                    data_fim=data_base_parcela + relativedelta(months=parcelas - 1),
-                )
-        else:
-            transacao.cartao = None
-            transacao.data = data_base_parcela
-            transacao.valor = valor_total
-            transacao.save()
+        if transacao.cartao:
+            # Se tem cartão, a primeira parcela depende do dia de fechamento
+            if transacao.cartao.dia_fechamento > 0:
+                if data.day >= transacao.cartao.dia_fechamento:
+                    data_base_parcela = data + relativedelta(months=1)
+                
+                # Se for crédito, geralmente a fatura vence no mês seguinte ao fechamento
+                if transacao.cartao.is_credito:
+                    data_base_parcela = data_base_parcela + relativedelta(months=1)
+        
+        # Criação das parcelas
+        for i in range(parcelas):
+            Transacao.objects.create(
+                user=request.user,
+                tipo=tipo,
+                forma_pagamento=forma_pagamento,
+                cartao=transacao.cartao,
+                categoria=categoria,
+                titulo=f"{transacao.titulo} ({i + 1}/{parcelas})" if parcelas > 1 else transacao.titulo,
+                valor=valor_parcela,
+                data=data_base_parcela + relativedelta(months=i),
+                parcelas=parcelas,
+                data_fim=data_base_parcela + relativedelta(months=parcelas - 1),
+                observacoes=transacao.observacoes
+            )
 
         return redirect('cal:transacoes_mes')
 
