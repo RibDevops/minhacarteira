@@ -1,4 +1,4 @@
-modules = ["nodejs-20", "web", "python-3.12"]
+modules = ["nodejs-20", "web", "python-3.11"]
 [agent]
 expertMode = true
 
@@ -30,13 +30,13 @@ args = "Django Server"
 name = "Django Server"
 author = "agent"
 
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "python manage.py runserver 0.0.0.0:5000"
-waitForPort = 5000
-
 [workflows.workflow.metadata]
 outputType = "webview"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "/home/runner/workspace/.pythonlibs/bin/python3.11 manage.py runserver 0.0.0.0:5000"
+waitForPort = 5000
 
 [[ports]]
 localPort = 5000
