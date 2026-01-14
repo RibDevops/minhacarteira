@@ -10,15 +10,25 @@ import logging
 
 logger = logging.getLogger('django')
 
+from cal.models import Categoria
+
 def register_view(request):
-    # print('POST')
     if request.method == 'POST':
-        # print('POST')
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
             user.set_password(form.cleaned_data['password'])
             user.save()
+            
+            # Criar categorias padrão para o novo usuário
+            categorias_padrao = [
+                'Alimentação', 'Transporte', 'Moradia', 'Lazer', 
+                'Saúde', 'Educação', 'Salário', 'Investimentos',
+                'Outros'
+            ]
+            for nome_cat in categorias_padrao:
+                Categoria.objects.create(user=user, nome=nome_cat)
+            
             login(request, user)  # login automático após cadastro
             messages.success(request, 'Cadastro realizado com sucesso!')
             logger.info(f'Novo usuário registrado: {user.username}')
