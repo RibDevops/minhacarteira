@@ -185,12 +185,18 @@ class TransacaoForm(ModelForm):
 
 
 class UserRegisterForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput, label='Senha')
-    password2 = forms.CharField(widget=forms.PasswordInput, label='Confirme a Senha')
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Senha'}), label='Senha')
+    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirme a Senha'}), label='Confirme a Senha')
 
     class Meta:
         model = User
         fields = ['username', 'email', 'first_name', 'last_name']
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Usuário'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Endereço de email'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Primeiro nome'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Último nome'}),
+        }
 
     def clean_password2(self):
         password = self.cleaned_data.get('password')
