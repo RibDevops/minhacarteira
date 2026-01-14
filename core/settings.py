@@ -27,11 +27,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'django.contrib.auth',
-    "debug_toolbar",
     "cal",
     'django.contrib.humanize',
     'encrypted_model_fields',
-    
 ]
 
 MIDDLEWARE = [
