@@ -18,7 +18,7 @@
     <link href="{% static 'css/simple-sidebar.css' %}" rel="stylesheet">
     <link href="{% static 'css/fontawesome.min.css' %}" rel="stylesheet">
     
-    <link rel="stylesheet" type="text/css" href="{% static 'css/calendar.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/fab.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}">
     <title>{% block title %}{% endblock %} | SGC</title>
 </head>
@@ -93,6 +93,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
 <script>
 $(document).ready(function(){
+  // FAB Toggle
+  $('#fab-main').on('click', function(e) {
+    e.stopPropagation();
+    $('#fab-actions').toggleClass('d-none').toggleClass('d-flex');
+  });
+
+  // Close FAB when clicking outside
+  $(document).on('click', function() {
+    $('#fab-actions').addClass('d-none').removeClass('d-flex');
+  });
+
+  // Input mask
   $('#id_limite').inputmask('decimal', {
     'alias': 'numeric',
     'groupSeparator': '.',
