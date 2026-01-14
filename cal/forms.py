@@ -17,11 +17,8 @@ class MetaCategoriaForm(forms.ModelForm):
         widget=forms.Select(attrs={'class': 'form-select'})
     )
     
-    # Adicione explicitamente o campo limite
-    limite = forms.DecimalField(
+    limite = forms.CharField(
         label="Valor Limite",
-        max_digits=15,
-        decimal_places=2,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': '0,00'

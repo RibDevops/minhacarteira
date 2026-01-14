@@ -76,11 +76,11 @@ $(document).ready(function() {
     
     // Validação do formulário
     $('form').on('submit', function(e) {
-        // Converte o valor para formato decimal antes de enviar
-        // Remove pontos de milhar e troca vírgula por ponto
-        let rawValue = $('#id_limite').val();
-        let valor = rawValue.replace(/\./g, '').replace(',', '.');
-        $('#id_limite').val(valor);
+        // Apenas limpa pontos de milhar para garantir que o Django receba algo processável
+        // O processamento real agora ocorre no backend para evitar erros de validação do navegador
+        let input = $('#id_limite');
+        let val = input.val().replace(/\./g, '');
+        input.val(val);
     });
 });
 
