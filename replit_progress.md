@@ -13,6 +13,7 @@ A Django-based personal finance management application in Portuguese.
 - **Mobile UI**: Responsive Bootstrap card layout for transaction lists.
 - **Card Management**: CRUD operations for payment cards with soft-delete support.
 - **URL Configuration**: Updated `cal/urls.py` with card management paths.
+- **AJAX Deletion**: Implemented asynchronous transaction deletion using JavaScript (Fetch API) in both `transacoes_mes.html` and `lista_transacoes.html` to prevent month reset bug.
 
 ## Current State
 - Superuser: rib / 123456

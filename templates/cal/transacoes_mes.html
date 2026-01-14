@@ -63,7 +63,7 @@
                 </thead>
                 <tbody>
                     {% for transacao in transacoes %}
-                    <tr>
+                    <tr id="transacao-{{ transacao.id }}">
                         <td class="px-4">
                             <div class="d-flex align-items-center">
                                 {% if transacao.tipo.codigo == 'C' %}
@@ -92,10 +92,7 @@
                         <td class="text-center px-4">
                             <div class="btn-group btn-group-sm">
                                 <a href="{% url 'cal:transacao_editar' transacao.id %}" class="btn btn-outline-primary"><i class="bi bi-pencil"></i></a>
-                                <form action="{% url 'cal:transacao_excluir' transacao.id %}" method="post" style="display:inline;">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Confirma?');"><i class="bi bi-trash"></i></button>
-                                </form>
+                                <button type="button" class="btn btn-outline-danger btn-excluir" data-url="{% url 'cal:transacao_excluir' transacao.id %}" data-id="{{ transacao.id }}"><i class="bi bi-trash"></i></button>
                             </div>
                         </td>
                     </tr>
@@ -110,7 +107,7 @@
     <!-- Mobile List -->
     <div class="d-md-none">
         {% for transacao in transacoes %}
-        <div class="card border-0 shadow-sm mb-3 {% if forloop.counter|divisibleby:2 %}bg-light{% else %}bg-white{% endif %}">
+        <div class="card border-0 shadow-sm mb-3 {% if forloop.counter|divisibleby:2 %}bg-light{% else %}bg-white{% endif %}" id="transacao-mobile-{{ transacao.id }}">
             <div class="card-body p-3">
                 <div class="d-flex justify-content-between align-items-start mb-2">
                     <div>
@@ -142,12 +139,9 @@
                     <a href="{% url 'cal:transacao_editar' transacao.id %}" class="btn btn-sm btn-light border text-primary px-3">
                         <i class="bi bi-pencil"></i> Editar
                     </a>
-                    <form action="{% url 'cal:transacao_excluir' transacao.id %}" method="post" class="d-inline">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-sm btn-light border text-danger px-3" onclick="return confirm('Confirma?');">
-                            <i class="bi bi-trash"></i> Excluir
-                        </button>
-                    </form>
+                    <button type="button" class="btn btn-sm btn-light border text-danger px-3 btn-excluir" data-url="{% url 'cal:transacao_excluir' transacao.id %}" data-id="{{ transacao.id }}">
+                        <i class="bi bi-trash"></i> Excluir
+                    </button>
                 </div>
             </div>
         </div>
@@ -207,6 +201,36 @@
             }]
         },
         options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+    });
+
+    document.querySelectorAll('.btn-excluir').forEach(button => {
+        button.addEventListener('click', function() {
+            if (confirm('Deseja realmente excluir esta transação?')) {
+                const url = this.getAttribute('data-url');
+                const id = this.getAttribute('data-id');
+                const token = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': token,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        document.getElementById(`transacao-${id}`)?.remove();
+                        document.getElementById(`transacao-mobile-${id}`)?.remove();
+                        // Opcional: Recarregar a página se for a última transação ou para atualizar os totais
+                        // location.reload(); 
+                    } else {
+                        alert('Erro ao excluir transação.');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        });
     });
 </script>
 {% endblock %}

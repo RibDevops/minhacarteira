@@ -61,7 +61,7 @@
                 </thead>
                 <tbody>
                     {% for transacao in transacoes %}
-                    <tr>
+                    <tr id="transacao-{{ transacao.id }}">
                         <td class="px-4">{{ transacao.data|date:"d/m/Y" }}</td>
                         <td>
                             <div class="d-flex align-items-center">
@@ -82,9 +82,9 @@
                                 <a href="{% url 'cal:transacao_editar' transacao.id %}" class="btn btn-outline-primary" title="Editar">
                                     <i class="bi bi-pencil"></i>
                                 </a>
-                                <a href="{% url 'cal:excluir_transacao_lista' transacao.id %}" class="btn btn-outline-danger" title="Excluir" onclick="return confirm('Tem certeza?')">
+                                <button type="button" class="btn btn-outline-danger btn-excluir" data-url="{% url 'cal:excluir_transacao_lista' transacao.id %}" data-id="{{ transacao.id }}" title="Excluir">
                                     <i class="bi bi-trash"></i>
-                                </a>
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -101,4 +101,38 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.querySelectorAll('.btn-excluir').forEach(button => {
+        button.addEventListener('click', function() {
+            if (confirm('Deseja realmente excluir esta transação?')) {
+                const url = this.getAttribute('data-url');
+                const id = this.getAttribute('data-id');
+                const token = document.querySelector('[name=csrfmiddlewaretoken]')?.value || '{{ csrf_token }}';
+
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': token,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        const row = document.getElementById(`transacao-${id}`);
+                        if (row) {
+                            row.style.transition = 'opacity 0.3s';
+                            row.style.opacity = '0';
+                            setTimeout(() => row.remove(), 300);
+                        }
+                    } else {
+                        alert('Erro ao excluir transação.');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        });
+    });
+</script>
 {% endblock %}

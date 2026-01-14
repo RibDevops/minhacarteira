@@ -13,19 +13,27 @@ from ..models import Categoria, Tipo, Transacao, Cartao
 from django.contrib import messages
 from django.views.decorators.http import require_POST
 
+from django.http import JsonResponse
+
 @login_required
 @require_POST
 def excluir_transacao(request, pk):
     transacao = get_object_or_404(Transacao, pk=pk, user=request.user)
     transacao.delete()
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse({'status': 'success', 'message': 'Transação excluída com sucesso!'})
     messages.success(request, 'Transação excluída com sucesso!')
     return redirect('cal:transacoes_mes')
 
 
 @login_required
+@require_POST
 def excluir_transacao_lista(request, pk):
     transacao = get_object_or_404(Transacao, pk=pk, user=request.user)
     transacao.delete()
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse({'status': 'success', 'message': 'Transação excluída com sucesso!'})
+    messages.success(request, 'Transação excluída com sucesso!')
     return redirect('cal:listar_transacoes')
 
 @login_required
