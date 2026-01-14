@@ -222,8 +222,10 @@
                     if (data.status === 'success') {
                         document.getElementById(`transacao-${id}`)?.remove();
                         document.getElementById(`transacao-mobile-${id}`)?.remove();
-                        // Opcional: Recarregar a página se for a última transação ou para atualizar os totais
-                        // location.reload(); 
+                        
+                        // Recarrega a página para atualizar os totais e gráficos
+                        // mas mantém o mês atual na URL
+                        window.location.reload(); 
                     } else {
                         alert('Erro ao excluir transação.');
                     }

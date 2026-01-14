@@ -124,7 +124,10 @@
                         if (row) {
                             row.style.transition = 'opacity 0.3s';
                             row.style.opacity = '0';
-                            setTimeout(() => row.remove(), 300);
+                            setTimeout(() => {
+                                row.remove();
+                                window.location.reload();
+                            }, 300);
                         }
                     } else {
                         alert('Erro ao excluir transação.');
