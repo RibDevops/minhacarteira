@@ -52,43 +52,34 @@ def transacao_editar(request, pk):
 def calcular_proxima_fatura(data_compra, dia_fechamento):
     """
     Regra de Negócio:
-    - Se dia_compra <= dia_fechamento: A fatura é do mês ATUAL da compra.
-    - Se dia_compra > dia_fechamento: A fatura é do mês SEGUINTE ao da compra.
+    - Compra com cartão SEMPRE é para o próximo mês (nunca mês atual).
+    - Se dia_compra <= dia_fechamento: Entra na fatura do mês SEGUINTE ao da compra.
+    - Se dia_compra > dia_fechamento: Entra na fatura do SEGUNDO mês após a compra.
     
     Exemplos fornecidos pelo usuário:
-    - Fechamento 25, Compra 24/01 -> Fatura Janeiro (vence em Jan/Fev conforme config)
-    - Fechamento 25, Compra 26/01 -> Fatura Fevereiro
-    - Fechamento 10, Compra 09/02 -> Fatura Fevereiro
+    - Janeiro, Fechamento 25:
+        - Compra dia 24/01 -> Fatura de Fevereiro (data_compra.month + 1)
+        - Compra dia 26/01 -> Fatura de Março (data_compra.month + 2)
     """
     if data_compra.day <= dia_fechamento:
-        # Fatura no mês atual
-        return date(data_compra.year, data_compra.month, dia_fechamento)
-    else:
         # Fatura no mês seguinte
         return date(data_compra.year, data_compra.month, 1) + relativedelta(months=1, day=dia_fechamento)
+    else:
+        # Fatura no segundo mês após a compra
+        return date(data_compra.year, data_compra.month, 1) + relativedelta(months=2, day=dia_fechamento)
 
 def testar_logica_parcelas():
-    # Caso: Fechamento 25, Compra 24/01 -> Janeiro
+    # Caso: Fechamento 25, Compra 24/01 -> Fevereiro (Mês 2)
     d1 = date(2024, 1, 24)
     res1 = calcular_proxima_fatura(d1, 25)
-    assert res1.month == 1, f"Erro Caso 1: Esperado mês 1, obtido {res1.month}"
+    assert res1.month == 2, f"Erro Caso 1: Esperado mês 2, obtido {res1.month}"
 
-    # Caso: Fechamento 25, Compra 26/01 -> Fevereiro
+    # Caso: Fechamento 25, Compra 26/01 -> Março (Mês 3)
     d2 = date(2024, 1, 26)
     res2 = calcular_proxima_fatura(d2, 25)
-    assert res2.month == 2, f"Erro Caso 2: Esperado mês 2, obtido {res2.month}"
-
-    # Caso: Fechamento 10, Compra 09/02 -> Fevereiro
-    d3 = date(2024, 2, 9)
-    res3 = calcular_proxima_fatura(d3, 10)
-    assert res3.month == 2, f"Erro Caso 3: Esperado mês 2, obtido {res3.month}"
+    assert res2.month == 3, f"Erro Caso 2: Esperado mês 3, obtido {res2.month}"
     
-    print("Novos testes de fechamento passaram!")
-
-    # Caso 2: Compra dia 10, Vencimento 10 -> Mesma data (Mês atual)
-    d2 = date(2024, 1, 10)
-    res2 = calcular_proxima_fatura(d2, 10)
-    assert res2 == date(2024, 1, 10), f"Erro Caso 2: {res2}"
+    print("Testes de 'sempre próximo mês' passaram!")
 
     # Caso 3: Compra dia 11, Vencimento 10 -> Mês seguinte
     d3 = date(2024, 1, 11)
