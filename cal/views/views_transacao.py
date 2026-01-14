@@ -49,6 +49,39 @@ def transacao_editar(request, pk):
     return render(request, 'cal/transacao_editar.html', {'form': form, 'titulo': 'Editar Transação'})
 
 
+def calcular_proxima_fatura(data_compra, dia_vencimento):
+    """
+    Calcula a data da primeira parcela baseada no dia de vencimento.
+    - Se dia_compra <= dia_vencimento: Mês atual
+    - Se dia_compra > dia_vencimento: Próximo mês
+    """
+    if data_compra.day <= dia_vencimento:
+        return date(data_compra.year, data_compra.month, dia_vencimento)
+    else:
+        # Se for dezembro, vira o ano
+        return date(data_compra.year, data_compra.month, 1) + relativedelta(months=1, day=dia_vencimento)
+
+def testar_logica_parcelas():
+    # Caso 1: Compra dia 09, Vencimento 10 -> Mesma data (Mês atual)
+    d1 = date(2024, 1, 9)
+    res1 = calcular_proxima_fatura(d1, 10)
+    assert res1 == date(2024, 1, 10), f"Erro Caso 1: {res1}"
+
+    # Caso 2: Compra dia 10, Vencimento 10 -> Mesma data (Mês atual)
+    d2 = date(2024, 1, 10)
+    res2 = calcular_proxima_fatura(d2, 10)
+    assert res2 == date(2024, 1, 10), f"Erro Caso 2: {res2}"
+
+    # Caso 3: Compra dia 11, Vencimento 10 -> Mês seguinte
+    d3 = date(2024, 1, 11)
+    res3 = calcular_proxima_fatura(d3, 10)
+    assert res3 == date(2024, 2, 10), f"Erro Caso 3: {res3}"
+
+    # Caso 4: Compra dia 26, Vencimento 25 -> Mês seguinte
+    d4 = date(2024, 1, 26)
+    res4 = calcular_proxima_fatura(d4, 25)
+    assert res4 == date(2024, 2, 25), f"Erro Caso 4: {res4}"
+
 @login_required
 def transacao_view(request):
     #form = TransacaoForm(request.POST or None)
@@ -73,17 +106,11 @@ def transacao_view(request):
 
         valor_parcela = (valor_total / parcelas).quantize(Decimal("0.01"))
 
-        # Lógica de data baseada na forma de pagamento e cartão
+        # Lógica de data baseada na regra de vencimento do cartão
         data_base_parcela = data
         if transacao.cartao:
-            # Se tem cartão, a primeira parcela depende do dia de fechamento
-            if transacao.cartao.dia_fechamento > 0:
-                if data.day >= transacao.cartao.dia_fechamento:
-                    data_base_parcela = data + relativedelta(months=1)
-                
-                # Se for crédito, geralmente a fatura vence no mês seguinte ao fechamento
-                if transacao.cartao.is_credito:
-                    data_base_parcela = data_base_parcela + relativedelta(months=1)
+            # Regra: Primeira parcela no mês atual se dia_compra <= vencimento, senão mês seguinte
+            data_base_parcela = calcular_proxima_fatura(data, transacao.cartao.dia_fechamento)
         
         # Criação das parcelas
         for i in range(parcelas):
