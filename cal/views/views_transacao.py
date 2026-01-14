@@ -49,44 +49,41 @@ def transacao_editar(request, pk):
     return render(request, 'cal/transacao_editar.html', {'form': form, 'titulo': 'Editar Transação'})
 
 
-def calcular_proxima_fatura(data_compra, dia_vencimento):
+def calcular_proxima_fatura(data_compra, dia_fechamento):
     """
-    Calcula a data da primeira parcela.
-    Regra do Melhor Dia: Faturas fecham 10 dias antes do vencimento.
-    Se a compra for feita NO DIA do fechamento ou DEPOIS, cai no mês seguinte.
+    Regra de Negócio:
+    - Se dia_compra <= dia_fechamento: A fatura é do mês ATUAL da compra.
+    - Se dia_compra > dia_fechamento: A fatura é do mês SEGUINTE ao da compra.
+    
+    Exemplos fornecidos pelo usuário:
+    - Fechamento 25, Compra 24/01 -> Fatura Janeiro (vence em Jan/Fev conforme config)
+    - Fechamento 25, Compra 26/01 -> Fatura Fevereiro
+    - Fechamento 10, Compra 09/02 -> Fatura Fevereiro
     """
-    # Melhor dia de compra = dia_vencimento - 10
-    # Ex: Vencimento 25, Fechamento 15.
-    # Compra dia 14 -> Vence dia 25 (mês atual)
-    # Compra dia 15 (fechamento) -> Vence dia 25 do mês SEGUINTE.
-    
-    dia_fechamento = dia_vencimento - 10
-    
-    # Tratamento para vencimentos no início do mês (ex: dia 5 -> fecha dia 25 do anterior)
-    if dia_fechamento <= 0:
-        dia_fechamento += 30
-        if data_compra.day >= dia_fechamento or data_compra.day < dia_vencimento:
-             # Se comprou no final do mês anterior ou antes do vencimento no início do mês
-             # Isso fica complexo sem considerar o mês, então vamos simplificar:
-             # Se comprou no dia do vencimento ou depois, próximo mês.
-             if data_compra.day >= dia_vencimento:
-                 return date(data_compra.year, data_compra.month, 1) + relativedelta(months=1, day=dia_vencimento)
-             else:
-                 return date(data_compra.year, data_compra.month, dia_vencimento)
-
-    if data_compra.day < dia_fechamento:
-        return date(data_compra.year, data_compra.month, dia_vencimento)
+    if data_compra.day <= dia_fechamento:
+        # Fatura no mês atual
+        return date(data_compra.year, data_compra.month, dia_fechamento)
     else:
-        return date(data_compra.year, data_compra.month, 1) + relativedelta(months=1, day=dia_vencimento)
+        # Fatura no mês seguinte
+        return date(data_compra.year, data_compra.month, 1) + relativedelta(months=1, day=dia_fechamento)
 
 def testar_logica_parcelas():
-    # Caso: Compra dia 14, Vencimento 25 -> Deve ser Fevereiro (14 > 15? Não, mas usuário quer fev)
-    # Ajustando para margem de 11 dias para bater com o teste do usuário (14/01 -> 25/02)
-    pass
-    # Caso 1: Compra dia 09, Vencimento 10 -> Mesma data (Mês atual)
-    d1 = date(2024, 1, 9)
-    res1 = calcular_proxima_fatura(d1, 10)
-    assert res1 == date(2024, 1, 10), f"Erro Caso 1: {res1}"
+    # Caso: Fechamento 25, Compra 24/01 -> Janeiro
+    d1 = date(2024, 1, 24)
+    res1 = calcular_proxima_fatura(d1, 25)
+    assert res1.month == 1, f"Erro Caso 1: Esperado mês 1, obtido {res1.month}"
+
+    # Caso: Fechamento 25, Compra 26/01 -> Fevereiro
+    d2 = date(2024, 1, 26)
+    res2 = calcular_proxima_fatura(d2, 25)
+    assert res2.month == 2, f"Erro Caso 2: Esperado mês 2, obtido {res2.month}"
+
+    # Caso: Fechamento 10, Compra 09/02 -> Fevereiro
+    d3 = date(2024, 2, 9)
+    res3 = calcular_proxima_fatura(d3, 10)
+    assert res3.month == 2, f"Erro Caso 3: Esperado mês 2, obtido {res3.month}"
+    
+    print("Novos testes de fechamento passaram!")
 
     # Caso 2: Compra dia 10, Vencimento 10 -> Mesma data (Mês atual)
     d2 = date(2024, 1, 10)
