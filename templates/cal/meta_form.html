@@ -77,7 +77,9 @@ $(document).ready(function() {
     // Validação do formulário
     $('form').on('submit', function(e) {
         // Converte o valor para formato decimal antes de enviar
-        let valor = $('#id_limite').val().replace(/\./g, '').replace(',', '.');
+        // Remove pontos de milhar e troca vírgula por ponto
+        let rawValue = $('#id_limite').val();
+        let valor = rawValue.replace(/\./g, '').replace(',', '.');
         $('#id_limite').val(valor);
     });
 });

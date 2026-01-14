@@ -51,16 +51,20 @@ class MetaCategoriaForm(forms.ModelForm):
     # ... restante do código ...
 
     def get_mes_ano_choices(self):
-        """Gera opções de mês/ano para os próximos 5 anos"""
+        """Gera opções de mês/ano para os próximos 5 anos em Português"""
         hoje = date.today()
         opcoes = []
+        meses_pt = [
+            'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+            'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+        ]
         
         for ano in range(hoje.year, hoje.year + 6):
             for mes in range(1, 13):
                 if ano == hoje.year and mes < hoje.month:
                     continue  # Pula meses passados do ano atual
                 
-                nome_mes = calendar.month_name[mes]
+                nome_mes = meses_pt[mes-1]
                 valor = f"{mes:02d}-{ano}"
                 label = f"{nome_mes}/{ano}"
                 opcoes.append((valor, label))
