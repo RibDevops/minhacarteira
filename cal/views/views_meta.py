@@ -132,17 +132,7 @@ def meta_adicionar(request):
             meta.user = request.user
             meta.mes = form.cleaned_data['mes']
             meta.ano = form.cleaned_data['ano']
-            
-            # Garanta que o limite está sendo passado e tratado
-            valor_limite = form.cleaned_data.get('limite', '0')
-            if isinstance(valor_limite, str):
-                valor_limite = valor_limite.replace('.', '').replace(',', '.')
-            
-            try:
-                meta.limite = Decimal(valor_limite)
-            except (InvalidOperation, ValueError, TypeError):
-                meta.limite = Decimal('0')
-            
+            meta.limite = form.cleaned_data['limite']
             meta.save()
             messages.success(request, "Meta cadastrada com sucesso!")
             return redirect('cal:metas_categoria')
@@ -159,17 +149,9 @@ def meta_editar(request, pk):  # Mude de 'meta_id' para 'pk'
         form = MetaCategoriaForm(request.POST, instance=meta, user=request.user)
         
         if form.is_valid():
-            # Trata o valor do limite antes de salvar
-            valor_limite = form.cleaned_data.get('limite', '0')
-            if isinstance(valor_limite, str):
-                valor_limite = valor_limite.replace('.', '').replace(',', '.')
-            
-            try:
-                meta.limite = Decimal(valor_limite)
-            except (InvalidOperation, ValueError, TypeError):
-                meta.limite = Decimal('0')
-                
-            form.save()
+            meta = form.save(commit=False)
+            meta.limite = form.cleaned_data['limite']
+            meta.save()
             messages.success(request, "Meta atualizada com sucesso!")
             return redirect('cal:metas_categoria')
     else:

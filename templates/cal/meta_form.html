@@ -32,10 +32,12 @@
               <label for="id_limite" class="form-label">Valor Limite (R$)</label>
               <div class="input-group">
                   <span class="input-group-text">R$</span>
-                  {{ form.limite }}
+                  <input type="text" name="limite" 
+                         value="{% if form.instance.pk %}{{ form.instance.limite|floatformat:2 }}{% elif form.limite.value %}{{ form.limite.value }}{% else %}{{ request.POST.limite|default:'' }}{% endif %}" 
+                         class="form-control" id="id_limite" placeholder="0,00">
               </div>
               {% if form.limite.errors %}
-                  <div class="invalid-feedback d-block">
+                  <div class="text-danger small mt-1">
                       {% for error in form.limite.errors %}
                           {{ error }}
                       {% endfor %}
@@ -76,11 +78,8 @@ $(document).ready(function() {
     
     // Validação do formulário
     $('form').on('submit', function(e) {
-        // Apenas limpa pontos de milhar para garantir que o Django receba algo processável
-        // O processamento real agora ocorre no backend para evitar erros de validação do navegador
-        let input = $('#id_limite');
-        let val = input.val().replace(/\./g, '');
-        input.val(val);
+        // Log para depuração
+        console.log('Valor antes do envio:', $('#id_limite').val());
     });
 });
 

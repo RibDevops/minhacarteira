@@ -19,6 +19,7 @@ class MetaCategoriaForm(forms.ModelForm):
     
     limite = forms.CharField(
         label="Valor Limite",
+        required=True,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': '0,00'
@@ -68,6 +69,46 @@ class MetaCategoriaForm(forms.ModelForm):
         
         return opcoes
 
+    def clean_limite(self):
+        # Pega o valor diretamente do POST para evitar interferência da validação do campo
+        valor = self.data.get('limite')
+        
+        if valor:
+            # Remove qualquer caractere que não seja número, vírgula ou ponto
+            import re
+            valor_limpo = re.sub(r'[^\d,\.]', '', str(valor))
+            
+            # Normalização robusta para formato brasileiro (1.234,56)
+            if ',' in valor_limpo:
+                # Se tem vírgula, o que está antes (pontos) é milhar e deve sumir
+                # O que está depois da vírgula é o decimal
+                partes = valor_limpo.split(',')
+                inteiro = partes[0].replace('.', '')
+                decimal = partes[1][:2] if len(partes) > 1 else '00'
+                if len(decimal) == 1: decimal += '0'
+                valor_str = f"{inteiro}.{decimal}"
+            else:
+                # Sem vírgula, remove pontos de milhar
+                valor_str = valor_limpo.replace('.', '')
+                
+            try:
+                decimal_val = Decimal(valor_str)
+                if decimal_val < 0:
+                    raise forms.ValidationError("O valor não pode ser negativo.")
+                return decimal_val
+            except (InvalidOperation, ValueError):
+                # Fallback final: apenas dígitos
+                try:
+                    apenas_digitos = re.sub(r'[^\d]', '', valor_limpo)
+                    if len(apenas_digitos) > 2:
+                        return Decimal(apenas_digitos[:-2] + '.' + apenas_digitos[-2:])
+                    elif apenas_digitos:
+                        return Decimal(apenas_digitos) / 100
+                except:
+                    pass
+                raise forms.ValidationError("Informe um número válido (ex: 200,00).")
+        return Decimal('0')
+        
     def clean(self):
         cleaned_data = super().clean()
         mes_ano = cleaned_data.get('mes_ano')
