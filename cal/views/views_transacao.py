@@ -49,36 +49,29 @@ def transacao_editar(request, pk):
     return render(request, 'cal/transacao_editar.html', {'form': form, 'titulo': 'Editar Transação'})
 
 
-def calcular_proxima_fatura(data_compra, dia_fechamento):
+def calcular_proxima_fatura(data_compra, dia_fechamento=None):
     """
-    Regra de Negócio Final:
-    - Compra com cartão NUNCA entra no mês atual.
-    - Se a compra for feita até o dia de fechamento (<= dia_fechamento), ela entra na fatura que vence/lança no mês SEGUINTE ao da compra.
-    - Se a compra for feita após o dia de fechamento (> dia_fechamento), ela entra na fatura que vence/lança no SEGUNDO mês após a compra.
+    Regra de Negócio Simplificada:
+    - Compras feitas em qualquer dia do mês X são lançadas para o mês X+1.
+    - O conceito de 'dia de fechamento' foi removido para simplificação total.
     
     Exemplo:
-    Janeiro (mês 1), Fechamento 25:
-    - Compra dia 24/01 (<= 25): Lançamento para Fevereiro (mês 2)
-    - Compra dia 26/01 (> 25): Lançamento para Março (mês 3)
+    - Compra em Janeiro (qualquer dia) -> Lançamento em Fevereiro.
+    - Compra em Fevereiro (qualquer dia) -> Lançamento em Março.
     """
-    if data_compra.day <= dia_fechamento:
-        # Próximo mês
-        return date(data_compra.year, data_compra.month, 1) + relativedelta(months=1, day=dia_fechamento)
-    else:
-        # Segundo mês subsequente
-        return date(data_compra.year, data_compra.month, 1) + relativedelta(months=2, day=dia_fechamento)
+    return date(data_compra.year, data_compra.month, 1) + relativedelta(months=1)
 
 def testar_logica_parcelas():
-    # Janeiro, Fechamento 25
-    jan_24 = date(2024, 1, 24)
-    res_fev = calcular_proxima_fatura(jan_24, 25)
-    assert res_fev.month == 2, f"Erro: 24/01 deveria ser Fev (2), veio {res_fev.month}"
-
-    jan_26 = date(2024, 1, 26)
-    res_mar = calcular_proxima_fatura(jan_26, 25)
-    assert res_mar.month == 3, f"Erro: 26/01 deveria ser Mar (3), veio {res_mar.month}"
+    # Qualquer dia de Janeiro -> Fevereiro
+    jan_01 = date(2024, 1, 1)
+    res = calcular_proxima_fatura(jan_01)
+    assert res.month == 2, f"Erro: 01/01 deveria ser Fev (2), veio {res.month}"
     
-    print("Logica de fatura 'Sempre Futuro' validada com sucesso!")
+    jan_31 = date(2024, 1, 31)
+    res_fim = calcular_proxima_fatura(jan_31)
+    assert res_fim.month == 2, f"Erro: 31/01 deveria ser Fev (2), veio {res_fim.month}"
+    
+    print("Logica simplificada (Mês + 1) validada com sucesso!")
 
 @login_required
 def transacao_view(request):
