@@ -105,6 +105,12 @@ def transacao_view(request):
         
         # Criação das parcelas
         for i in range(parcelas):
+            # Se for Crédito (Entrada/Salário), não aplica a lógica de mês+1 do cartão
+            if transacao.tipo.codigo == 'C':
+                data_final_parcela = data + relativedelta(months=i)
+            else:
+                data_final_parcela = data_base_parcela + relativedelta(months=i)
+
             Transacao.objects.create(
                 user=request.user,
                 tipo=tipo,
@@ -113,9 +119,9 @@ def transacao_view(request):
                 categoria=categoria,
                 titulo=f"{transacao.titulo} ({i + 1}/{parcelas})" if parcelas > 1 else transacao.titulo,
                 valor=valor_parcela,
-                data=data_base_parcela + relativedelta(months=i),
+                data=data_final_parcela,
                 parcelas=parcelas,
-                data_fim=data_base_parcela + relativedelta(months=parcelas - 1),
+                data_fim=data + relativedelta(months=parcelas - 1) if transacao.tipo.codigo == 'C' else data_base_parcela + relativedelta(months=parcelas - 1),
                 observacoes=transacao.observacoes
             )
 

@@ -185,7 +185,11 @@
             labels: {{ grafico_labels|safe }},
             datasets: [{
                 data: {{ grafico_valores|safe }},
-                backgroundColor: ['#4CAF50', '#F44336', '#2196F3', '#FF9800'],
+                backgroundColor: {{ grafico_labels|safe }}.map(label => {
+                    if (label.toLowerCase().includes('entrada') || label.toLowerCase().includes('crédito')) return '#4CAF50'; // Verde
+                    if (label.toLowerCase().includes('saída') || label.toLowerCase().includes('débito')) return '#F44336'; // Vermelho
+                    return '#2196F3'; // Azul (padrão)
+                }),
                 borderWidth: 0
             }]
         },
