@@ -19,7 +19,18 @@ from django.http import JsonResponse
 @require_POST
 def excluir_transacao(request, pk):
     transacao = get_object_or_404(Transacao, pk=pk, user=request.user)
-    transacao.delete()
+    excluir_proximas = request.POST.get('excluir_proximas') == 'true'
+    
+    if excluir_proximas and transacao.grupo_id:
+        # Excluir esta e todas as parcelas futuras do mesmo grupo
+        Transacao.objects.filter(
+            user=request.user, 
+            grupo_id=transacao.grupo_id, 
+            data__gte=transacao.data
+        ).delete()
+    else:
+        transacao.delete()
+        
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         return JsonResponse({'status': 'success', 'message': 'Transação excluída com sucesso!'})
     messages.success(request, 'Transação excluída com sucesso!')
@@ -30,7 +41,17 @@ def excluir_transacao(request, pk):
 @require_POST
 def excluir_transacao_lista(request, pk):
     transacao = get_object_or_404(Transacao, pk=pk, user=request.user)
-    transacao.delete()
+    excluir_proximas = request.POST.get('excluir_proximas') == 'true'
+
+    if excluir_proximas and transacao.grupo_id:
+        Transacao.objects.filter(
+            user=request.user, 
+            grupo_id=transacao.grupo_id, 
+            data__gte=transacao.data
+        ).delete()
+    else:
+        transacao.delete()
+
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         return JsonResponse({'status': 'success', 'message': 'Transação excluída com sucesso!'})
     messages.success(request, 'Transação excluída com sucesso!')
@@ -40,13 +61,37 @@ def excluir_transacao_lista(request, pk):
 def transacao_editar(request, pk):
     instancia = get_object_or_404(Transacao, pk=pk, user=request.user)
     form = TransacaoForm(request.POST or None, instance=instancia, user=request.user)
+    
+    # Campo para opção de cascata
+    aplicar_proximas = request.POST.get('aplicar_proximas') == 'true'
 
     if request.method == 'POST' and form.is_valid():
-        form.save()
-        messages.success(request, 'Transação atualizada com sucesso!')
-        return redirect('cal:calendar')
+        transacao_editada = form.save(commit=False)
+        
+        if aplicar_proximas and instancia.grupo_id:
+            # Atualizar esta e todas as parcelas futuras do mesmo grupo
+            Transacao.objects.filter(
+                user=request.user,
+                grupo_id=instancia.grupo_id,
+                data__gte=instancia.data
+            ).update(
+                titulo=transacao_editada.titulo,
+                valor=transacao_editada.valor,
+                categoria=transacao_editada.categoria,
+                observacoes=transacao_editada.observacoes
+            )
+            messages.success(request, 'Transações do grupo atualizadas com sucesso!')
+        else:
+            transacao_editada.save()
+            messages.success(request, 'Transação atualizada com sucesso!')
+            
+        return redirect('cal:transacoes_mes')
 
-    return render(request, 'cal/transacao_editar.html', {'form': form, 'titulo': 'Editar Transação'})
+    return render(request, 'cal/transacao_editar.html', {
+        'form': form, 
+        'titulo': 'Editar Transação',
+        'transacao': instancia
+    })
 
 
 def calcular_proxima_fatura(data_compra, dia_fechamento=None):
@@ -96,6 +141,8 @@ def transacao_view(request):
             valor_total = Decimal('0')
 
         valor_parcela = (valor_total / parcelas).quantize(Decimal("0.01"))
+        import uuid
+        grupo_id = str(uuid.uuid4()) if parcelas > 1 else None
 
         # Lógica de data baseada na regra de vencimento do cartão
         data_base_parcela = data
@@ -122,7 +169,8 @@ def transacao_view(request):
                 data=data_final_parcela,
                 parcelas=parcelas,
                 data_fim=data + relativedelta(months=parcelas - 1) if transacao.tipo.codigo == 'C' else data_base_parcela + relativedelta(months=parcelas - 1),
-                observacoes=transacao.observacoes
+                observacoes=transacao.observacoes,
+                grupo_id=grupo_id
             )
 
         return redirect('cal:transacoes_mes')

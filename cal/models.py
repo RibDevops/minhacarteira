@@ -222,6 +222,14 @@ class Transacao(BaseModel):
         verbose_name="Observações"
     )
 
+    grupo_id = models.CharField(
+        max_length=100,
+        null=True,
+        blank=True,
+        db_index=True,
+        verbose_name="ID do Grupo"
+    )
+
     def get_html_url(self):
         url = reverse('cal:transacao_update', args=[self.id])
         valor_formatado = f"R$ {self.valor:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
