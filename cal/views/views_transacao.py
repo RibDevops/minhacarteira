@@ -191,8 +191,20 @@ class TransacaoUpdateView(UpdateView):
 
 @login_required
 def transacoes_mes_view(request):
-    ano = int(request.GET.get('ano', date.today().year))
-    mes = int(request.GET.get('mes', date.today().month))
+    ano_raw = request.GET.get('ano', str(date.today().year))
+    # Remove separador de milhar se existir (ex: '2.026' -> '2026')
+    ano_clean = str(ano_raw).replace('.', '').replace(',', '')
+    try:
+        ano = int(ano_clean)
+    except ValueError:
+        ano = date.today().year
+
+    mes_raw = request.GET.get('mes', str(date.today().month))
+    mes_clean = str(mes_raw).replace('.', '').replace(',', '')
+    try:
+        mes = int(mes_clean)
+    except ValueError:
+        mes = date.today().month
 
     data_inicio = make_aware(datetime(ano, mes, 1))
     data_fim = make_aware(datetime(ano, mes, 1) + relativedelta(months=1))
