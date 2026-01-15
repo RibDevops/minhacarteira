@@ -20,7 +20,15 @@
     
     <link rel="stylesheet" type="text/css" href="{% static 'css/fab.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}">
-    <title>{% block title %}{% endblock %} | SGC</title>
+    <style>
+        /* Ajuste fino para o FAB em telas menores */
+        @media (max-width: 576px) {
+            #fab-container { bottom: 15px !important; right: 15px !important; }
+            .btn-fab { width: 50px; height: 50px; }
+            .fab-label { right: 55px; }
+        }
+    </style>
+    <title>{% block title %}{% endblock %} | Carteira Digital</title>
 </head>
 <body>
     <!-- Navbar -->
