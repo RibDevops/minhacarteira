@@ -54,15 +54,16 @@ Registrar suas movimentações é essencial para o controle.
 **Como registrar uma nova despesa ou receita:**
 1. Clique no botão flutuante (+) e escolha "Nova Transação" ou vá pelo menu.
 2. Preencha o Título (ex: Mercado), Valor, Data e a Categoria.
-3. Se for uma compra parcelada, informe o número de parcelas.
+3. **Salário Anual / Recorrência:** Se você deseja registrar um valor que se repete (como salário), informe o número de parcelas (ex: 12 para um ano inteiro). O sistema criará automaticamente uma entrada para cada mês.
 4. Clique em "Salvar".
 
 [PRINT 3 – Formulário de Nova Transação]
 
-**Lista Geral:**
-Você pode visualizar todas as suas transações em uma lista detalhada, facilitando a conferência de gastos antigos.
-
-[PRINT 4 – Lista de Transações]
+### 🔄 Edição e Exclusão em Massa (Cascata)
+O sistema possui inteligência para lidar com grupos de parcelas ou recorrências.
+- **Identificação:** Transações que fazem parte de um grupo exibem o ícone de camadas (<i class="bi bi-layers-half text-info"></i>).
+- **Editar em Massa:** Ao editar uma parcela, você pode marcar a opção **"Aplicar alteração a todas as parcelas futuras"** para atualizar o valor ou título de todo o grupo de uma só vez.
+- **Excluir em Massa:** Ao clicar em excluir, o sistema perguntará se deseja remover apenas aquela parcela ou **cancelar todas as parcelas futuras** do grupo.
 
 ---
 
