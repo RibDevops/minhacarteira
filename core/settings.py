@@ -7,6 +7,7 @@ from decouple import config
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 FIELD_ENCRYPTION_KEY = config('FIELD_ENCRYPTION_KEY')
+FERNET_SECRET_KEY = FIELD_ENCRYPTION_KEY
 
 DEBUG = config('DEBUG', default=False, cast=bool)
 
