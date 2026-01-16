@@ -1,9 +1,10 @@
+from decimal import Decimal
 from django.shortcuts import render
 from ..models import Transacao
 from django.db.models import Sum
 from django.contrib.auth.decorators import login_required
 from datetime import date
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
 
 @login_required
 def dashboard(request):
@@ -18,8 +19,14 @@ def dashboard(request):
     ).select_related('tipo', 'categoria')
 
     # Resumo Anual
-    credito_anual = transacoes_ano.filter(tipo__codigo='C').aggregate(total=Sum('valor'))['total'] or 0
-    debito_anual = transacoes_ano.filter(tipo__codigo='D').aggregate(total=Sum('valor'))['total'] or 0
+    credito_anual = Decimal('0')
+    debito_anual = Decimal('0')
+    for t in transacoes_ano:
+        val = t.valor_decimal
+        if t.tipo.codigo == 'C':
+            credito_anual += val
+        else:
+            debito_anual += val
     saldo_anual = credito_anual - debito_anual
 
     # Detalhamento por Mês
@@ -30,27 +37,26 @@ def dashboard(request):
     ]
 
     for mes_num in range(1, 13):
-        transacoes_mes = transacoes_ano.filter(data__month=mes_num)
+        transacoes_mes = [t for t in transacoes_ano if t.data.month == mes_num]
         
-        c_mes = transacoes_mes.filter(tipo__codigo='C').aggregate(total=Sum('valor'))['total'] or 0
-        d_mes = transacoes_mes.filter(tipo__codigo='D').aggregate(total=Sum('valor'))['total'] or 0
+        c_mes = sum((t.valor_decimal for t in transacoes_mes if t.tipo.codigo == 'C'), Decimal('0'))
+        d_mes = sum((t.valor_decimal for t in transacoes_mes if t.tipo.codigo == 'D'), Decimal('0'))
         s_mes = c_mes - d_mes
         
         # Dados para o gráfico do mês (por categoria)
-        dados_grafico = (
-            transacoes_mes.values('categoria__nome')
-            .annotate(total=Sum('valor'))
-            .order_by('-total')
-        )
-        
+        cat_sums = defaultdict(Decimal)
+        for t in transacoes_mes:
+            cat_name = t.categoria.nome if t.categoria else 'Sem Categoria'
+            cat_sums[cat_name] += t.valor_decimal
+            
         meses_detalhe[mes_num] = {
             'nome': nomes_meses[mes_num],
             'credito': c_mes,
             'debito': d_mes,
             'saldo': s_mes,
-            'grafico_labels': [item['categoria__nome'] or 'Sem Categoria' for item in dados_grafico],
-            'grafico_valores': [float(item['total']) for item in dados_grafico],
-            'tem_dados': transacoes_mes.exists()
+            'grafico_labels': list(cat_sums.keys()),
+            'grafico_valores': [float(v) for v in cat_sums.values()],
+            'tem_dados': len(transacoes_mes) > 0
         }
 
     anos_disponiveis = range(hoje.year - 5, hoje.year + 2)

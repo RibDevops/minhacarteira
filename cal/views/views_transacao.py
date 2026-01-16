@@ -208,48 +208,35 @@ def transacoes_mes_view(request):
     ).select_related('tipo', 'categoria').order_by('-data')
 
 
+    # Totais
+    total_creditos = sum((t.valor_decimal for t in transacoes if t.tipo.codigo == 'C'), Decimal('0'))
+    total_debitos = sum((t.valor_decimal for t in transacoes if t.tipo.codigo == 'D'), Decimal('0'))
+    saldo_total = total_creditos - total_debitos
+
     # Gráfico por tipo (Crédito/Débito)
     dados_por_tipo = defaultdict(Decimal)
     for t in transacoes:
         try:
-            valor = Decimal(t.valor)
+            valor = t.valor_decimal
             if t.tipo.codigo == 'D':
                 valor = -valor
             dados_por_tipo[t.tipo.descricao] += valor
         except Exception as e:
-            #print(f"Erro ao processar transação {t.id}: {e}")
             import logging
-
             logger = logging.getLogger(__name__)
-
-            # Substitua print por:
             logger.error(f"Erro ao processar transação {t.id}: {e}")
-            logger.debug(f'Transações do ano: {transacoes}')
 
     labels = list(dados_por_tipo.keys())
     valores = [float(v) for v in dados_por_tipo.values()]
 
     # Gráfico por categoria (exclui transações sem categoria)
-    dados_por_categoria = (
-        transacoes.exclude(categoria__isnull=True)
-                .values('categoria__nome')
-                .annotate(total=Sum('valor'))
-                .order_by('-total')
-    )
+    cat_sums = defaultdict(Decimal)
+    for t in transacoes:
+        if t.categoria:
+            cat_sums[t.categoria.nome] += t.valor_decimal
 
-
-    categorias = [item['categoria__nome'] for item in dados_por_categoria]
-    totais_categoria = [float(item['total']) for item in dados_por_categoria]
-
-    # Totais
-    from django.db import models
-    totais = transacoes.aggregate(
-        total_creditos=Sum('valor', filter=models.Q(tipo__codigo='C')),
-        total_debitos=Sum('valor', filter=models.Q(tipo__codigo='D'))
-    )
-    total_creditos = totais['total_creditos'] or 0
-    total_debitos = totais['total_debitos'] or 0
-    saldo_total = total_creditos - total_debitos
+    categorias = list(cat_sums.keys())
+    totais_categoria = [float(v) for v in cat_sums.values()]
 
     contexto = {
         'transacoes': transacoes,
@@ -258,8 +245,8 @@ def transacoes_mes_view(request):
         'mes_proximo': date(ano, mes, 1) + relativedelta(months=1),
         'grafico_labels': labels,
         'grafico_valores': valores,
-        'grafico_categorias': categorias,  # para gráfico por categoria
-        'grafico_totais_categoria': totais_categoria,  # para gráfico por categoria
+        'grafico_categorias': categorias,
+        'grafico_totais_categoria': totais_categoria,
         'total_creditos': total_creditos,
         'total_debitos': total_debitos,
         'saldo_total': saldo_total,
@@ -281,26 +268,33 @@ def resumo_categoria_view(request):
     )
 
     # Dados para o gráfico de pizza por Categoria (apenas Débitos)
-    dados_categoria = transacoes.filter(tipo__codigo='D').values("categoria__nome").annotate(total=Sum("valor")).order_by('-total')
+    debitos = [t for t in transacoes if t.tipo.codigo == 'D']
+    cat_sums = defaultdict(Decimal)
+    for t in debitos:
+        cat_name = t.categoria.nome if t.categoria else "Sem Categoria"
+        cat_sums[cat_name] += t.valor_decimal
     
-    cat_labels = [item["categoria__nome"] or "Sem Categoria" for item in dados_categoria]
-    cat_valores = [float(item["total"]) for item in dados_categoria]
+    cat_labels = list(cat_sums.keys())
+    cat_valores = [float(v) for v in cat_sums.values()]
 
     # Dados para o gráfico de pizza por Tipo (Crédito vs Débito)
-    dados_tipo = transacoes.values("tipo__descricao", "tipo__codigo").annotate(total=Sum("valor"))
+    tipo_sums = defaultdict(Decimal)
+    for t in transacoes:
+        tipo_sums[t.tipo.codigo] += t.valor_decimal
     
     tipo_labels = []
     tipo_valores = []
     tipo_cores = []
 
-    for item in dados_tipo:
-        tipo_labels.append(item["tipo__descricao"])
-        tipo_valores.append(float(item["total"]))
-        tipo_cores.append("#4CAF50" if item["tipo__codigo"] == 'C' else "#F44336")
+    for codigo, total in tipo_sums.items():
+        desc = "Crédito (Entrada)" if codigo == 'C' else "Débito (Saída)"
+        tipo_labels.append(desc)
+        tipo_valores.append(float(total))
+        tipo_cores.append("#4CAF50" if codigo == 'C' else "#F44336")
 
     # Totais para os cards
-    total_creditos = transacoes.filter(tipo__codigo='C').aggregate(Sum('valor'))['valor__sum'] or 0
-    total_debitos = transacoes.filter(tipo__codigo='D').aggregate(Sum('valor'))['valor__sum'] or 0
+    total_creditos = sum((t.valor_decimal for t in transacoes if t.tipo.codigo == 'C'), Decimal('0'))
+    total_debitos = sum((t.valor_decimal for t in transacoes if t.tipo.codigo == 'D'), Decimal('0'))
     saldo = total_creditos - total_debitos
 
     contexto = {
@@ -381,12 +375,14 @@ def cartoes_resumo_view(request):
     for c in cartoes:
         # Soma transações do mês atual vinculadas a este cartão
         hoje = date.today()
-        consumo = Transacao.objects.filter(
+        transacoes_cartao = Transacao.objects.filter(
             user=request.user,
             cartao=c,
             data__month=hoje.month,
             data__year=hoje.year
-        ).aggregate(total=Sum('valor'))['total'] or 0
+        ).select_related('tipo')
+        
+        consumo = sum((t.valor_decimal for t in transacoes_cartao), Decimal('0'))
         
         labels.append(c.nome)
         consumo_valores.append(float(consumo))

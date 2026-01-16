@@ -1,4 +1,5 @@
 from datetime import date
+from decimal import Decimal
 from django.db.models import Sum
 from .models import Transacao
 
@@ -15,17 +16,11 @@ def saldos_mensais(request):
         user=user,
         data__year=hoje.year,
         data__month=hoje.month
-    )
-    # print(f'transacoes_mes: {transacoes_mes}')
-    try:
-        total_creditos = transacoes_mes.filter(tipo__codigo='C').aggregate(total=Sum('valor'))['total'] or 0
-        total_debitos = transacoes_mes.filter(tipo__codigo='D').aggregate(total=Sum('valor'))['total'] or 0
-    except Exception as e:
-        total_creditos = 0
-        total_debitos = 0
-        print(f"Erro ao calcular saldos no context processor: {e}")
+    ).select_related('tipo')
+    
+    total_creditos = sum((t.valor_decimal for t in transacoes_mes if t.tipo.codigo == 'C'), Decimal('0'))
+    total_debitos = sum((t.valor_decimal for t in transacoes_mes if t.tipo.codigo == 'D'), Decimal('0'))
     saldo_total = total_creditos - total_debitos
-    # print(f'saldo_total: {saldo_total}')
 
     # Próximo mês
     if hoje.month == 12:
@@ -39,9 +34,10 @@ def saldos_mensais(request):
         user=user,
         data__year=proximo_ano,
         data__month=proximo_mes
-    )
-    total_creditos_prox = transacoes_prox_mes.filter(tipo__codigo='C').aggregate(total=Sum('valor'))['total'] or 0
-    total_debitos_prox = transacoes_prox_mes.filter(tipo__codigo='D').aggregate(total=Sum('valor'))['total'] or 0
+    ).select_related('tipo')
+    
+    total_creditos_prox = sum((t.valor_decimal for t in transacoes_prox_mes if t.tipo.codigo == 'C'), Decimal('0'))
+    total_debitos_prox = sum((t.valor_decimal for t in transacoes_prox_mes if t.tipo.codigo == 'D'), Decimal('0'))
     saldo_total_prox = total_creditos_prox - total_debitos_prox
 
     return {

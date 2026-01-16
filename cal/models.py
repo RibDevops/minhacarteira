@@ -230,9 +230,16 @@ class Transacao(BaseModel):
         verbose_name="ID do Grupo"
     )
 
+    @property
+    def valor_decimal(self):
+        try:
+            return Decimal(str(self.valor)) if self.valor is not None else Decimal('0')
+        except:
+            return Decimal('0')
+
     def get_html_url(self):
         url = reverse('cal:transacao_update', args=[self.id])
-        valor_formatado = f"R$ {self.valor:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+        valor_formatado = f"R$ {self.valor_decimal:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
         return f'<a href="{url}"><strong>{self.titulo}</strong><br><small>{valor_formatado}</small></a>'
 
     def get_absolute_url(self):
