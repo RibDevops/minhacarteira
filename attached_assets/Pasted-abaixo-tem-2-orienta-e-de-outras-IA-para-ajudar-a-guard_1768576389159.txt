@@ -1,0 +1,154 @@
+abaixo tem 2 orientaçõe de outras IA para ajudar a guardar o dados em segurança no banco, sem sair do modo free
+
+Você é um desenvolvedor Python/Django sênior especializado em segurança de dados financeiros.
+
+OBJETIVO:
+Garantir que todas as informações sensíveis sejam criptografadas ANTES de serem persistidas no banco de dados, usando um método seguro, simples e compatível com ambiente de baixo custo (Replit Free).
+
+REQUISITOS DE SEGURANÇA:
+- Utilizar criptografia simétrica baseada em Fernet (AES + HMAC)
+- Não usar criptografia manual com hashlib ou base64
+- Não usar libs pesadas ou serviços externos
+- A chave de criptografia deve vir de variável de ambiente (FERNET_KEY)
+- Nunca salvar dados sensíveis em texto plano
+
+DADOS QUE DEVEM SER CRIPTOGRAFADOS:
+- Título da transação
+- Valor financeiro
+- Observações
+- Limites de metas
+- Limite do cartão
+
+DADOS QUE NÃO DEVEM SER CRIPTOGRAFADOS:
+- Datas
+- IDs
+- ForeignKeys
+- Tipo contábil
+- Forma de pagamento
+
+IMPLEMENTAÇÃO:
+- Usar django-encrypted-model-fields
+- Usar EncryptedCharField e EncryptedDecimalField
+- Validar a FERNET_KEY no startup da aplicação
+- Manter propriedades (@property) para acesso transparente aos valores descriptografados
+- Não permitir acesso direto ao campo criptografado fora do model
+
+MODELAGEM:
+- Ajustar a model Transacao para garantir que o valor sempre seja salvo criptografado
+- Garantir que cálculos e relatórios usem os valores já descriptografados
+- Não quebrar filtros por data, usuário ou categoria
+
+DESEMPENHO:
+- Código simples e direto
+- Nenhuma operação pesada
+- Compatível com SQLite e PostgreSQL
+- Não sair do modo FREE do Replit
+
+ENTREGA:
+- Ajustes claros na model
+- Exemplo de uso correto no save()
+- Boas práticas comentadas
+- Nenhuma explicação longa, apenas código limpo e seguro
+
+
+Atue como um desenvolvedor Django sênior. Preciso implementar criptografia de dados no banco de dados para campos sensíveis. 
+
+Ações necessárias:
+1. Instale a biblioteca 'django-encrypted-model-fields'.
+2. Configure o arquivo settings.py para incluir uma chave 'FIELD_ENCRYPTION_KEY' que deve ser lida de uma variável de ambiente (Secrets do Replit).
+3. Refatore o arquivo models.py fornecido para garantir que:
+   - 'valor', 'limite', 'titulo' e 'observacoes' sejam criptografados.
+   - O campo 'valor' na model Transacao funcione perfeitamente com criptografia, mantendo a compatibilidade com propriedades getter/setter se necessário.
+   - Adicione validações de segurança.
+4. Explique como gerar a chave de criptografia inicial e onde salvá-la no Replit.
+
+
+from django.db import models
+from django.contrib.auth.models import User
+from django.urls import reverse
+from encrypted_model_fields.fields import (
+    EncryptedCharField,
+    EncryptedDecimalField
+)
+
+# ======================================================
+# BASE MODEL
+# ======================================================
+class BaseModel(models.Model):
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Usuário")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Criado em")
+
+    class Meta:
+        abstract = True
+
+# ======================================================
+# CATEGORIA
+# ======================================================
+class Categoria(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    nome = models.CharField(max_length=100) # Categoria geralmente não precisa de criptografia para permitir buscas rápidas
+    is_global = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = "Categoria"
+        verbose_name_plural = "Categorias"
+        ordering = ['nome']
+
+    def __str__(self) -> str:
+        prefix = "[GLOBAL] " if self.is_global else ""
+        return f"{prefix}{self.nome}"
+
+# ======================================================
+# META POR CATEGORIA
+# ======================================================
+class MetaCategoria(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
+    # Valor sensível: Criptografado
+    limite = EncryptedDecimalField(max_digits=15, decimal_places=2)
+    mes = models.PositiveIntegerField()
+    ano = models.PositiveIntegerField()
+
+    class Meta:
+        unique_together = ['user', 'categoria', 'mes', 'ano']
+
+# ======================================================
+# CARTÃO
+# ======================================================
+class Cartao(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    nome = models.CharField(max_length=100)
+    # Limite é dado sensível
+    limite = EncryptedDecimalField(max_digits=15, decimal_places=2, default=0)
+    dia_fechamento = models.PositiveIntegerField(default=1)
+    is_credito = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self) -> str:
+        return self.nome
+
+# ======================================================
+# TRANSAÇÃO (Onde o dado é mais crítico)
+# ======================================================
+class Transacao(BaseModel):
+    tipo = models.ForeignKey('Tipo', on_delete=models.PROTECT)
+    forma_pagamento = models.ForeignKey('FormaPagamento', on_delete=models.PROTECT, null=True)
+    cartao = models.ForeignKey(Cartao, on_delete=models.SET_NULL, null=True, blank=True)
+    categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True, blank=True)
+    
+    # Campos Criptografados
+    titulo = EncryptedCharField(max_length=200, verbose_name="Título")
+    valor = EncryptedDecimalField(max_digits=15, decimal_places=2, verbose_name="Valor")
+    observacoes = EncryptedCharField(max_length=500, null=True, blank=True)
+    
+    data = models.DateField(verbose_name="Data")
+    parcelas = models.PositiveIntegerField(default=1)
+    data_fim = models.DateField(null=True, blank=True)
+
+    def get_html_url(self):
+        url = reverse('cal:transacao_update', args=[self.id])
+        # A biblioteca descriptografa automaticamente ao acessar o atributo
+        valor_fmt = f"R$ {self.valor:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+        return f'<a href="{url}"><strong>{self.titulo}</strong><br><small>{valor_fmt}</small></a>'

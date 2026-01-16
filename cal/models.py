@@ -58,7 +58,7 @@ class Categoria(models.Model):
 class MetaCategoria(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
-    limite = models.DecimalField(max_digits=15, decimal_places=2)
+    limite = EncryptedDecimalField(max_digits=15, decimal_places=2)
     mes = models.PositiveIntegerField()  # 1–12
     ano = models.PositiveIntegerField()
 
@@ -137,7 +137,7 @@ class FormaPagamento(models.Model):
 class Cartao(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     nome = models.CharField(max_length=100, verbose_name="Nome do cartão", default="Novo Cartão")
-    limite = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    limite = EncryptedDecimalField(max_digits=15, decimal_places=2, default=0)
     dia_fechamento = models.PositiveIntegerField(default=1)
 
     is_credito = models.BooleanField(
@@ -193,7 +193,7 @@ class Transacao(BaseModel):
         verbose_name="Título"
     )
 
-    valor = models.DecimalField(
+    valor = EncryptedDecimalField(
         max_digits=15,
         decimal_places=2,
         null=True,
