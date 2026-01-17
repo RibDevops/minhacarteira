@@ -43,18 +43,18 @@
     </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="{% url 'cal:transacoes_mes' %}">
-      <i class="bi bi-bar-chart-fill"></i> Mês
-    </a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'cal:metas_categoria' %}">
-      <i class="bi bi-bullseye"></i> Meta
+    <a class="nav-link" href="{% url 'cal:dashboard' %}">
+      <i class="bi bi-graph-up"></i> Balanço Anual
     </a>
   </li>
   <li class="nav-item">
     <a class="nav-link" href="{% url 'cal:resumo_categoria' %}">
-      <i class="bi bi-pie-chart-fill"></i> Balanço
+      <i class="bi bi-pie-chart-fill"></i> Balanço Mensal
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'cal:metas_categoria' %}">
+      <i class="bi bi-bullseye"></i> Metas
     </a>
   </li>
   <li class="nav-item">
@@ -62,9 +62,9 @@
       <i class="bi bi-credit-card-2-back-fill"></i> Cartões
     </a>
   </li>
-<li class="nav-item">
+  <li class="nav-item">
     <a class="nav-link" href="{% url 'cal:listar_transacoes' %}"><i class="bi bi-list-ul"></i> Lista</a>
-</li>
+  </li>
   <li class="nav-item">
     <a class="nav-link" href="{% url 'cal:categorias' %}"><i class="bi bi-tags-fill"></i> Categorias</a>
   </li>

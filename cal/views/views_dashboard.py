@@ -55,6 +55,7 @@ def dashboard(request):
     anos_disponiveis = range(hoje.year - 5, hoje.year + 2)
 
     return render(request, 'cal/dashboard.html', {
+        'titulo_pagina': 'Balanço Anual',
         'ano_selecionado': ano_selecionado,
         'anos_disponiveis': anos_disponiveis,
         'credito_anual': credito_anual,
