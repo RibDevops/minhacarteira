@@ -47,10 +47,11 @@ class CalendarView(generic.ListView):
         user = self.request.user
 
         # ==================== MÊS ATUAL ====================
+        hoje = datetime.today()
         transacoes_mes_atual = Transacao.objects.filter(
             user=user,
             data__year=d.year,
-            data__month=hoje.month
+            data__month=d.month
         ).select_related('tipo')
         
         total_creditos = sum((t.valor_decimal for t in transacoes_mes_atual if t.tipo.codigo == 'C'), Decimal('0'))
