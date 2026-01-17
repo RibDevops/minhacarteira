@@ -38,6 +38,9 @@ def metas_dashboard(request):
 
     metas = MetaCategoria.objects.filter(user=user, mes=mes, ano=ano)
 
+    from django.db.models.functions import Cast
+    from django.db.models import DecimalField
+
     for meta in metas:
         transacoes = Transacao.objects.filter(
             user=user,
@@ -46,7 +49,9 @@ def metas_dashboard(request):
             data__month=mes
         )
 
-        gasto = transacoes.aggregate(total=Sum('valor'))['total'] or 0
+        gasto = transacoes.annotate(
+            valor_decimal=Cast('valor', DecimalField(max_digits=15, decimal_places=2))
+        ).aggregate(total=Sum('valor_decimal'))['total'] or 0
         restante = max(float(meta.limite) - float(gasto), 0)
 
         percentual = round((float(gasto) / float(meta.limite)) * 100, 2) if meta.limite else 0

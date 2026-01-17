@@ -54,8 +54,16 @@ class CalendarView(generic.ListView):
         )
         # print(transacoes_mes_atual)
 
-        total_creditos = transacoes_mes_atual.filter(tipo__codigo='C').aggregate(total=Sum('valor'))['total'] or 0
-        total_debitos = transacoes_mes_atual.filter(tipo__codigo='D').aggregate(total=Sum('valor'))['total'] or 0
+        from django.db.models.functions import Cast
+        from django.db.models import DecimalField
+
+        total_creditos = transacoes_mes_atual.filter(tipo__codigo='C').annotate(
+            valor_decimal=Cast('valor', DecimalField(max_digits=15, decimal_places=2))
+        ).aggregate(total=Sum('valor_decimal'))['total'] or 0
+
+        total_debitos = transacoes_mes_atual.filter(tipo__codigo='D').annotate(
+            valor_decimal=Cast('valor', DecimalField(max_digits=15, decimal_places=2))
+        ).aggregate(total=Sum('valor_decimal'))['total'] or 0
         saldo_total = total_creditos - total_debitos
 
         # ==================== PRÓXIMO MÊS ====================
@@ -71,10 +79,14 @@ class CalendarView(generic.ListView):
             data__year=proximo_ano,
             data__month=proximo_mes
         )
-        # print(transacoes_prox_mes)
-        total_creditos_prox = transacoes_prox_mes.filter(tipo__codigo='C').aggregate(total=Sum('valor'))['total'] or 0
-        # print(total_creditos_prox)
-        total_debitos_prox = transacoes_prox_mes.filter(tipo__codigo='D').aggregate(total=Sum('valor'))['total'] or 0
+        
+        total_creditos_prox = transacoes_prox_mes.filter(tipo__codigo='C').annotate(
+            valor_decimal=Cast('valor', DecimalField(max_digits=15, decimal_places=2))
+        ).aggregate(total=Sum('valor_decimal'))['total'] or 0
+
+        total_debitos_prox = transacoes_prox_mes.filter(tipo__codigo='D').annotate(
+            valor_decimal=Cast('valor', DecimalField(max_digits=15, decimal_places=2))
+        ).aggregate(total=Sum('valor_decimal'))['total'] or 0
         # print(total_debitos_prox)
         saldo_total_prox = total_creditos_prox - total_debitos_prox
         # print(saldo_total_prox)
