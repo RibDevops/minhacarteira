@@ -14,19 +14,29 @@ from cal.utils import Calendar
 def get_date(req_month):
     if req_month:
         try:
-            # Handle possible float strings like '2026.0' or '2.026'
+            # Handle float strings like '2.026-2' or '2026.0-2'
             if '.' in req_month:
-                req_month = req_month.split('.')[0]
+                # If there's a dot, it might be 2.026-2 -> we want 2026 and 2
+                # Let's clean the string of dots first if they are in the year part
+                parts = req_month.split('-')
+                if len(parts) >= 2:
+                    year_str = parts[0].replace('.', '')
+                    month_str = parts[1].replace('.', '')
+                    # If it was 2.026, it becomes 2026
+                    # If it was 2.026 and 2, it becomes 2026 and 2
+                    year = int(year_str)
+                    month = int(month_str)
+                    return date(year, month, 1)
             
             if '-' in req_month:
                 parts = req_month.split('-')
                 if len(parts) >= 2:
-                    year = int(float(parts[0]))
-                    month = int(float(parts[1]))
+                    year = int(parts[0])
+                    month = int(parts[1])
                     return date(year, month, 1)
             
-            # Fallback for single integer year or other formats
-            year = int(float(req_month))
+            # Fallback for single integer year
+            year = int(req_month)
             return date(year, 1, 1)
         except (ValueError, TypeError):
             pass
