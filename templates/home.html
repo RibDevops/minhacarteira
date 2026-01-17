@@ -8,8 +8,12 @@
       <p class="lead mb-4">Gerencie suas finanças de forma simples, visual e com total privacidade. Controle seus gastos, defina metas e acompanhe sua evolução mensal.</p>
       <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-lg-start">
         {% if user.is_authenticated %}
-          <a href="{% url 'cal:dashboard' %}" class="btn btn-primary btn-lg px-4 gap-3"><i class="bi bi-speedometer2"></i> Ir para o Dashboard</a>
-          <a href="{% url 'cal:calendar' %}" class="btn btn-outline-secondary btn-lg px-4"><i class="bi bi-calendar3"></i> Ver Calendário</a>
+          <a href="{% url 'cal:dashboard' %}" class="btn btn-primary btn-lg px-4 gap-3">
+            <i class="bi bi-graph-up-arrow"></i> Ir para o Balanço Anual
+          </a>
+          <a href="{% url 'cal:calendar' %}" class="btn btn-outline-secondary btn-lg px-4">
+            <i class="bi bi-calendar3"></i> Ver Calendário
+          </a>
         {% else %}
           <a href="{% url 'login' %}" class="btn btn-primary btn-lg px-4 gap-3">Começar Agora</a>
           <a href="{% url 'cal:manual_publico' %}" class="btn btn-outline-secondary btn-lg px-4">Ver Manual</a>
@@ -26,8 +30,8 @@
       <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3 rounded-3 px-3 py-2">
         <i class="bi bi-shield-lock-fill"></i>
       </div>
-      <h3 class="fs-4 fw-bold">Privacidade Total</h3>
-      <p>Seus dados sensíveis (título, valores e observações) são criptografados com <strong>tecnologia AES-256</strong> antes de serem salvos no banco de dados.</p>
+      <h3 class="fs-4 fw-bold">Privacidade e Velocidade</h3>
+      <p>Desenvolvido com foco na simplicidade e rapidez, seus dados são armazenados de forma estruturada para garantir a melhor performance e usabilidade.</p>
     </div>
     <div class="feature col">
       <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-success bg-gradient fs-2 mb-3 rounded-3 px-3 py-2">
