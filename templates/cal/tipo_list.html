@@ -8,7 +8,6 @@
         <thead>
             <tr>
                 <th>Descrição</th>
-                <th>É Crédito?</th>
                 <th>Ações</th>
             </tr>
         </thead>
@@ -16,14 +15,13 @@
             {% for tipo in tipos %}
             <tr>
                 <td>{{ tipo.descricao }}</td>
-                <td>{{ tipo.is_credito|yesno:"Sim,Não" }}</td>
                 <td>
                     <a href="{% url 'cal:tipo_update' tipo.pk %}" class="btn btn-sm btn-warning">Editar</a>
                     <a href="{% url 'cal:tipo_delete' tipo.pk %}" class="btn btn-sm btn-danger">Excluir</a>
                 </td>
             </tr>
             {% empty %}
-            <tr><td colspan="3">Nenhum tipo cadastrado.</td></tr>
+            <tr><td colspan="2">Nenhum tipo cadastrado.</td></tr>
             {% endfor %}
         </tbody>
     </table>
