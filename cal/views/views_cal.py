@@ -13,9 +13,24 @@ from cal.utils import Calendar
 
 def get_date(req_month):
     if req_month:
-        year, month = (int(x) for x in req_month.split('-'))
-        return date(year, month, 1)
-    return datetime.today()
+        try:
+            # Handle possible float strings like '2026.0' or '2.026'
+            if '.' in req_month:
+                req_month = req_month.split('.')[0]
+            
+            if '-' in req_month:
+                parts = req_month.split('-')
+                if len(parts) >= 2:
+                    year = int(float(parts[0]))
+                    month = int(float(parts[1]))
+                    return date(year, month, 1)
+            
+            # Fallback for single integer year or other formats
+            year = int(float(req_month))
+            return date(year, 1, 1)
+        except (ValueError, TypeError):
+            pass
+    return date.today()
 
 
 def prev_month(d):
