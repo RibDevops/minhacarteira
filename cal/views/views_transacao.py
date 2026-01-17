@@ -189,6 +189,45 @@ class TransacaoUpdateView(UpdateView):
     template_name = 'cal/transacao_form.html'  # crie esse template se ainda não existir
     success_url = reverse_lazy('cal:calendar')  # ou outra URL para onde redirecionar depois da edição
 
+import csv
+from django.http import HttpResponse
+
+@login_required
+def exportar_transacoes_csv(request):
+    try:
+        ano = int(request.GET.get('ano', date.today().year))
+        mes = int(request.GET.get('mes', date.today().month))
+    except (ValueError, TypeError):
+        ano, mes = date.today().year, date.today().month
+
+    data_inicio = make_aware(datetime(ano, mes, 1))
+    data_fim = make_aware(datetime(ano, mes, 1) + relativedelta(months=1))
+
+    transacoes = Transacao.objects.filter(
+        user=request.user,
+        data__gte=data_inicio,
+        data__lt=data_fim
+    ).select_related('tipo', 'categoria', 'cartao').order_by('data')
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = f'attachment; filename="transacoes_{mes}_{ano}.csv"'
+    response.write(u'\ufeff'.encode('utf8')) # BOM para Excel
+
+    writer = csv.writer(response, delimiter=';')
+    writer.writerow(['Data', 'Título', 'Categoria', 'Tipo', 'Cartão', 'Valor'])
+
+    for t in transacoes:
+        writer.writerow([
+            t.data.strftime('%d/%m/%Y'),
+            t.titulo,
+            t.categoria.nome if t.categoria else '-',
+            t.tipo.descricao,
+            t.cartao.nome if t.cartao else '-',
+            str(t.valor).replace('.', ',')
+        ])
+
+    return response
+
 @login_required
 def transacoes_mes_view(request):
     try:

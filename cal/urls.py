@@ -42,6 +42,7 @@ urlpatterns = [
     path('tipos/<int:pk>/editar/', views_tipo.tipo_update, name='tipo_update'),
     path('tipos/<int:pk>/excluir/', views_tipo.tipo_delete, name='tipo_delete'),
     path('transacoes-mes/', transacoes_mes_view, name='transacoes_mes'),
+    path('transacoes/exportar/', exportar_transacoes_csv, name='exportar_transacoes_csv'),
     path("resumo-categoria/", resumo_categoria_view, name="resumo_categoria"),
     path('transacao/<int:pk>/editar/', TransacaoUpdateView.as_view(), name='transacao_update'),
 
