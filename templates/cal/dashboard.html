@@ -9,7 +9,7 @@
             <label for="ano" class="fw-bold d-none d-sm-inline">Ano:</label>
             <select name="ano" id="ano" class="form-select form-select-sm" onchange="this.form.submit()">
                 {% for a in anos_disponiveis %}
-                <option value="{{ a }}" {% if a == ano_selecionado %}selected{% endif %}>{{ a }}</option>
+                <option value="{{ a }}" {% if a == ano_selecionado %}selected{% endif %}>{{ a|stringformat:"d" }}</option>
                 {% endfor %}
             </select>
         </form>
@@ -20,7 +20,7 @@
         <div class="col-md-4">
             <div class="card border-0 shadow-sm bg-success text-white h-100">
                 <div class="card-body py-4 text-center">
-                    <h6 class="opacity-75 mb-1">Créditos Anuais ({{ ano_selecionado }})</h6>
+                    <h6 class="opacity-75 mb-1">Créditos Anuais ({{ ano_selecionado|stringformat:"d" }})</h6>
                     <h3 class="fw-bold mb-0">R$ {{ credito_anual|floatformat:2|intcomma }}</h3>
                 </div>
             </div>
@@ -28,7 +28,7 @@
         <div class="col-md-4">
             <div class="card border-0 shadow-sm bg-danger text-white h-100">
                 <div class="card-body py-4 text-center">
-                    <h6 class="opacity-75 mb-1">Débitos Anuais ({{ ano_selecionado }})</h6>
+                    <h6 class="opacity-75 mb-1">Débitos Anuais ({{ ano_selecionado|stringformat:"d" }})</h6>
                     <h3 class="fw-bold mb-0">R$ {{ debito_anual|floatformat:2|intcomma }}</h3>
                 </div>
             </div>
@@ -36,7 +36,7 @@
         <div class="col-md-4">
             <div class="card border-0 shadow-sm {% if saldo_anual >= 0 %}bg-primary{% else %}bg-warning text-dark{% endif %} text-white h-100">
                 <div class="card-body py-4 text-center">
-                    <h6 class="opacity-75 mb-1">Saldo Anual ({{ ano_selecionado }})</h6>
+                    <h6 class="opacity-75 mb-1">Saldo Anual ({{ ano_selecionado|stringformat:"d" }})</h6>
                     <h3 class="fw-bold mb-0">R$ {{ saldo_anual|floatformat:2|intcomma }}</h3>
                 </div>
             </div>
