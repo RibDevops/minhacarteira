@@ -238,9 +238,9 @@ class Transacao(BaseModel):
             return Decimal('0')
 
     def get_html_url(self):
-        url = reverse('cal:transacao_update', args=[self.id])
+        url = reverse('cal:transacao_editar', args=[self.id])
         valor_formatado = f"R$ {self.valor_decimal:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
         return f'<a href="{url}"><strong>{self.titulo}</strong><br><small>{valor_formatado}</small></a>'
 
     def get_absolute_url(self):
-        return reverse('cal:transacao_update', args=[self.id])
+        return reverse('cal:transacao_editar', args=[self.id])
