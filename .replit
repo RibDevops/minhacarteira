@@ -4,7 +4,7 @@ expertMode = true
 
 [nix]
 channel = "stable-25_05"
-packages = ["cargo", "libffi", "libiconv", "libxcrypt", "openssl", "pgadmin4", "pkg-config", "rustc"]
+packages = ["cargo", "libffi", "libiconv", "libmysqlclient", "libxcrypt", "openssl", "pgadmin4", "pkg-config", "rustc"]
 
 [userenv]
 

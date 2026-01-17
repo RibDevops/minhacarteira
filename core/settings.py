@@ -66,7 +66,7 @@ WSGI_APPLICATION = "core.wsgi.application"
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=config('DATABASE_URL'),
+        default=config('DATABASE_URL', default='mysql://user:password@localhost/dbname'),
         conn_max_age=600,
         conn_health_checks=True,
     )
