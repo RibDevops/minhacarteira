@@ -50,20 +50,11 @@ class CalendarView(generic.ListView):
         transacoes_mes_atual = Transacao.objects.filter(
             user=user,
             data__year=d.year,
-            data__month=d.month
-        )
-        # print(transacoes_mes_atual)
-
-        from django.db.models.functions import Cast
-        from django.db.models import DecimalField
-
-        total_creditos = transacoes_mes_atual.filter(tipo__codigo='C').annotate(
-            valor_decimal=Cast('valor', DecimalField(max_digits=15, decimal_places=2))
-        ).aggregate(total=Sum('valor_decimal'))['total'] or 0
-
-        total_debitos = transacoes_mes_atual.filter(tipo__codigo='D').annotate(
-            valor_decimal=Cast('valor', DecimalField(max_digits=15, decimal_places=2))
-        ).aggregate(total=Sum('valor_decimal'))['total'] or 0
+            data__month=hoje.month
+        ).select_related('tipo')
+        
+        total_creditos = sum((t.valor_decimal for t in transacoes_mes_atual if t.tipo.codigo == 'C'), Decimal('0'))
+        total_debitos = sum((t.valor_decimal for t in transacoes_mes_atual if t.tipo.codigo == 'D'), Decimal('0'))
         saldo_total = total_creditos - total_debitos
 
         # ==================== PRÓXIMO MÊS ====================
@@ -78,15 +69,11 @@ class CalendarView(generic.ListView):
             user=user,
             data__year=proximo_ano,
             data__month=proximo_mes
-        )
+        ).select_related('tipo')
         
-        total_creditos_prox = transacoes_prox_mes.filter(tipo__codigo='C').annotate(
-            valor_decimal=Cast('valor', DecimalField(max_digits=15, decimal_places=2))
-        ).aggregate(total=Sum('valor_decimal'))['total'] or 0
-
-        total_debitos_prox = transacoes_prox_mes.filter(tipo__codigo='D').annotate(
-            valor_decimal=Cast('valor', DecimalField(max_digits=15, decimal_places=2))
-        ).aggregate(total=Sum('valor_decimal'))['total'] or 0
+        total_creditos_prox = sum((t.valor_decimal for t in transacoes_prox_mes if t.tipo.codigo == 'C'), Decimal('0'))
+        total_debitos_prox = sum((t.valor_decimal for t in transacoes_prox_mes if t.tipo.codigo == 'D'), Decimal('0'))
+        saldo_total_prox = total_creditos_prox - total_debitos_prox
         # print(total_debitos_prox)
         saldo_total_prox = total_creditos_prox - total_debitos_prox
         # print(saldo_total_prox)
