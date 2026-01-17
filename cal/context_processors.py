@@ -18,8 +18,8 @@ def saldos_mensais(request):
         data__month=hoje.month
     ).select_related('tipo')
     
-    total_creditos = sum((t.valor_decimal for t in transacoes_mes if t.tipo.codigo == 'C'), Decimal('0'))
-    total_debitos = sum((t.valor_decimal for t in transacoes_mes if t.tipo.codigo == 'D'), Decimal('0'))
+    total_creditos = transacoes_mes.filter(tipo__codigo='C').aggregate(Sum('valor'))['valor__sum'] or Decimal('0')
+    total_debitos = transacoes_mes.filter(tipo__codigo='D').aggregate(Sum('valor'))['valor__sum'] or Decimal('0')
     saldo_total = total_creditos - total_debitos
 
     # Próximo mês
@@ -36,8 +36,8 @@ def saldos_mensais(request):
         data__month=proximo_mes
     ).select_related('tipo')
     
-    total_creditos_prox = sum((t.valor_decimal for t in transacoes_prox_mes if t.tipo.codigo == 'C'), Decimal('0'))
-    total_debitos_prox = sum((t.valor_decimal for t in transacoes_prox_mes if t.tipo.codigo == 'D'), Decimal('0'))
+    total_creditos_prox = transacoes_prox_mes.filter(tipo__codigo='C').aggregate(Sum('valor'))['valor__sum'] or Decimal('0')
+    total_debitos_prox = transacoes_prox_mes.filter(tipo__codigo='D').aggregate(Sum('valor'))['valor__sum'] or Decimal('0')
     saldo_total_prox = total_creditos_prox - total_debitos_prox
 
     return {

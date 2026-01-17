@@ -19,14 +19,8 @@ def dashboard(request):
     ).select_related('tipo', 'categoria')
 
     # Resumo Anual
-    credito_anual = Decimal('0')
-    debito_anual = Decimal('0')
-    for t in transacoes_ano:
-        val = t.valor_decimal
-        if t.tipo.codigo == 'C':
-            credito_anual += val
-        else:
-            debito_anual += val
+    credito_anual = transacoes_ano.filter(tipo__codigo='C').aggregate(Sum('valor'))['valor__sum'] or Decimal('0')
+    debito_anual = transacoes_ano.filter(tipo__codigo='D').aggregate(Sum('valor'))['valor__sum'] or Decimal('0')
     saldo_anual = credito_anual - debito_anual
 
     # Detalhamento por Mês
@@ -37,26 +31,25 @@ def dashboard(request):
     ]
 
     for mes_num in range(1, 13):
-        transacoes_mes = [t for t in transacoes_ano if t.data.month == mes_num]
+        transacoes_mes_queryset = transacoes_ano.filter(data__month=mes_num)
         
-        c_mes = sum((t.valor_decimal for t in transacoes_mes if t.tipo.codigo == 'C'), Decimal('0'))
-        d_mes = sum((t.valor_decimal for t in transacoes_mes if t.tipo.codigo == 'D'), Decimal('0'))
+        c_mes = transacoes_mes_queryset.filter(tipo__codigo='C').aggregate(Sum('valor'))['valor__sum'] or Decimal('0')
+        d_mes = transacoes_mes_queryset.filter(tipo__codigo='D').aggregate(Sum('valor'))['valor__sum'] or Decimal('0')
         s_mes = c_mes - d_mes
         
         # Dados para o gráfico do mês (por categoria)
-        cat_sums = defaultdict(Decimal)
-        for t in transacoes_mes:
-            cat_name = t.categoria.nome if t.categoria else 'Sem Categoria'
-            cat_sums[cat_name] += t.valor_decimal
+        dados_categoria = transacoes_mes_queryset.values('categoria__nome').annotate(total=Sum('valor'))
+        cat_labels = [item['categoria__nome'] or 'Sem Categoria' for item in dados_categoria]
+        cat_valores = [float(item['total']) for item in dados_categoria]
             
         meses_detalhe[mes_num] = {
             'nome': nomes_meses[mes_num],
             'credito': c_mes,
             'debito': d_mes,
             'saldo': s_mes,
-            'grafico_labels': list(cat_sums.keys()),
-            'grafico_valores': [float(v) for v in cat_sums.values()],
-            'tem_dados': len(transacoes_mes) > 0
+            'grafico_labels': cat_labels,
+            'grafico_valores': cat_valores,
+            'tem_dados': transacoes_mes_queryset.exists()
         }
 
     anos_disponiveis = range(hoje.year - 5, hoje.year + 2)

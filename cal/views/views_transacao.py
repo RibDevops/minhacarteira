@@ -209,34 +209,26 @@ def transacoes_mes_view(request):
 
 
     # Totais
-    total_creditos = sum((t.valor_decimal for t in transacoes if t.tipo.codigo == 'C'), Decimal('0'))
-    total_debitos = sum((t.valor_decimal for t in transacoes if t.tipo.codigo == 'D'), Decimal('0'))
+    total_creditos = transacoes.filter(tipo__codigo='C').aggregate(Sum('valor'))['valor__sum'] or 0
+    total_debitos = transacoes.filter(tipo__codigo='D').aggregate(Sum('valor'))['valor__sum'] or 0
     saldo_total = total_creditos - total_debitos
 
     # Gráfico por tipo (Crédito/Débito)
-    dados_por_tipo = defaultdict(Decimal)
-    for t in transacoes:
-        try:
-            valor = t.valor_decimal
-            if t.tipo.codigo == 'D':
-                valor = -valor
-            dados_por_tipo[t.tipo.descricao] += valor
-        except Exception as e:
-            import logging
-            logger = logging.getLogger(__name__)
-            logger.error(f"Erro ao processar transação {t.id}: {e}")
-
-    labels = list(dados_por_tipo.keys())
-    valores = [float(v) for v in dados_por_tipo.values()]
+    dados_por_tipo = transacoes.values('tipo__descricao', 'tipo__codigo').annotate(total=Sum('valor'))
+    
+    labels = [item['tipo__descricao'] for item in dados_por_tipo]
+    valores = []
+    for item in dados_por_tipo:
+        val = float(item['total'])
+        if item['tipo__codigo'] == 'D':
+            val = -val
+        valores.append(val)
 
     # Gráfico por categoria (exclui transações sem categoria)
-    cat_sums = defaultdict(Decimal)
-    for t in transacoes:
-        if t.categoria:
-            cat_sums[t.categoria.nome] += t.valor_decimal
-
-    categorias = list(cat_sums.keys())
-    totais_categoria = [float(v) for v in cat_sums.values()]
+    dados_categoria = transacoes.filter(categoria__isnull=False).values('categoria__nome').annotate(total=Sum('valor'))
+    
+    categorias = [item['categoria__nome'] for item in dados_categoria]
+    totais_categoria = [float(item['total']) for item in dados_categoria]
 
     contexto = {
         'transacoes': transacoes,

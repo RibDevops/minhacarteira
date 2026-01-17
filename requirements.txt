@@ -1,10 +1,7 @@
 Django==5.2.10
 djangorestframework==3.16.1
-django-encrypted-model-fields
 cryptography==46.0.3
 python-decouple==3.8
 python-dateutil==2.9.0.post0
 cffi
-dj-database-url
-mysqlclient
 dj-database-url

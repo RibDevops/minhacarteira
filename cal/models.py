@@ -7,11 +7,6 @@ from django.db import models
 from django.urls import reverse
 
 from dateutil.relativedelta import relativedelta
-from encrypted_model_fields.fields import (
-    EncryptedCharField,
-    EncryptedDecimalField,
-    validate_fernet_key
-)
 
 # ======================================================
 # BASE MODEL
@@ -58,7 +53,7 @@ class Categoria(models.Model):
 class MetaCategoria(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
-    limite = EncryptedDecimalField(max_digits=15, decimal_places=2)
+    limite = models.DecimalField(max_digits=15, decimal_places=2)
     mes = models.PositiveIntegerField()  # 1–12
     ano = models.PositiveIntegerField()
 
@@ -137,7 +132,7 @@ class FormaPagamento(models.Model):
 class Cartao(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     nome = models.CharField(max_length=100, verbose_name="Nome do cartão", default="Novo Cartão")
-    limite = EncryptedDecimalField(max_digits=15, decimal_places=2, default=0)
+    limite = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     dia_fechamento = models.PositiveIntegerField(default=1)
 
     is_credito = models.BooleanField(
@@ -188,12 +183,12 @@ class Transacao(BaseModel):
         blank=True
     )
 
-    titulo = EncryptedCharField(
+    titulo = models.CharField(
         max_length=200,
         verbose_name="Título"
     )
 
-    valor = EncryptedDecimalField(
+    valor = models.DecimalField(
         max_digits=15,
         decimal_places=2,
         null=True,
@@ -215,7 +210,7 @@ class Transacao(BaseModel):
         verbose_name="Data final"
     )
 
-    observacoes = EncryptedCharField(
+    observacoes = models.CharField(
         max_length=500,
         null=True,
         blank=True,
@@ -232,10 +227,7 @@ class Transacao(BaseModel):
 
     @property
     def valor_decimal(self):
-        try:
-            return Decimal(str(self.valor)) if self.valor is not None else Decimal('0')
-        except:
-            return Decimal('0')
+        return self.valor if self.valor is not None else Decimal('0')
 
     def get_html_url(self):
         url = reverse('cal:transacao_editar', args=[self.id])
