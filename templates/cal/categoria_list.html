@@ -3,10 +3,13 @@
 {% block content %}
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="mb-0">Categorias</h2>
-        <a href="{% url 'cal:categoria_nova' %}" class="btn btn-success">
-            <i class="bi bi-plus-circle"></i> Nova Categoria
-        </a>
+        <h2 class="fw-bold text-primary"><i class="bi bi-tags"></i> Categorias</h2>
+        <div>
+            <a href="{% url 'cal:categoria_nova' %}" class="btn btn-success btn-sm">
+                <i class="bi bi-plus-circle"></i> Nova Categoria
+            </a>
+            <a href="{% url 'cal:calendar' %}" class="btn btn-outline-secondary btn-sm">Voltar</a>
+        </div>
     </div>
 
     {% if categorias %}
