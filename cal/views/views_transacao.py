@@ -147,18 +147,14 @@ def transacao_view(request):
         # Lógica de data baseada na regra de vencimento do cartão
         data_base_parcela = data
         if transacao.cartao:
-            # Regra: Compras no cartão SEMPRE vão para o próximo mês (Mês+1)
-            # Exceto se for uma ENTRADA (Salário/Crédito)
-            if transacao.tipo.codigo != 'C':
-                data_base_parcela = calcular_proxima_fatura(data)
+            # Regra: Qualquer lançamento no cartão SEMPRE vai para o próximo mês (Mês+1)
+            # Não importa se é Entrada ou Saída
+            data_base_parcela = calcular_proxima_fatura(data)
         
         # Criação das parcelas
         for i in range(parcelas):
-            # Se for Crédito (Entrada/Salário), não aplica a lógica de mês+1 do cartão
-            if transacao.tipo.codigo == 'C':
-                data_final_parcela = data + relativedelta(months=i)
-            else:
-                data_final_parcela = data_base_parcela + relativedelta(months=i)
+            # A data inicial da sequência de parcelas é definida acima (data ou data+1 mês)
+            data_final_parcela = data_base_parcela + relativedelta(months=i)
 
             Transacao.objects.create(
                 user=request.user,
@@ -170,7 +166,7 @@ def transacao_view(request):
                 valor=valor_parcela,
                 data=data_final_parcela,
                 parcelas=parcelas,
-                data_fim=data + relativedelta(months=parcelas - 1) if transacao.tipo.codigo == 'C' else data_base_parcela + relativedelta(months=parcelas - 1),
+                data_fim=data_base_parcela + relativedelta(months=parcelas - 1),
                 observacoes=transacao.observacoes,
                 grupo_id=grupo_id
             )
