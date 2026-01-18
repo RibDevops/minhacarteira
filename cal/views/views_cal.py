@@ -78,7 +78,7 @@ class CalendarView(generic.ListView):
             user=user,
             data__year=d.year,
             data__month=d.month
-        ).select_related('tipo')
+        ).select_related('tipo', 'categoria', 'cartao')
         
         total_creditos = sum((t.valor_decimal for t in transacoes_mes_atual if t.tipo.codigo == 'C'), Decimal('0'))
         total_debitos = sum((t.valor_decimal for t in transacoes_mes_atual if t.tipo.codigo == 'D'), Decimal('0'))
@@ -96,7 +96,7 @@ class CalendarView(generic.ListView):
             user=user,
             data__year=proximo_ano,
             data__month=proximo_mes
-        ).select_related('tipo')
+        ).select_related('tipo', 'categoria', 'cartao')
         
         total_creditos_prox = sum((t.valor_decimal for t in transacoes_prox_mes if t.tipo.codigo == 'C'), Decimal('0'))
         total_debitos_prox = sum((t.valor_decimal for t in transacoes_prox_mes if t.tipo.codigo == 'D'), Decimal('0'))

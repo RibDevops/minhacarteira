@@ -242,7 +242,7 @@ def transacoes_mes_view(request):
         user=request.user,
         data__gte=data_inicio,
         data__lt=data_fim
-    ).select_related('tipo', 'categoria').order_by('-data')
+    ).select_related('tipo', 'categoria', 'cartao').order_by('-data')
 
 
     # Totais
@@ -300,7 +300,7 @@ def resumo_categoria_view(request):
         user=request.user,
         data__gte=data_inicio,
         data__lt=data_fim
-    )
+    ).select_related('tipo', 'categoria', 'cartao')
 
     # Dados para o gráfico de pizza por Categoria (apenas Débitos)
     debitos = [t for t in transacoes if t.tipo.codigo == 'D']
@@ -452,7 +452,7 @@ def listar_transacoes(request):
         user=request.user,
         data__gte=data_inicio,
         data__lt=data_fim
-    ).select_related('tipo', 'categoria').order_by('-data')
+    ).select_related('tipo', 'categoria', 'cartao').order_by('-data')
 
     tipo_filtro = request.GET.get('tipo')
     categoria_filtro = request.GET.get('categoria')
