@@ -1,12 +1,9 @@
 /* static/css/dark-mode.css */
-.dark-mode {
-    --bs-body-bg: #1a1a2e;
-    --bs-body-color: #e5e5e5;
-}
-
-.dark-mode body {
+body.dark-mode {
     background-color: #1a1a2e;
     color: #e5e5e5;
+    --bs-body-bg: #1a1a2e;
+    --bs-body-color: #e5e5e5;
 }
 
 .dark-mode .navbar {
@@ -16,13 +13,21 @@
 .dark-mode .card {
     background-color: #16213e;
     border-color: #0f3460;
+    color: #e5e5e5;
 }
 
 .dark-mode .table {
-    --bs-table-bg: #1a1a2e;
+    --bs-table-bg: #16213e;
     --bs-table-color: #e5e5e5;
-    --bs-table-striped-bg: #16213e;
+    --bs-table-striped-bg: #1a1a2e;
     --bs-table-hover-bg: #0f3460;
+    border-color: #0f3460;
+}
+
+.dark-mode .table thead th {
+    background-color: #0f3460;
+    color: #fff;
+    border-bottom-color: #e94560;
 }
 
 .dark-mode .form-control,
@@ -43,12 +48,22 @@
     background-color: #16213e !important;
 }
 
-.dark-mode .btn-outline-primary {
-    color: #4da8da;
-    border-color: #4da8da;
+.dark-mode .modal-content {
+    background-color: #16213e;
+    color: #e5e5e5;
 }
 
-.dark-mode .btn-outline-primary:hover {
-    background-color: #4da8da;
-    color: #1a1a2e;
+.dark-mode .list-group-item {
+    background-color: #16213e;
+    color: #e5e5e5;
+    border-color: #0f3460;
 }
+
+.dark-mode .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+.dark-mode .text-muted {
+    color: #a0a0a0 !important;
+}
+
