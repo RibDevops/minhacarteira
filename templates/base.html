@@ -76,6 +76,21 @@
             0%, 100% { transform: scale(1); opacity: 1; }
             50% { transform: scale(1.2); opacity: 0.7; }
         }
+
+        /* Dark Mode fixes for headers */
+        body.dark-mode .bg-white {
+            background-color: #212529 !important;
+            color: #f8f9fa !important;
+        }
+        body.dark-mode .card.bg-white {
+            background-color: #2b3035 !important;
+        }
+        body.dark-mode .shadow-sm {
+            box-shadow: 0 .125rem .25rem rgba(0,0,0,.5) !important;
+        }
+        body.dark-mode .border {
+            border-color: #444 !important;
+        }
     </style>
     <title>{% block title %}{% endblock %} | Carteira Digital</title>
 </head>
@@ -144,6 +159,12 @@
       <i class="bi bi-plus-circle"></i>
     </a>
   </div>
+</div>
+
+  <!-- Botão Voltar (Esquerda do FAB Principal) -->
+  <button onclick="window.history.back()" class="btn btn-secondary shadow btn-fab" title="Voltar">
+    <i class="bi bi-arrow-left"></i>
+  </button>
 </div>
 {% endif %}
 
