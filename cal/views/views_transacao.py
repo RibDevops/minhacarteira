@@ -286,8 +286,14 @@ def transacoes_mes_view(request):
 
 @login_required
 def resumo_categoria_view(request):
-    ano = int(request.GET.get('ano', date.today().year))
-    mes = int(request.GET.get('mes', date.today().month))
+    try:
+        ano_raw = request.GET.get('ano', date.today().year)
+        mes_raw = request.GET.get('mes', date.today().month)
+        
+        ano = int(float(str(ano_raw).replace('.', '').replace(',', '')))
+        mes = int(float(str(mes_raw).replace('.', '').replace(',', '')))
+    except (ValueError, TypeError):
+        ano, mes = date.today().year, date.today().month
 
     data_inicio = make_aware(datetime(ano, mes, 1))
     data_fim = make_aware(datetime(ano, mes, 1) + relativedelta(months=1))
@@ -430,8 +436,16 @@ def cartoes_resumo_view(request):
 @login_required
 def listar_transacoes(request):
     hoje = date.today()
-    ano = int(request.GET.get('ano', hoje.year))
-    mes = int(request.GET.get('mes', hoje.month))
+    
+    try:
+        ano_raw = request.GET.get('ano', hoje.year)
+        mes_raw = request.GET.get('mes', hoje.month)
+        
+        # Robust parsing for ano/mes (handle floats/strings)
+        ano = int(float(str(ano_raw).replace('.', '').replace(',', '')))
+        mes = int(float(str(mes_raw).replace('.', '').replace(',', '')))
+    except (ValueError, TypeError):
+        ano, mes = hoje.year, hoje.month
     
     data_inicio = make_aware(datetime(ano, mes, 1))
     data_fim = make_aware(datetime(ano, mes, 1) + relativedelta(months=1))
