@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-  {% if form.instance.pk %}Editar Transação{% else %}Registrar Transação{% endif %}
+  {% if form.instance.pk %}Editar Despesa{% else %}Registrar Despesa{% endif %}
 {% endblock %}
 
 {% block content %}
@@ -13,7 +13,7 @@
         <div class="card-header {% if form.instance.pk %}bg-primary{% else %}bg-success{% endif %} text-white py-3">
           <h4 class="mb-0 d-flex align-items-center">
             <i class="bi {% if form.instance.pk %}bi-pencil-square{% else %}bi-plus-circle{% endif %} me-2"></i>
-            {% if form.instance.pk %}Editar Transação{% else %}Nova Transação{% endif %}
+            {% if form.instance.pk %}Editar Despesa{% else %}Nova Despesa{% endif %}
           </h4>
         </div>
         <div class="card-body p-3 p-md-4">
