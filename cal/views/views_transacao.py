@@ -147,8 +147,10 @@ def transacao_view(request):
         # Lógica de data baseada na regra de vencimento do cartão
         data_base_parcela = data
         if transacao.cartao:
-            # Regra: Primeira parcela no mês atual se dia_compra <= vencimento, senão mês seguinte
-            data_base_parcela = calcular_proxima_fatura(data, transacao.cartao.dia_fechamento)
+            # Regra: Compras no cartão SEMPRE vão para o próximo mês (Mês+1)
+            # Exceto se for uma ENTRADA (Salário/Crédito)
+            if transacao.tipo.codigo != 'C':
+                data_base_parcela = calcular_proxima_fatura(data)
         
         # Criação das parcelas
         for i in range(parcelas):
