@@ -41,7 +41,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(255, 255, 255, 0.9);
+            background-color: rgba(255, 255, 255, 0.95);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -49,46 +49,74 @@
             transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
         }
         body.dark-mode #preloader {
-            background-color: rgba(33, 37, 41, 0.9);
+            background-color: rgba(33, 37, 41, 0.95);
+        }
+        .loader-container {
+            position: relative;
+            text-align: center;
         }
         .loader {
-            width: 60px;
-            height: 60px;
+            display: block;
             position: relative;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #3498db;
+            -webkit-animation: spin 2s linear infinite;
+            animation: spin 2s linear infinite;
         }
-        .loader span {
+        .loader:before {
+            content: "";
             position: absolute;
-            width: 4px;
-            height: 15px;
-            background: #0d6efd;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #e74c3c;
+            -webkit-animation: spin 3s linear infinite;
+            animation: spin 3s linear infinite;
+        }
+        .loader:after {
+            content: "";
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: #f9c922;
+            -webkit-animation: spin 1.5s linear infinite;
+            animation: spin 1.5s linear infinite;
+        }
+        .loader-home-link {
+            position: absolute;
+            top: 180px;
             left: 50%;
-            top: 50%;
-            margin-left: -2px;
-            transform-origin: center -10px; /* Ajuste para o círculo */
-            border-radius: 2px;
-            animation: loader-bars-fade 1s linear infinite;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            color: #6c757d;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: bold;
+            opacity: 0.8;
+            transition: opacity 0.2s;
         }
-        @keyframes loader-bars-fade {
-            0% { opacity: 1; }
-            100% { opacity: 0.1; }
+        .loader-home-link:hover {
+            opacity: 1;
+            color: #0d6efd;
         }
-        /* Posicionamento dos 12 traços conforme a imagem */
-        .loader span:nth-child(1)  { transform: rotate(0deg) translate(0, -20px); animation-delay: 0s; }
-        .loader span:nth-child(2)  { transform: rotate(30deg) translate(0, -20px); animation-delay: -0.9167s; }
-        .loader span:nth-child(3)  { transform: rotate(60deg) translate(0, -20px); animation-delay: -0.8333s; }
-        .loader span:nth-child(4)  { transform: rotate(90deg) translate(0, -20px); animation-delay: -0.75s; }
-        .loader span:nth-child(5)  { transform: rotate(120deg) translate(0, -20px); animation-delay: -0.6667s; }
-        .loader span:nth-child(6)  { transform: rotate(150deg) translate(0, -20px); animation-delay: -0.5833s; }
-        .loader span:nth-child(7)  { transform: rotate(180deg) translate(0, -20px); animation-delay: -0.5s; }
-        .loader span:nth-child(8)  { transform: rotate(210deg) translate(0, -20px); animation-delay: -0.4167s; }
-        .loader span:nth-child(9)  { transform: rotate(240deg) translate(0, -20px); animation-delay: -0.3333s; }
-        .loader span:nth-child(10) { transform: rotate(270deg) translate(0, -20px); animation-delay: -0.25s; }
-        .loader span:nth-child(11) { transform: rotate(300deg) translate(0, -20px); animation-delay: -0.1667s; }
-        .loader span:nth-child(12) { transform: rotate(330deg) translate(0, -20px); animation-delay: -0.0833s; }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.2); opacity: 0.7; }
+        @-webkit-keyframes spin {
+            0%   { -webkit-transform: rotate(0deg); transform: rotate(0deg); }
+            100% { -webkit-transform: rotate(360deg); transform: rotate(360deg); }
+        }
+        @keyframes spin {
+            0%   { -webkit-transform: rotate(0deg); transform: rotate(0deg); }
+            100% { -webkit-transform: rotate(360deg); transform: rotate(360deg); }
         }
 
         /* Dark Mode fixes for headers */
@@ -111,10 +139,11 @@
 <body class="loading">
     <!-- Preloader -->
     <div id="preloader">
-        <div class="loader">
-            <span></span><span></span><span></span><span></span>
-            <span></span><span></span><span></span><span></span>
-            <span></span><span></span><span></span><span></span>
+        <div class="loader-container">
+            <div class="loader"></div>
+            <a href="{% url 'cal:home' %}" class="loader-home-link no-loader">
+                <i class="bi bi-house-door"></i> Voltar ao Início
+            </a>
         </div>
     </div>
     <!-- Navbar -->

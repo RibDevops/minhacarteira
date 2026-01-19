@@ -1,0 +1,251 @@
+1. Create HTML Markup
+01
+02
+03
+	
+<div id="loader-wrapper">
+    <div id="loader"></div>
+</div>
+
+These two containers are all we need for start.
+
+#loader-wrapper will be a full width and height div covering the whole screen and #loader will be our spinning elements in the middle of the screen.
+2. Position our preloader
+CSS3 spinning preloader
+01
+02
+03
+04
+05
+06
+07
+08
+09
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+	
+#loader-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+}
+#loader {
+    display: block;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    width: 150px;
+    height: 150px;
+    margin: -75px 0 0 -75px;
+ 
+    border: 3px solid #3498db;
+    z-index: 1500;
+}
+
+#loader-wrapper is set to position fixed with a very high z-index to appear on top of any content.
+
+#loader is positioned in the middle of the screen by left: 50%; top: 50%, but to position the center of this div in the middle of the screen we are setting negative top and left margin -75px.
+
+75px is a half of the #loader width and height.
+3. Create a nested elements
+
+Now lets create another two nested elements for our inner circles.
+01
+02
+03
+04
+05
+06
+07
+08
+09
+10
+11
+12
+13
+14
+15
+16
+17
+18
+	
+#loader:before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border: 3px solid #e74c3c;
+}
+#loader:after {
+    content: "";
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+    border: 3px solid #f9c922;
+}
+
+We are using :before and :after CSS3 pseudo elements and positioning them absolute.
+
+As you can see, we are not defining any width or height on the nested squares. We are simply setting the top, left, right and bottom offset.
+
+That gives us more flexibility.
+
+If we decide to change the size of #loader later on, our nested elements would scale automatically.
+4. Turn our squares into lines
+CSS3 spinning preloader
+
+To turn all our squares into lines we will simply change the border to transparent and only set the border-top-color.
+01
+02
+03
+04
+05
+06
+07
+08
+09
+10
+11
+12
+13
+	
+/* change border to transparent and set only border-top to a solid color */
+#loader {
+    border: 3px solid transparent;
+    border-top-color: #3498db;
+}
+#loader:before {
+    border: 3px solid transparent;
+    border-top-color: #e74c3c;
+}
+#loader:after {
+    border: 3px solid transparent;
+    border-top-color: #f9c922;
+}
+
+This will keep all the other sides of the squares transparent.
+
+Next we’ll add some border-radius to get a more circular shape to our preloader. Add the following to each of the elements.
+01
+02
+03
+04
+05
+06
+07
+08
+09
+	
+#loader {
+    border-radius: 50%;
+}
+#loader:before {
+    border-radius: 50%;
+}
+#loader:after {
+    border-radius: 50%;
+}
+
+This will bend our lines and we can finally add some animations.
+5. Add CSS3 animation
+CSS3 spinning preloader
+
+We will add the animation to each of our element and use two keyframes to rotate each line by 360deg.
+01
+02
+03
+04
+05
+06
+07
+08
+09
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+	
+/* copy and paste the animation inside all 3 elements */
+/* #loader, #loader:before, #loader:after */
+-webkit-animation: spin 1.5s linear infinite;
+animation: spin 1.5s linear infinite;
+ 
+/* include this only once */
+@-webkit-keyframes spin {
+    0%   {
+        -webkit-transform: rotate(0deg);  /* Chrome, Opera 15+, Safari 3.1+ */
+        -ms-transform: rotate(0deg);  /* IE 9 */
+        transform: rotate(0deg);  /* Firefox 16+, IE 10+, Opera */
+    }
+    100% {
+        -webkit-transform: rotate(360deg);  /* Chrome, Opera 15+, Safari 3.1+ */
+        -ms-transform: rotate(360deg);  /* IE 9 */
+        transform: rotate(360deg);  /* Firefox 16+, IE 10+, Opera */
+    }
+}
+@keyframes spin {
+    0%   {
+        -webkit-transform: rotate(0deg);  /* Chrome, Opera 15+, Safari 3.1+ */
+        -ms-transform: rotate(0deg);  /* IE 9 */
+        transform: rotate(0deg);  /* Firefox 16+, IE 10+, Opera */
+    }
+    100% {
+        -webkit-transform: rotate(360deg);  /* Chrome, Opera 15+, Safari 3.1+ */
+        -ms-transform: rotate(360deg);  /* IE 9 */
+        transform: rotate(360deg);  /* Firefox 16+, IE 10+, Opera */
+    }
+}
+
+We will also set the animation ease to linear and tweak the duration of the animations for #loader and #loader:before.
+01
+02
+03
+04
+05
+06
+07
+08
+	
+#loader {
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+}
+#loader:before {
+    -webkit-animation: spin 3s linear infinite;
+    animation: spin 3s linear infinite;
+}
+
+This creates the final effect when all 3 lines come together every few seconds.
