@@ -44,6 +44,11 @@
                       <i class="bi bi-info-circle"></i> O valor será registrado no próximo mês.
                     </div>
                   {% endif %}
+                  {% if field.name == 'parcelas' %}
+                    <div class="form-text text-warning small fw-bold">
+                      <i class="bi bi-info-circle"></i> O valor será registrado no próximo mês.
+                    </div>
+                  {% endif %}
                   {% if field.help_text %}
                     <div class="form-text small opacity-75">{{ field.help_text }}</div>
                   {% endif %}
