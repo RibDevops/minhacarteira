@@ -170,6 +170,13 @@ class TransacaoForm(ModelForm):
             'placeholder': 'ex: Mercado, Salário, Bitcoin',
             'class': 'form-control'
         })
+
+        if 'valor' in self.fields:
+            self.fields['valor'].widget.attrs.update({
+                'placeholder': 'Valor da parcela (ex: 100,00)',
+                'class': 'form-control'
+            })
+            self.fields['valor'].help_text = "Informe o valor de cada parcela individualmente."
         
         for field in ['valor', 'tipo', 'parcelas', 'categoria', 'cartao', 'observacoes']:
             if field in self.fields:

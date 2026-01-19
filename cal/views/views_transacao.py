@@ -140,7 +140,7 @@ def transacao_view(request):
         except (InvalidOperation, ValueError):
             valor_total = Decimal('0')
 
-        valor_parcela = (valor_total / parcelas).quantize(Decimal("0.01"))
+        valor_parcela = valor_total.quantize(Decimal("0.01"))
         import uuid
         grupo_id = str(uuid.uuid4()) if parcelas > 1 else None
 
