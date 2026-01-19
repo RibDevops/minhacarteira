@@ -39,6 +39,11 @@
                 <div class="col-12 col-md-6 mb-2" id="div_{{ field.name }}">
                   <label for="{{ field.id_for_label }}" class="form-label fw-bold small text-muted text-uppercase mb-1">{{ field.label }}</label>
                   {{ field }}
+                  {% if field.name == 'cartao' %}
+                    <div class="form-text text-warning small fw-bold">
+                      <i class="bi bi-info-circle"></i> O valor será registrado no próximo mês.
+                    </div>
+                  {% endif %}
                   {% if field.help_text %}
                     <div class="form-text small opacity-75">{{ field.help_text }}</div>
                   {% endif %}
