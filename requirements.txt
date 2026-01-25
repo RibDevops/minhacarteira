@@ -12,3 +12,10 @@ Django==5.2.10
 djangorestframework==3.16.1
 python-dateutil==2.9.0.post0
 python-decouple==3.8
+cffi
+cryptography==46.0.3
+dj-database-url
+Django==5.2.10
+djangorestframework==3.16.1
+python-dateutil==2.9.0.post0
+python-decouple==3.8
