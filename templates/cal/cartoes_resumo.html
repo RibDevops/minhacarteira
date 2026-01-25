@@ -11,13 +11,27 @@
         </div>
     </div>
 
+    <div class="d-flex justify-content-center mb-4">
+        <div class="btn-group shadow-sm">
+            <a href="?mes={{ mes_anterior.month }}&ano={{ mes_anterior.year }}" class="btn btn-outline-primary border-2 btn-sm">
+                <i class="bi bi-chevron-left"></i> {{ mes_anterior|date:"M/Y" }}
+            </a>
+            <span class="btn btn-primary fw-bold px-4 d-flex align-items-center btn-sm">
+                {{ mes_atual|date:"F Y"|upper }}
+            </span>
+            <a href="?mes={{ mes_proximo.month }}&ano={{ mes_proximo.year }}" class="btn btn-outline-primary border-2 btn-sm">
+                {{ mes_proximo|date:"M/Y" }} <i class="bi bi-chevron-right"></i>
+            </a>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-lg-8 mx-auto">
             <div class="mt-2">
                 <h5 class="mb-3">Meus Cartões</h5>
                 {% for c in cartoes %}
                 <div class="card border-0 shadow-sm mb-3 p-3 {% if not c.is_active %}opacity-50 bg-light{% endif %}">
-                    <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
                         <div>
                             <h6 class="fw-bold mb-1">{{ c.nome }}</h6>
                             <small class="text-muted d-block">
@@ -46,14 +60,19 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Mini Gráfico Individual -->
+                    <div class="mt-2" style="height: 100px;">
+                        <canvas id="chart-{{ c.id }}"></canvas>
+                    </div>
                 </div>
                 {% empty %}
                 <p class="text-center text-muted py-4">Nenhum cartão cadastrado.</p>
                 {% endfor %}
             </div>
 
+            <!-- Dashboard consolidado movido para baixo ou removido se preferir individual -->
             <div class="card border-0 shadow-sm p-4 mt-4">
-                <h5 class="card-title text-center mb-4">Dashboard: Consumo Mensal vs Limite</h5>
+                <h5 class="card-title text-center mb-4">Dashboard Consolidado: Consumo vs Limite</h5>
                 <canvas id="chartCartoes" height="250"></canvas>
             </div>
         </div>
@@ -62,8 +81,63 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const ctx = document.getElementById('chartCartoes').getContext('2d');
-    new Chart(ctx, {
+    // Gráficos Individuais
+    {% for c in cartoes %}
+    (function() {
+        const ctx = document.getElementById('chart-{{ c.id }}').getContext('2d');
+        // Buscando o índice do cartão nos dados globais
+        const labels = {{ labels|safe }};
+        const idx = labels.indexOf('{{ c.nome }}');
+        const consumo = {{ consumo|safe }}[idx];
+        const limite = {{ limites|safe }}[idx];
+        
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Consumo'],
+                datasets: [
+                    {
+                        label: 'Gasto',
+                        data: [consumo],
+                        backgroundColor: '#F44336',
+                        borderRadius: 5,
+                        barThickness: 20
+                    },
+                    {
+                        label: 'Limite',
+                        data: [limite],
+                        backgroundColor: '#e9ecef',
+                        borderRadius: 5,
+                        barThickness: 20
+                    }
+                ]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { beginAtZero: true, display: false },
+                    y: { display: false, stacked: true }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': R$ ' + context.raw.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    })();
+    {% endfor %}
+
+    // Dashboard Consolidado
+    const ctxConsolidado = document.getElementById('chartCartoes').getContext('2d');
+    new Chart(ctxConsolidado, {
         type: 'bar',
         data: {
             labels: {{ labels|safe }},

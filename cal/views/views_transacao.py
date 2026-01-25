@@ -399,8 +399,17 @@ def cartao_alternar_status(request, pk):
 @login_required
 def cartoes_resumo_view(request):
     """
-    View simples para exibir o consumo total de cada cartão do usuário.
+    View para exibir o consumo total de cada cartão do usuário com suporte a filtro de mês/ano.
     """
+    hoje = date.today()
+    try:
+        ano_raw = request.GET.get('ano', hoje.year)
+        mes_raw = request.GET.get('mes', hoje.month)
+        ano = int(float(str(ano_raw).replace('.', '').replace(',', '')))
+        mes = int(float(str(mes_raw).replace('.', '').replace(',', '')))
+    except (ValueError, TypeError):
+        ano, mes = hoje.year, hoje.month
+
     cartoes = Cartao.objects.filter(user=request.user)
     
     labels = []
@@ -408,13 +417,12 @@ def cartoes_resumo_view(request):
     limite_valores = []
     
     for c in cartoes:
-        # Soma transações do mês atual vinculadas a este cartão
-        hoje = date.today()
+        # Soma transações do mês/ano filtrado vinculadas a este cartão
         transacoes_cartao = Transacao.objects.filter(
             user=request.user,
             cartao=c,
-            data__month=hoje.month,
-            data__year=hoje.year
+            data__month=mes,
+            data__year=ano
         ).select_related('tipo')
         
         consumo = sum((t.valor_decimal for t in transacoes_cartao), Decimal('0'))
@@ -428,6 +436,9 @@ def cartoes_resumo_view(request):
         'consumo': consumo_valores,
         'limites': limite_valores,
         'cartoes': cartoes,
+        'mes_atual': date(ano, mes, 1),
+        'mes_anterior': date(ano, mes, 1) - relativedelta(months=1),
+        'mes_proximo': date(ano, mes, 1) + relativedelta(months=1),
     }
     return render(request, 'cal/cartoes_resumo.html', contexto)
 
