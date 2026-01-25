@@ -22,6 +22,18 @@
         </div>
     </div>
 
+    <!-- Card de Saldo Mensal Centralizado -->
+    <div class="row mb-4 justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm {% if saldo_total >= 0 %}bg-primary{% else %}bg-warning text-dark{% endif %} text-white">
+                <div class="card-body py-4 text-center">
+                    <h6 class="card-title opacity-75 mb-1">Saldo Mensal</h6>
+                    <h2 class="fw-bold mb-0">R$ {{ saldo_total|floatformat:2 }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Filtros -->
     <div class="card border-0 shadow-sm mb-4 bg-light">
         <div class="card-body">
