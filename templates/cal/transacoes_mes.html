@@ -28,7 +28,7 @@
     </div>
 
     <!-- Card de Saldo Mensal Centralizado -->
-    <div class="row mb-4 justify-content-center">
+    <div class="row mb-2 justify-content-center">
         <div class="col-md-5 col-lg-3">
             <div class="card border-0 shadow-sm {% if saldo_total >= 0 %}bg-primary{% else %}bg-warning text-dark{% endif %} text-white">
                 <div class="card-body py-2 text-center">
@@ -40,20 +40,20 @@
     </div>
 
     <!-- Cards de Resumo -->
-    <div class="row mb-4 g-3">
-        <div class="col-md-6">
-            <div class="card border-0 shadow-sm bg-success text-white">
-                <div class="card-body py-4">
-                    <h6 class="card-title opacity-75 mb-0">Total Créditos</h6>
-                    <h3 class="fw-bold mb-0">R$ {{ total_creditos|floatformat:2 }}</h3>
+    <div class="row mb-4 g-2">
+        <div class="col-6">
+            <div class="card border-0 shadow-sm bg-success text-white h-100">
+                <div class="card-body py-2 text-center">
+                    <small class="card-title opacity-75 mb-0" style="font-size: 0.8rem;">Total Créditos</small>
+                    <h5 class="fw-bold mb-0">R$ {{ total_creditos|floatformat:2 }}</h5>
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="card border-0 shadow-sm bg-danger text-white">
-                <div class="card-body py-4">
-                    <h6 class="card-title opacity-75 mb-0">Total Débitos</h6>
-                    <h3 class="fw-bold mb-0">R$ {{ total_debitos|floatformat:2 }}</h3>
+        <div class="col-6">
+            <div class="card border-0 shadow-sm bg-danger text-white h-100">
+                <div class="card-body py-2 text-center">
+                    <small class="card-title opacity-75 mb-0" style="font-size: 0.8rem;">Total Débitos</small>
+                    <h5 class="fw-bold mb-0">R$ {{ total_debitos|floatformat:2 }}</h5>
                 </div>
             </div>
         </div>
