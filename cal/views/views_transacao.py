@@ -465,6 +465,11 @@ def listar_transacoes(request):
     tipos = Tipo.objects.all()
     categorias = Categoria.objects.all()
 
+    # Totais para o card de saldo
+    total_creditos = transacoes.filter(tipo__codigo='C').aggregate(Sum('valor'))['valor__sum'] or 0
+    total_debitos = transacoes.filter(tipo__codigo='D').aggregate(Sum('valor'))['valor__sum'] or 0
+    saldo_total = total_creditos - total_debitos
+
     contexto = {
         'transacoes': transacoes,
         'tipos': tipos,
@@ -472,6 +477,7 @@ def listar_transacoes(request):
         'mes_atual': date(ano, mes, 1),
         'mes_anterior': date(ano, mes, 1) - relativedelta(months=1),
         'mes_proximo': date(ano, mes, 1) + relativedelta(months=1),
+        'saldo_total': saldo_total,
     }
 
     return render(request, 'cal/lista_transacoes.html', contexto)
