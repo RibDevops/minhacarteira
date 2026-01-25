@@ -27,33 +27,29 @@
         </div>
     </div>
 
-    <!-- Card de Saldo Mensal Centralizado -->
-    <div class="row mb-2 justify-content-center">
+    <!-- Cards de Resumo -->
+    <div class="row mb-4 g-2 justify-content-center">
         <div class="col-md-5 col-lg-3">
-            <div class="card border-0 shadow-sm {% if saldo_total >= 0 %}bg-primary{% else %}bg-warning text-dark{% endif %} text-white">
-                <div class="card-body py-2 text-center">
+            <div class="card border-0 shadow-sm {% if saldo_total >= 0 %}bg-primary{% else %}bg-warning text-dark{% endif %} text-white h-100">
+                <div class="card-body py-2 text-center d-flex flex-column justify-content-center">
                     <small class="card-title opacity-75 mb-0" style="font-size: 0.8rem;">Saldo Mensal</small>
                     <h4 class="fw-bold mb-0">R$ {{ saldo_total|floatformat:2 }}</h4>
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Cards de Resumo -->
-    <div class="row mb-4 g-2">
-        <div class="col-6">
+        <div class="col-md-5 col-lg-3">
             <div class="card border-0 shadow-sm bg-success text-white h-100">
-                <div class="card-body py-2 text-center">
+                <div class="card-body py-2 text-center d-flex flex-column justify-content-center">
                     <small class="card-title opacity-75 mb-0" style="font-size: 0.8rem;">Total Créditos</small>
-                    <h5 class="fw-bold mb-0">R$ {{ total_creditos|floatformat:2 }}</h5>
+                    <h4 class="fw-bold mb-0">R$ {{ total_creditos|floatformat:2 }}</h4>
                 </div>
             </div>
         </div>
-        <div class="col-6">
+        <div class="col-md-5 col-lg-3">
             <div class="card border-0 shadow-sm bg-danger text-white h-100">
-                <div class="card-body py-2 text-center">
+                <div class="card-body py-2 text-center d-flex flex-column justify-content-center">
                     <small class="card-title opacity-75 mb-0" style="font-size: 0.8rem;">Total Débitos</small>
-                    <h5 class="fw-bold mb-0">R$ {{ total_debitos|floatformat:2 }}</h5>
+                    <h4 class="fw-bold mb-0">R$ {{ total_debitos|floatformat:2 }}</h4>
                 </div>
             </div>
         </div>
