@@ -149,12 +149,13 @@ DEFAULT_FROM_EMAIL = 'no-reply@minhacarteira.com'
 
 
 LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'home'
 LOGIN_REDIRECT_URL = '/'
 
-import os
-
-import os  # certifique-se de importar o os
+# Garante que a pasta de logs exista. Sem isso, o Django falha na
+# inicialização (django.setup() levanta ValueError) em qualquer clone novo
+# do repositório, porque o handler 'file' abaixo aponta para um arquivo
+# dentro de uma pasta que nunca é criada.
+os.makedirs(os.path.join(BASE_DIR, 'logs'), exist_ok=True)
 
 LOGGING = {
     'version': 1,

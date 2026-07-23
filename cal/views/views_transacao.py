@@ -1,15 +1,16 @@
-from datetime import date, datetime
+from datetime import date
 from collections import defaultdict
 from decimal import Decimal, InvalidOperation
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Sum
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy, reverse
-from django.utils.timezone import make_aware
+from django.urls import reverse_lazy
 from django.views.generic.edit import UpdateView
 from dateutil.relativedelta import relativedelta
 from ..forms import TransacaoForm, CartaoForm
 from ..models import Categoria, Tipo, Transacao, Cartao
+from ..utils import parse_mes_ano, intervalo_do_mes
 from django.contrib import messages
 from django.views.decorators.http import require_POST
 
@@ -94,6 +95,110 @@ def transacao_editar(request, pk):
     })
 
 
+@login_required
+@require_POST
+def transacao_rapida(request):
+    """
+    Endpoint enxuto para o modal de registro rápido (menos cliques).
+
+    Campos essenciais: título, valor, tipo, categoria (opcional).
+    Campos avançados (opcionais, ficam escondidos atrás de um "+ opções" no
+    modal): cartão e parcelas. Quando informados, reaproveita a mesma regra
+    de fatura usada no formulário completo (calcular_proxima_fatura) para
+    manter os dois fluxos consistentes.
+    """
+    titulo = (request.POST.get('titulo') or '').strip()
+    tipo_id = request.POST.get('tipo')
+    categoria_id = request.POST.get('categoria') or None
+    cartao_id = request.POST.get('cartao') or None
+    parcelas_raw = request.POST.get('parcelas') or '1'
+
+    erros = []
+    if not titulo:
+        erros.append('Informe um título para o lançamento.')
+
+    valor_input = (request.POST.get('valor') or '').replace(',', '.')
+    try:
+        valor_total = Decimal(valor_input).quantize(Decimal('0.01'))
+        if valor_total <= 0:
+            erros.append('Informe um valor maior que zero.')
+    except (InvalidOperation, ValueError):
+        valor_total = None
+        erros.append('Informe um valor válido.')
+
+    tipo = Tipo.objects.filter(pk=tipo_id).first() if tipo_id else None
+    if not tipo:
+        erros.append('Selecione o tipo (crédito ou débito).')
+
+    categoria = None
+    if categoria_id:
+        # Sempre filtrado por user: nunca aceitar uma categoria de outro usuário
+        # vinda do POST (o mesmo cuidado do bug de IDOR corrigido antes).
+        categoria = Categoria.objects.filter(pk=categoria_id, user=request.user).first()
+
+    cartao = None
+    if cartao_id:
+        cartao = Cartao.objects.filter(pk=cartao_id, user=request.user, is_active=True).first()
+        if not cartao:
+            erros.append('Cartão inválido.')
+
+    try:
+        parcelas = int(parcelas_raw)
+        if parcelas < 1:
+            raise ValueError
+    except (ValueError, TypeError):
+        parcelas = 1
+        erros.append('Número de parcelas inválido.')
+
+    if erros:
+        return JsonResponse({'status': 'error', 'errors': erros}, status=400)
+
+    hoje = date.today()
+    valor_parcela = valor_total.quantize(Decimal('0.01'))
+
+    # Mesma regra do formulário completo: lançamento em cartão sempre cai
+    # na fatura do mês seguinte, independente do dia da compra.
+    data_base_parcela = calcular_proxima_fatura(hoje) if cartao else hoje
+
+    import uuid
+    grupo_id = str(uuid.uuid4()) if parcelas > 1 else None
+
+    transacoes_criadas = []
+    for i in range(parcelas):
+        data_final_parcela = data_base_parcela + relativedelta(months=i)
+        transacoes_criadas.append(Transacao.objects.create(
+            user=request.user,
+            tipo=tipo,
+            cartao=cartao,
+            categoria=categoria,
+            titulo=f"{titulo} ({i + 1}/{parcelas})" if parcelas > 1 else titulo,
+            valor=valor_parcela,
+            data=data_final_parcela,
+            parcelas=parcelas,
+            data_fim=data_base_parcela + relativedelta(months=parcelas - 1) if parcelas > 1 else None,
+            grupo_id=grupo_id,
+        ))
+
+    primeira = transacoes_criadas[0]
+    if parcelas > 1:
+        mensagem = f'"{titulo}" registrado em {parcelas}x de R$ {valor_parcela}!'
+    else:
+        mensagem = f'"{titulo}" registrado com sucesso!'
+
+    return JsonResponse({
+        'status': 'success',
+        'message': mensagem,
+        'transacao': {
+            'id': primeira.id,
+            'titulo': titulo,
+            'valor': str(valor_parcela),
+            'tipo_codigo': tipo.codigo,
+            'data': primeira.data.strftime('%d/%m/%Y'),
+            'parcelas': parcelas,
+        }
+    })
+
+
 def calcular_proxima_fatura(data_compra, dia_fechamento=None):
     """
     Regra de Negócio Simplificada:
@@ -105,18 +210,6 @@ def calcular_proxima_fatura(data_compra, dia_fechamento=None):
     - Compra em Fevereiro (qualquer dia) -> Lançamento em Março.
     """
     return date(data_compra.year, data_compra.month, 1) + relativedelta(months=1)
-
-def testar_logica_parcelas():
-    # Qualquer dia de Janeiro -> Fevereiro
-    jan_01 = date(2024, 1, 1)
-    res = calcular_proxima_fatura(jan_01)
-    assert res.month == 2, f"Erro: 01/01 deveria ser Fev (2), veio {res.month}"
-    
-    jan_31 = date(2024, 1, 31)
-    res_fim = calcular_proxima_fatura(jan_31)
-    assert res_fim.month == 2, f"Erro: 31/01 deveria ser Fev (2), veio {res_fim.month}"
-    
-    print("Logica simplificada (Mês + 1) validada com sucesso!")
 
 @login_required
 def transacao_view(request):
@@ -176,30 +269,31 @@ def transacao_view(request):
     return render(request, 'cal/transacao_form.html', {'form': form})
 
 
-def get_absolute_url(self):
-        return reverse('transacao_editar', args=[self.id])
+class TransacaoUpdateView(LoginRequiredMixin, UpdateView):
+    """
+    View acessível em /transacao/<pk>/editar/ (rota 'cal:transacao_update').
 
-
-
-class TransacaoUpdateView(UpdateView):
+    IMPORTANTE: get_queryset() é obrigatório aqui. Sem ele, o UpdateView usa
+    Transacao.objects.all() por padrão, permitindo que qualquer usuário logado
+    edite a transação de QUALQUER outro usuário apenas trocando o pk na URL
+    (falha de IDOR - Insecure Direct Object Reference).
+    """
     model = Transacao
     fields = ['tipo', 'titulo', 'valor', 'data', 'parcelas', 'observacoes']
-    template_name = 'cal/transacao_form.html'  # crie esse template se ainda não existir
-    success_url = reverse_lazy('cal:calendar')  # ou outra URL para onde redirecionar depois da edição
+    template_name = 'cal/transacao_form.html'
+    success_url = reverse_lazy('cal:transacoes_mes')
+
+    def get_queryset(self):
+        return Transacao.objects.filter(user=self.request.user)
+
 
 import csv
 from django.http import HttpResponse
 
 @login_required
 def exportar_transacoes_csv(request):
-    try:
-        ano = int(request.GET.get('ano', date.today().year))
-        mes = int(request.GET.get('mes', date.today().month))
-    except (ValueError, TypeError):
-        ano, mes = date.today().year, date.today().month
-
-    data_inicio = make_aware(datetime(ano, mes, 1))
-    data_fim = make_aware(datetime(ano, mes, 1) + relativedelta(months=1))
+    ano, mes = parse_mes_ano(request)
+    data_inicio, data_fim = intervalo_do_mes(ano, mes)
 
     transacoes = Transacao.objects.filter(
         user=request.user,
@@ -228,16 +322,9 @@ def exportar_transacoes_csv(request):
 
 @login_required
 def transacoes_mes_view(request):
-    try:
-        ano = int(str(request.GET.get('ano', date.today().year)).replace('.', '').replace(',', ''))
-        mes = int(str(request.GET.get('mes', date.today().month)).replace('.', '').replace(',', ''))
-    except (ValueError, TypeError):
-        ano, mes = date.today().year, date.today().month
+    ano, mes = parse_mes_ano(request)
+    data_inicio, data_fim = intervalo_do_mes(ano, mes)
 
-    data_inicio = make_aware(datetime(ano, mes, 1))
-    data_fim = make_aware(datetime(ano, mes, 1) + relativedelta(months=1))
-
-    
     transacoes = Transacao.objects.filter(
         user=request.user,
         data__gte=data_inicio,
@@ -284,17 +371,8 @@ def transacoes_mes_view(request):
 
 @login_required
 def resumo_categoria_view(request):
-    try:
-        ano_raw = request.GET.get('ano', date.today().year)
-        mes_raw = request.GET.get('mes', date.today().month)
-        
-        ano = int(float(str(ano_raw).replace('.', '').replace(',', '')))
-        mes = int(float(str(mes_raw).replace('.', '').replace(',', '')))
-    except (ValueError, TypeError):
-        ano, mes = date.today().year, date.today().month
-
-    data_inicio = make_aware(datetime(ano, mes, 1))
-    data_fim = make_aware(datetime(ano, mes, 1) + relativedelta(months=1))
+    ano, mes = parse_mes_ano(request)
+    data_inicio, data_fim = intervalo_do_mes(ano, mes)
 
     transacoes = Transacao.objects.filter(
         user=request.user,
@@ -401,14 +479,7 @@ def cartoes_resumo_view(request):
     """
     View para exibir o consumo total de cada cartão do usuário com suporte a filtro de mês/ano.
     """
-    hoje = date.today()
-    try:
-        ano_raw = request.GET.get('ano', hoje.year)
-        mes_raw = request.GET.get('mes', hoje.month)
-        ano = int(float(str(ano_raw).replace('.', '').replace(',', '')))
-        mes = int(float(str(mes_raw).replace('.', '').replace(',', '')))
-    except (ValueError, TypeError):
-        ano, mes = hoje.year, hoje.month
+    ano, mes = parse_mes_ano(request)
 
     cartoes = Cartao.objects.filter(user=request.user)
     
@@ -444,21 +515,9 @@ def cartoes_resumo_view(request):
 
 @login_required
 def listar_transacoes(request):
-    hoje = date.today()
-    
-    try:
-        ano_raw = request.GET.get('ano', hoje.year)
-        mes_raw = request.GET.get('mes', hoje.month)
-        
-        # Robust parsing for ano/mes (handle floats/strings)
-        ano = int(float(str(ano_raw).replace('.', '').replace(',', '')))
-        mes = int(float(str(mes_raw).replace('.', '').replace(',', '')))
-    except (ValueError, TypeError):
-        ano, mes = hoje.year, hoje.month
-    
-    data_inicio = make_aware(datetime(ano, mes, 1))
-    data_fim = make_aware(datetime(ano, mes, 1) + relativedelta(months=1))
-    
+    ano, mes = parse_mes_ano(request)
+    data_inicio, data_fim = intervalo_do_mes(ano, mes)
+
     transacoes = Transacao.objects.filter(
         user=request.user,
         data__gte=data_inicio,
@@ -473,8 +532,8 @@ def listar_transacoes(request):
     if categoria_filtro:
         transacoes = transacoes.filter(categoria_id=int(categoria_filtro))
 
-    tipos = Tipo.objects.all()
-    categorias = Categoria.objects.all()
+    tipos = Tipo.objects.all()  # Tipo (Crédito/Débito) é global do sistema, não pertence a um usuário
+    categorias = Categoria.get_for_user(request.user)
 
     # Totais para o card de saldo
     total_creditos = transacoes.filter(tipo__codigo='C').aggregate(Sum('valor'))['valor__sum'] or 0

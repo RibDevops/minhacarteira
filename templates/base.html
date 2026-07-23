@@ -179,6 +179,91 @@
     {% endblock %}
 
     {% if user.is_authenticated %}
+    <!-- Modal: Registro Rápido (menos cliques para lançar algo) -->
+    <div class="modal fade" id="modalRegistroRapido" tabindex="-1" aria-labelledby="modalRegistroRapidoLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <form id="formRegistroRapido" novalidate>
+            {% csrf_token %}
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalRegistroRapidoLabel"><i class="bi bi-lightning-charge-fill text-warning"></i> Registro Rápido</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+              <div id="quickAddErro" class="alert alert-danger d-none py-2 mb-3"></div>
+
+              <!-- Tipo: crédito ou débito, um toque só -->
+              <div class="btn-group w-100 mb-3" role="group" aria-label="Tipo">
+                {% for tipo in tipos_quick_add %}
+                <input type="radio" class="btn-check" name="quickTipo" id="quickTipo{{ tipo.id }}" value="{{ tipo.id }}" data-codigo="{{ tipo.codigo }}" {% if tipo.codigo == 'D' %}checked{% endif %}>
+                <label class="btn {% if tipo.codigo == 'C' %}btn-outline-success{% else %}btn-outline-danger{% endif %}" for="quickTipo{{ tipo.id }}">
+                  {% if tipo.codigo == 'C' %}<i class="bi bi-arrow-down-circle"></i> Entrada{% else %}<i class="bi bi-arrow-up-circle"></i> Saída{% endif %}
+                </label>
+                {% endfor %}
+              </div>
+
+              <!-- Valor primeiro: é o dado mais importante, auto-foco -->
+              <div class="mb-3">
+                <label for="quickValor" class="form-label">Valor</label>
+                <div class="input-group">
+                  <span class="input-group-text">R$</span>
+                  <input type="text" inputmode="decimal" class="form-control form-control-lg" id="quickValor" name="valor" placeholder="0,00" required autocomplete="off">
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="quickTitulo" class="form-label">Título</label>
+                <input type="text" class="form-control" id="quickTitulo" name="titulo" placeholder="ex: Mercado, Uber, Salário" required autocomplete="off">
+              </div>
+
+              <div class="mb-1">
+                <label for="quickCategoria" class="form-label">Categoria <span class="text-muted">(opcional)</span></label>
+                <select class="form-select" id="quickCategoria" name="categoria">
+                  <option value="">Sem categoria</option>
+                  {% for cat in categorias_quick_add %}
+                  <option value="{{ cat.id }}">{{ cat.nome }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+
+              <!-- Opções avançadas: escondidas por padrão pra não atrapalhar quem só quer registrar rápido -->
+              <button class="btn btn-sm btn-link px-0 mt-2" type="button" data-bs-toggle="collapse" data-bs-target="#quickOpcoesAvancadas" aria-expanded="false" aria-controls="quickOpcoesAvancadas">
+                <i class="bi bi-plus-slash-minus"></i> <span id="quickOpcoesAvancadasLabel">Opções avançadas (cartão, parcelas)</span>
+              </button>
+              <div class="collapse" id="quickOpcoesAvancadas">
+                <div class="row g-2 mt-1">
+                  <div class="col-7">
+                    <label for="quickCartao" class="form-label">Cartão <span class="text-muted">(opcional)</span></label>
+                    <select class="form-select" id="quickCartao" name="cartao">
+                      <option value="">Sem cartão</option>
+                      {% for cartao in cartoes_quick_add %}
+                      <option value="{{ cartao.id }}">{{ cartao.nome }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <div class="col-5">
+                    <label for="quickParcelas" class="form-label">Parcelas</label>
+                    <input type="number" min="1" max="60" class="form-control" id="quickParcelas" name="parcelas" value="1">
+                  </div>
+                </div>
+                {% if not cartoes_quick_add %}
+                <div class="form-text mt-1">Você ainda não tem cartões cadastrados. <a href="{% url 'cal:cartao_novo' %}">Cadastrar um cartão</a>.</div>
+                {% endif %}
+              </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+              <a href="{% url 'cal:transacao_nova' %}" class="btn btn-link btn-sm text-muted">Precisa de parcelas ou cartão? Formulário completo</a>
+              <button type="submit" class="btn btn-primary" id="quickAddSubmit">
+                <i class="bi bi-check-lg"></i> Registrar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if user.is_authenticated %}
    <!-- Botões Flutuantes -->
 <div id="fab-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 1050;">
   <!-- Botão principal -->
@@ -206,13 +291,19 @@
       <i class="bi bi-list-ul"></i>
     </a>
 
+    <!-- Assinaturas / Recorrências -->
+    <a href="{% url 'cal:recorrencia_listar' %}" class="btn btn-warning shadow btn-fab mb-2">
+      <span class="fab-label">Assinaturas</span>
+      <i class="bi bi-arrow-repeat"></i>
+    </a>
+
     
 
-    <!-- Nova despesa -->
-    <a href="{% url 'cal:transacao_nova' %}" class="btn btn-danger shadow btn-fab mb-2">
+    <!-- Nova despesa (registro rápido, sem sair da página) -->
+    <button type="button" class="btn btn-danger shadow btn-fab mb-2" data-bs-toggle="modal" data-bs-target="#modalRegistroRapido">
       <span class="fab-label">Novo Lançamento</span>
       <i class="bi bi-plus-circle"></i>
-    </a>
+    </button>
       <!-- Home -->
       <a href="{% url 'cal:home' %}" class="btn btn-info shadow btn-fab mb-2">
         <span class="fab-label">Home</span>
@@ -319,6 +410,103 @@ $(document).ready(function(){
   });
 });
 </script>
+
+{% if user.is_authenticated %}
+<script>
+$(document).ready(function () {
+  const modalEl = document.getElementById('modalRegistroRapido');
+  const form = document.getElementById('formRegistroRapido');
+  if (!modalEl || !form) return;
+
+  const erroBox = document.getElementById('quickAddErro');
+  const submitBtn = document.getElementById('quickAddSubmit');
+
+  // Ao abrir o modal: foco direto no valor (é o dado que a pessoa mais digita)
+  // e restaura a última categoria/tipo usados, pra não ter que escolher de novo toda vez.
+  modalEl.addEventListener('shown.bs.modal', function () {
+    document.getElementById('quickValor').focus();
+    erroBox.classList.add('d-none');
+
+    const ultimaCategoria = localStorage.getItem('quickAdd:ultimaCategoria');
+    if (ultimaCategoria) {
+      const sel = document.getElementById('quickCategoria');
+      if ([...sel.options].some(o => o.value === ultimaCategoria)) sel.value = ultimaCategoria;
+    }
+    const ultimoTipo = localStorage.getItem('quickAdd:ultimoTipo');
+    if (ultimoTipo) {
+      const radio = document.getElementById('quickTipo' + ultimoTipo);
+      if (radio) radio.checked = true;
+    }
+  });
+
+  // Atalho de teclado: tecla "n" abre o registro rápido de qualquer lugar da tela
+  // (sem estar dentro de um campo de texto, pra não atrapalhar quem está digitando).
+  document.addEventListener('keydown', function (e) {
+    const tag = (e.target.tagName || '').toLowerCase();
+    if (e.key === 'n' && tag !== 'input' && tag !== 'textarea' && tag !== 'select') {
+      e.preventDefault();
+      bootstrap.Modal.getOrCreateInstance(modalEl).show();
+    }
+  });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    erroBox.classList.add('d-none');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Registrando...';
+
+    const formData = new FormData(form);
+    // O grupo de radio se chama "quickTipo" na tela pra ficar claro, mas o backend espera "tipo"
+    formData.set('tipo', formData.get('quickTipo'));
+
+    fetch("{% url 'cal:transacao_rapida' %}", {
+      method: 'POST',
+      headers: { 'X-Requested-With': 'XMLHttpRequest' },
+      body: formData,
+    })
+      .then(async (res) => {
+        const data = await res.json();
+        if (!res.ok || data.status !== 'success') {
+          throw new Error((data.errors && data.errors.join(' ')) || 'Não foi possível registrar. Tente novamente.');
+        }
+        return data;
+      })
+      .then((data) => {
+        // Lembra a escolha pra próxima vez
+        const categoriaSelecionada = document.getElementById('quickCategoria').value;
+        if (categoriaSelecionada) localStorage.setItem('quickAdd:ultimaCategoria', categoriaSelecionada);
+        localStorage.setItem('quickAdd:ultimoTipo', formData.get('quickTipo'));
+
+        bootstrap.Modal.getOrCreateInstance(modalEl).hide();
+        form.reset();
+        const opcoesAvancadas = document.getElementById('quickOpcoesAvancadas');
+        bootstrap.Collapse.getOrCreateInstance(opcoesAvancadas, { toggle: false }).hide();
+
+        // Se a página tiver uma lista de transações do mês, recarrega pra já mostrar o novo lançamento.
+        // Caso contrário, só confirma com uma mensagem simples.
+        if (document.querySelector('[data-transacoes-lista]') || window.location.pathname.includes('transacoes')) {
+          window.location.reload();
+        } else {
+          const toastMsg = document.createElement('div');
+          toastMsg.className = 'alert alert-success position-fixed shadow';
+          toastMsg.style.cssText = 'top:20px; left:50%; transform:translateX(-50%); z-index:2000;';
+          toastMsg.textContent = data.message;
+          document.body.appendChild(toastMsg);
+          setTimeout(() => toastMsg.remove(), 3000);
+        }
+      })
+      .catch((err) => {
+        erroBox.textContent = err.message;
+        erroBox.classList.remove('d-none');
+      })
+      .finally(() => {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="bi bi-check-lg"></i> Registrar';
+      });
+  });
+});
+</script>
+{% endif %}
 
 </body>
 </html>

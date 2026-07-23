@@ -8,6 +8,98 @@ import locale
 import decimal
 
 
+def parse_mes_ano(request):
+    """
+    Lê 'ano' e 'mes' da querystring de forma robusta (aceita valores com
+    ponto/vírgula que às vezes chegam de inputs mal formatados) e cai no
+    mês/ano atual se algo vier inválido.
+
+    Centralizado aqui porque essa lógica estava duplicada (com o mesmo
+    try/except) em pelo menos 4 views diferentes — corrigir um bug ali
+    exigia lembrar de corrigir nos outros 3 lugares também.
+    """
+    hoje = date.today()
+    try:
+        ano_raw = request.GET.get('ano', hoje.year)
+        mes_raw = request.GET.get('mes', hoje.month)
+        ano = int(float(str(ano_raw).replace('.', '').replace(',', '')))
+        mes = int(float(str(mes_raw).replace('.', '').replace(',', '')))
+        if not (1 <= mes <= 12):
+            raise ValueError('mês fora do intervalo 1-12')
+    except (ValueError, TypeError):
+        ano, mes = hoje.year, hoje.month
+    return ano, mes
+
+
+def intervalo_do_mes(ano, mes):
+    """
+    Retorna (data_inicio, data_fim) como objetos `date` puros (sem hora/
+    timezone) para filtrar um DateField com data__gte / data__lt.
+
+    Importante: Transacao.data é um DateField, não DateTimeField. Usar
+    make_aware(datetime(...)) para filtrar um DateField mistura um
+    datetime "aware" (com timezone) numa comparação que não tem hora,
+    o que pode deslocar o dia 1 do mês para o mês errado dependendo do
+    TIME_ZONE do projeto. Comparar date com date evita essa ambiguidade.
+    """
+    from dateutil.relativedelta import relativedelta
+    data_inicio = date(ano, mes, 1)
+    data_fim = data_inicio + relativedelta(months=1)
+    return data_inicio, data_fim
+
+
+def gerar_transacoes_pendentes(user):
+    """
+    Gera as transações "faltando" de cada Recorrência ativa do usuário
+    (assinaturas, aluguel, etc).
+
+    Chamada a cada request autenticado (via context_processors.saldos_mensais),
+    então não depende de Celery/cron: se o usuário não abre o app por 2 meses,
+    ao voltar ele vê os lançamentos retroativos gerados na hora.
+
+    Limita o backfill a 3 meses atrás para não criar uma avalanche de
+    transações se uma recorrência antiga ficar "esquecida" por muito tempo.
+    """
+    from dateutil.relativedelta import relativedelta
+    from .models import Recorrencia, Transacao
+
+    hoje = date.today()
+    limite_backfill = (hoje.replace(day=1) - relativedelta(months=3))
+
+    recorrencias = Recorrencia.objects.filter(user=user, ativa=True).select_related('tipo', 'categoria', 'cartao')
+
+    for r in recorrencias:
+        inicio = r.data_inicio or r.created_at.date()
+        mes_cursor = max(inicio.replace(day=1), limite_backfill)
+        fim = r.data_fim or hoje
+
+        while mes_cursor <= fim and mes_cursor <= hoje.replace(day=1):
+            dia = min(r.dia_cobranca, calendar.monthrange(mes_cursor.year, mes_cursor.month)[1])
+            data_lancamento = date(mes_cursor.year, mes_cursor.month, dia)
+
+            ja_existe = Transacao.objects.filter(
+                recorrencia=r,
+                data__year=mes_cursor.year,
+                data__month=mes_cursor.month,
+            ).exists()
+
+            if not ja_existe and data_lancamento <= hoje:
+                Transacao.objects.create(
+                    user=user,
+                    tipo=r.tipo,
+                    categoria=r.categoria,
+                    cartao=r.cartao,
+                    titulo=r.titulo,
+                    valor=r.valor,
+                    data=data_lancamento,
+                    parcelas=1,
+                    observacoes=r.observacoes,
+                    recorrencia=r,
+                )
+
+            mes_cursor = mes_cursor + relativedelta(months=1)
+
+
 try:
     locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')
 except locale.Error:

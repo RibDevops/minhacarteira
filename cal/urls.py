@@ -1,6 +1,6 @@
 from django import views
 from django.urls import path
-from cal.views import views_categoria, views_dashboard
+from cal.views import views_categoria, views_dashboard, views_recorrencia
 from cal.views.views_cal import CalendarView
 from cal.views.views_user import *
 from cal.views.views_transacao import *
@@ -28,6 +28,7 @@ urlpatterns = [
     # Transações
     path('transacoes/', listar_transacoes, name='listar_transacoes'),
     path('transacao/nova/', transacao_view, name='transacao_nova'),
+    path('transacao/rapida/', transacao_rapida, name='transacao_rapida'),
     path('transacao/editar/<int:pk>/', transacao_editar, name='transacao_editar'),
     path('transacao/excluir/<int:pk>/', excluir_transacao, name='transacao_excluir'),
     path('excluir_transacao_lista/<int:pk>/', excluir_transacao_lista, name='excluir_transacao_lista'),
@@ -66,6 +67,13 @@ urlpatterns = [
     path('cartao/editar/<int:pk>/', cartao_editar, name='cartao_editar'),
     path('cartao/excluir/<int:pk>/', cartao_excluir, name='cartao_excluir'),
     path('cartao/alternar-status/<int:pk>/', cartao_alternar_status, name='cartao_alternar_status'),
+
+    # Recorrências (assinaturas, aluguel, mensalidades...)
+    path('recorrencias/', views_recorrencia.recorrencia_listar, name='recorrencia_listar'),
+    path('recorrencia/nova/', views_recorrencia.recorrencia_nova, name='recorrencia_nova'),
+    path('recorrencia/<int:pk>/editar/', views_recorrencia.recorrencia_editar, name='recorrencia_editar'),
+    path('recorrencia/<int:pk>/alternar-status/', views_recorrencia.recorrencia_alternar_status, name='recorrencia_alternar_status'),
+    path('recorrencia/<int:pk>/excluir/', views_recorrencia.recorrencia_excluir, name='recorrencia_excluir'),
     path('manual/', views_user.manual_publico, name='manual_publico'),
 
     # Metas

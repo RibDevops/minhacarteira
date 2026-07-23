@@ -225,6 +225,16 @@ class Transacao(BaseModel):
         verbose_name="ID do Grupo"
     )
 
+    recorrencia = models.ForeignKey(
+        'Recorrencia',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='transacoes_geradas',
+        verbose_name="Recorrência de origem",
+        help_text="Preenchido automaticamente quando esta transação foi gerada por uma assinatura/recorrência."
+    )
+
     @property
     def valor_decimal(self):
         return self.valor if self.valor is not None else Decimal('0')
@@ -236,3 +246,52 @@ class Transacao(BaseModel):
 
     def get_absolute_url(self):
         return reverse('cal:transacao_editar', args=[self.id])
+
+
+# ======================================================
+# RECORRÊNCIA (assinaturas, aluguel, mensalidades...)
+# ======================================================
+
+class Recorrencia(BaseModel):
+    """
+    Representa um lançamento que se repete todo mês (assinatura de
+    streaming, aluguel, academia, etc). Diferente de Transacao.parcelas,
+    que tem fim definido: uma Recorrencia não tem data de término a menos
+    que o usuário a desative.
+
+    As transações efetivas de cada mês são criadas sob demanda por
+    `cal.utils.gerar_transacoes_pendentes()` (chamada a cada request
+    autenticado), não por um cron/worker separado — mantém a infraestrutura
+    do projeto simples, sem depender de Celery/agendador externo.
+    """
+    tipo = models.ForeignKey(Tipo, on_delete=models.PROTECT, verbose_name="Tipo contábil")
+    categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True, blank=True)
+    cartao = models.ForeignKey(Cartao, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Cartão")
+
+    titulo = models.CharField(max_length=200, verbose_name="Título")
+    valor = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Valor mensal")
+
+    dia_cobranca = models.PositiveSmallIntegerField(
+        default=1,
+        verbose_name="Dia da cobrança",
+        help_text="Dia do mês em que o lançamento deve ser gerado (1-28, para evitar problemas com meses curtos)."
+    )
+
+    data_inicio = models.DateField(default=None, null=True, blank=True, verbose_name="Início")
+    data_fim = models.DateField(
+        null=True, blank=True, verbose_name="Repetir até",
+        help_text="Deixe em branco para repetir indefinidamente até ser desativada."
+    )
+    ativa = models.BooleanField(default=True, verbose_name="Ativa")
+    observacoes = models.CharField(max_length=500, null=True, blank=True)
+
+    class Meta:
+        verbose_name = "Recorrência"
+        verbose_name_plural = "Recorrências"
+        ordering = ['-ativa', 'titulo']
+
+    def __str__(self):
+        return f"{self.titulo} (R$ {self.valor}/mês)"
+
+    def get_absolute_url(self):
+        return reverse('cal:recorrencia_editar', args=[self.id])

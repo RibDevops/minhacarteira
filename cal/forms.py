@@ -1,6 +1,6 @@
 import calendar
 from datetime import date
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
@@ -9,7 +9,7 @@ from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 from django.forms.widgets import DateInput
 
-from .models import Categoria, MetaCategoria, Tipo, Transacao
+from .models import Categoria, MetaCategoria, Tipo, Transacao, Recorrencia
 
 class MetaCategoriaForm(forms.ModelForm):
     mes_ano = forms.ChoiceField(
@@ -189,6 +189,62 @@ class TransacaoForm(ModelForm):
             
             # Ajuste de exibição para simplificar Débito/Crédito
             self.fields['tipo'].label_from_instance = lambda obj: f"{'Crédito' if obj.codigo == 'C' else 'Débito'} - {obj.descricao}"
+
+
+class RecorrenciaForm(ModelForm):
+    valor = forms.CharField(
+        label="Valor mensal",
+        widget=forms.TextInput(attrs={'placeholder': '0,00'})
+    )
+
+    class Meta:
+        model = Recorrencia
+        fields = ['tipo', 'titulo', 'valor', 'categoria', 'cartao', 'dia_cobranca', 'data_inicio', 'data_fim', 'observacoes']
+        widgets = {
+            'data_inicio': DateInput(attrs={'type': 'date', 'class': 'form-control'}, format='%Y-%m-%d'),
+            'data_fim': DateInput(attrs={'type': 'date', 'class': 'form-control'}, format='%Y-%m-%d'),
+        }
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+
+        if not self.instance.pk:
+            self.initial['data_inicio'] = date.today().strftime('%Y-%m-%d')
+        elif self.instance.data_inicio:
+            self.initial['data_inicio'] = self.instance.data_inicio.strftime('%Y-%m-%d')
+        if self.instance.pk and self.instance.data_fim:
+            self.initial['data_fim'] = self.instance.data_fim.strftime('%Y-%m-%d')
+
+        self.fields['titulo'].widget.attrs.update({'class': 'form-control', 'placeholder': 'ex: Netflix, Aluguel, Academia'})
+        self.fields['valor'].widget.attrs.update({'class': 'form-control', 'placeholder': '0,00'})
+        self.fields['dia_cobranca'].widget.attrs.update({'class': 'form-control', 'min': 1, 'max': 28})
+        self.fields['observacoes'].widget.attrs.update({'class': 'form-control'})
+        for field in ['tipo', 'categoria', 'cartao']:
+            self.fields[field].widget.attrs['class'] = 'form-select'
+        self.fields['categoria'].required = False
+        self.fields['cartao'].required = False
+        self.fields['data_fim'].required = False
+
+        if user:
+            self.fields['categoria'].queryset = Categoria.objects.filter(user=user)
+            self.fields['cartao'].queryset = Cartao.objects.filter(user=user, is_active=True)
+            self.fields['tipo'].queryset = Tipo.objects.all()
+            self.fields['tipo'].label_from_instance = lambda obj: f"{'Crédito' if obj.codigo == 'C' else 'Débito'} - {obj.descricao}"
+
+    def clean_valor(self):
+        # O campo é um DecimalField padrão do Django, que só aceita ponto como
+        # separador decimal. O resto do app usa vírgula (formato brasileiro),
+        # então aceitamos os dois aqui pra não surpreender o usuário.
+        valor = self.data.get('valor', '')
+        valor_normalizado = str(valor).replace('.', '').replace(',', '.') if ',' in str(valor) else str(valor)
+        try:
+            valor_decimal = Decimal(valor_normalizado)
+        except (InvalidOperation, ValueError):
+            raise forms.ValidationError("Informe um valor válido (ex: 39,90).")
+        if valor_decimal <= 0:
+            raise forms.ValidationError("O valor deve ser maior que zero.")
+        return valor_decimal
 
 
 class UserRegisterForm(forms.ModelForm):
