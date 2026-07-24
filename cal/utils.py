@@ -1,11 +1,19 @@
-  
 import calendar
+import decimal
+import locale
 from datetime import date, datetime
 
 from django.urls import reverse
+
 from .models import Transacao
-import locale
-import decimal
+
+try:
+    locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')
+except locale.Error:
+    try:
+        locale.setlocale(locale.LC_TIME, 'pt_BR')
+    except locale.Error:
+        pass
 
 
 def parse_mes_ano(request):
@@ -66,7 +74,9 @@ def gerar_transacoes_pendentes(user):
     hoje = date.today()
     limite_backfill = (hoje.replace(day=1) - relativedelta(months=3))
 
-    recorrencias = Recorrencia.objects.filter(user=user, ativa=True).select_related('tipo', 'categoria', 'cartao')
+    recorrencias = Recorrencia.objects.filter(
+        user=user, ativa=True
+    ).select_related('tipo', 'categoria', 'cartao')
 
     for r in recorrencias:
         inicio = r.data_inicio or r.created_at.date()
@@ -100,14 +110,6 @@ def gerar_transacoes_pendentes(user):
             mes_cursor = mes_cursor + relativedelta(months=1)
 
 
-try:
-    locale.setlocale(locale.LC_TIME, 'pt_BR.UTF-8')
-except locale.Error:
-    try:
-        locale.setlocale(locale.LC_TIME, 'pt_BR')
-    except locale.Error:
-        pass  # Use default locale if Portuguese not available
-
 class Calendar(calendar.HTMLCalendar):
     def __init__(self, year=None, month=None):
         self.year = year
@@ -115,17 +117,27 @@ class Calendar(calendar.HTMLCalendar):
         super().__init__()
 
     def formatday(self, day, transacoes):
+        """
+        Renderiza um único dia do calendário. Versão única (a anterior
+        tinha duas definições conflitantes desta função — a segunda
+        sobrescrevia a primeira silenciosamente).
+        """
         transacoes_do_dia = transacoes.filter(data__day=day)
-        # itens = ''.join(f'<li>{t.get_html_url}</li>' for t in transacoes_do_dia)
-        # itens = ''.join(f'<li>{t.titulo}</li>' for t in transacoes_do_dia)
-        # itens = ''.join(f'<li><a href="{t.get_absolute_url()}">{t.titulo} - R$ {t.valor}</a></li>' for t in transacoes_do_dia)
-        itens = ''.join(f'<li><a href="{t.get_absolute_url()}">{t.titulo}{" - CC" if not t.valor else f" - R$ {t.valor:.2f}"}</a></li>'
-        for t in transacoes_do_dia)
 
+        itens = []
+        for t in transacoes_do_dia:
+            try:
+                valor = t.valor if isinstance(t.valor, (int, float, decimal.Decimal)) else decimal.Decimal(str(t.valor))
+                item = f'<li><a href="{t.get_absolute_url()}">{t.titulo} - R$ {valor:.2f}</a></li>'
+            except (TypeError, ValueError, decimal.InvalidOperation):
+                item = f'<li><a href="{t.get_absolute_url()}">{t.titulo} - CC</a></li>'
+            itens.append(item)
+
+        itens_html = ''.join(itens)
 
         if day != 0:
             css_class = 'today' if date(self.year, self.month, day) == datetime.today().date() else ''
-            return f'<td class="{css_class}"><span class="date">{day}</span><ul>{itens}</ul></td>'
+            return f'<td class="{css_class}"><span class="date">{day}</span><ul>{itens_html}</ul></td>'
         return '<td></td>'
 
     def formatweek(self, theweek, transacoes):
@@ -152,33 +164,3 @@ class Calendar(calendar.HTMLCalendar):
                  'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
         nome_mes = meses[themonth - 1]
         return f'<tr><th colspan="7" class="month">{nome_mes} {theyear if withyear else ""}</th></tr>'
-
-    # def get_date(req_day):
-    #     """
-    #     Retorna um objeto datetime.date baseado no parâmetro GET (?month=YYYY-MM).
-    #     Se não for passado nada, retorna a data de hoje.
-    #     """
-    #     if req_day:
-    #         year, month = (int(x) for x in req_day.split('-'))
-    #         return date(year, month, 1)
-    #     return datetime.today().date()
-
-    def formatday(self, day, transacoes):
-        transacoes_do_dia = transacoes.filter(data__day=day)
-        
-        itens = []
-        for t in transacoes_do_dia:
-            try:
-                # Tenta converter para Decimal se for string
-                valor = t.valor if isinstance(t.valor, (int, float, decimal.Decimal)) else decimal.Decimal(str(t.valor))
-                item = f'<li><a href="{t.get_absolute_url()}">{t.titulo} - R$ {valor:.2f}</a></li>'
-            except (TypeError, ValueError, decimal.InvalidOperation):
-                item = f'<li><a href="{t.get_absolute_url()}">{t.titulo} - CC</a></li>'
-            itens.append(item)
-        
-        itens_html = ''.join(itens)
-
-        if day != 0:
-            css_class = 'today' if date(self.year, self.month, day) == datetime.today().date() else ''
-            return f'<td class="{css_class}"><span class="date">{day}</span><ul>{itens_html}</ul></td>'
-        return '<td></td>'

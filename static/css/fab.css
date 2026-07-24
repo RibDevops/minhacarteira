@@ -26,6 +26,19 @@
     right: 0;
 }
 
+/* Botão Voltar — posicionado à esquerda do FAB principal */
+#fab-container > .btn-fab[onclick*="history.back"] {
+    position: absolute;
+    bottom: 0;
+    right: 70px;
+}
+
+@media (max-width: 576px) {
+    #fab-container > .btn-fab[onclick*="history.back"] {
+        right: 58px;
+    }
+}
+
 #fab-actions .btn-fab {
     width: 48px;
     height: 48px;

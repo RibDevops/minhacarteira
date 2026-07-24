@@ -7,6 +7,13 @@
     
     <form method="post" class="needs-validation" novalidate>
         {% csrf_token %}
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {% for error in form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
         
         <div class="row g-3">
             <!-- Campo Mês/Ano -->

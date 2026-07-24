@@ -133,7 +133,7 @@
         transition: all 0.2s;
         border-left: 2px solid #dee2e6;
     }
-    
+
     /* Ajustes específicos para Mobile */
     .small-label { font-size: 0.7rem; }
     .currency-text { font-size: 0.85rem; }
@@ -155,5 +155,37 @@
         background: #dee2e6;
         border-radius: 10px;
     }
+
+    /* ========================================================
+       Dark Mode — calendário (antes era hard-coded branco,
+       quebrando a leitura quando o usuário ativava dark mode)
+       ======================================================== */
+    body.dark-mode .calendar { background: #16213e; }
+    body.dark-mode .calendar th {
+        background-color: #0f3460;
+        color: #e5e5e5;
+        border-bottom-color: #e94560;
+    }
+    body.dark-mode .calendar td {
+        background-color: #16213e;
+        border-color: #0f3460;
+        color: #e5e5e5;
+    }
+    body.dark-mode .calendar td:hover { background-color: #1a1a2e; }
+    body.dark-mode .calendar td.today {
+        background-color: #0f3460;
+        border-color: #e94560;
+    }
+    body.dark-mode .calendar td.today .date { color: #e94560; }
+    body.dark-mode .calendar .date { color: #adb5bd; }
+    body.dark-mode .calendar li a {
+        background-color: #0f3460;
+        color: #e5e5e5;
+        border-left-color: #e94560;
+    }
+    body.dark-mode .calendar li a:hover {
+        background-color: #1a1a2e;
+    }
+    body.dark-mode .table-responsive::-webkit-scrollbar-thumb { background: #0f3460; }
 </style>
 {% endblock %}

@@ -1,5 +1,6 @@
 from django.urls import reverse_lazy
 from django.contrib.auth.models import User
+from django.contrib.auth import update_session_auth_hash
 from django.shortcuts import render, redirect, get_object_or_404
 from ..forms import UsuarioForm, UsuarioUpdateForm, UsuarioPasswordResetForm
 from django.contrib import messages
@@ -56,16 +57,6 @@ def editar_usuario(request, user_id):
     else:
         form = UsuarioUpdateForm(instance=usuario)
     return render(request, 'usuarios/form_usuario.html', {'form': form, 'titulo': 'Editar Usuário'})
-
-
-@login_required
-@staff_member_required
-def desativar_usuario(request, pk):
-    user = get_object_or_404(User, pk=pk)
-    user.is_active = False
-    user.save()
-    messages.success(request, "Usuário desativado com sucesso.")
-    return redirect('usuarios_list')
 
 @login_required
 @staff_member_required

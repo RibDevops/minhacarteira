@@ -9,7 +9,7 @@ from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 from django.forms.widgets import DateInput
 
-from .models import Categoria, MetaCategoria, Tipo, Transacao, Recorrencia
+from .models import Categoria, MetaCategoria, Tipo, Transacao, Recorrencia, Cartao
 
 class MetaCategoriaForm(forms.ModelForm):
     mes_ano = forms.ChoiceField(
@@ -155,6 +155,23 @@ class TransacaoForm(ModelForm):
             ),
         }
 
+    def clean_valor(self):
+        """
+        Aceita vírgula como separador decimal (formato brasileiro) num campo
+        DecimalField que por padrão só aceita ponto. Antes essa conversão
+        era feita só depois de form.is_valid() — o que fazia o form rejeitar
+        '150,50' e nunca salvar via POST.html.
+        """
+        from decimal import Decimal, InvalidOperation
+        raw = self.cleaned_data.get('valor')
+        if raw in (None, ''):
+            return raw
+        try:
+            return Decimal(str(raw).replace(',', '.'))
+        except (InvalidOperation, ValueError):
+            from django import forms
+            raise forms.ValidationError("Informe um valor válido (ex: 150,50).")
+
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
@@ -268,9 +285,6 @@ class UserRegisterForm(forms.ModelForm):
             raise ValidationError("As senhas não coincidem.")
         return password2
 
-# cal/forms.py
-from django import forms
-from .models import Tipo
 
 class TipoForm(forms.ModelForm):
     class Meta:
@@ -285,8 +299,6 @@ class TipoForm(forms.ModelForm):
             'descricao': 'Descrição',
         }
 
-
-from .models import Cartao
 
 class CartaoForm(forms.ModelForm):
     limite = forms.DecimalField(

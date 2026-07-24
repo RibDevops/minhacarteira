@@ -112,7 +112,6 @@ TIME_ZONE = 'America/Sao_Paulo'
 
 USE_I18N = True
 USE_TZ = True
-USE_L10N = True
 
 # Formatação de números e datas
 USE_THOUSAND_SEPARATOR = True
@@ -140,7 +139,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = '/static/'
 
 # Email configuration for password reset
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -150,6 +148,7 @@ DEFAULT_FROM_EMAIL = 'no-reply@minhacarteira.com'
 
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 # Garante que a pasta de logs exista. Sem isso, o Django falha na
 # inicialização (django.setup() levanta ValueError) em qualquer clone novo

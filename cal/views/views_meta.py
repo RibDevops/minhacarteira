@@ -1,11 +1,13 @@
-from pyexpat.errors import messages
-from django.shortcuts import get_object_or_404, redirect, render
+from datetime import date, timedelta
+from decimal import Decimal
+
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
-from datetime import date, timedelta
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 
-from cal.forms import MetaCategoriaForm
-
+from ..forms import MetaCategoriaForm
 from ..models import MetaCategoria, Transacao
 
 MESES_PT = {
@@ -87,46 +89,11 @@ def metas_dashboard(request):
     return render(request, 'cal/metas_dashboard.html', context)
 
 
-from django.contrib import messages
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from datetime import date
-from ..forms import MetaCategoriaForm
-from ..models import MetaCategoria
-
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from django.urls import reverse  # <-- IMPORT ESSENCIAL AQUI
-from django.db.models import Sum
-from datetime import date, timedelta
-
-from ..models import MetaCategoria, Transacao
-from ..forms import MetaCategoriaForm
-
-
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
-from ..forms import MetaCategoriaForm
-from ..models import MetaCategoria
-
-
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
-
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-
-
-
 @login_required
 def meta_adicionar(request):
     if request.method == 'POST':
         form = MetaCategoriaForm(request.POST, user=request.user)
-        
+
         if form.is_valid():
             meta = form.save(commit=False)
             meta.user = request.user
@@ -138,16 +105,17 @@ def meta_adicionar(request):
             return redirect('cal:metas_categoria')
     else:
         form = MetaCategoriaForm(user=request.user)
-    
+
     return render(request, 'cal/meta_form.html', {'form': form})
 
+
 @login_required
-def meta_editar(request, pk):  # Mude de 'meta_id' para 'pk'
+def meta_editar(request, pk):
     meta = get_object_or_404(MetaCategoria, pk=pk, user=request.user)
-    
+
     if request.method == 'POST':
         form = MetaCategoriaForm(request.POST, instance=meta, user=request.user)
-        
+
         if form.is_valid():
             meta = form.save(commit=False)
             meta.limite = form.cleaned_data['limite']
@@ -155,39 +123,22 @@ def meta_editar(request, pk):  # Mude de 'meta_id' para 'pk'
             messages.success(request, "Meta atualizada com sucesso!")
             return redirect('cal:metas_categoria')
     else:
-        # Pré-popula o campo mes_ano
         initial = {'mes_ano': f"{meta.mes:02d}-{meta.ano}"}
         form = MetaCategoriaForm(instance=meta, initial=initial, user=request.user)
-    
+
     return render(request, 'cal/meta_form.html', {
         'form': form,
         'meta': meta
     })
 
 
-# @login_required
-# def meta_excluir(request, pk):
-#     meta = get_object_or_404(MetaCategoria, pk=pk, user=request.user)
-#     if request.method == 'POST':
-#         meta.delete()
-#         messages.success(request, "Meta excluída com sucesso.")
-#         return redirect('metas_dashboard')
-#     return render(request, 'cal/meta_confirm_delete.html', {'meta': meta})
-
-# MES_NOMES = {
-#     1: 'Janeiro', 2: 'Fevereiro', 3: 'Março', 4: 'Abril',
-#     5: 'Maio', 6: 'Junho', 7: 'Julho', 8: 'Agosto',
-#     9: 'Setembro', 10: 'Outubro', 11: 'Novembro', 12: 'Dezembro',
-# }
 @login_required
-
-
 def meta_excluir(request, meta_id):
     meta = get_object_or_404(MetaCategoria, id=meta_id)
     mes_nome = MESES_PT.get(meta.mes, '-')
 
     if request.method == 'POST':
         meta.delete()
-        return redirect(f"{reverse('cal:metas_dashboard')}?mes={meta.mes}&ano={meta.ano}")
+        return redirect(f"{reverse('cal:metas_categoria')}?mes={meta.mes}&ano={meta.ano}")
 
     return render(request, 'cal/confirmar_exclusao_meta.html', {'meta': meta, 'mes_nome': mes_nome})
