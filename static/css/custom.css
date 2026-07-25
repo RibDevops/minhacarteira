@@ -169,9 +169,22 @@
 #modalRegistroRapido .modal-content {
     border: none;
     border-radius: 20px;
-    overflow: hidden;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.22), 0 4px 12px rgba(0, 0, 0, 0.08);
-    backdrop-filter: blur(6px);
+}
+
+/* modal-dialog-scrollable precisa que o .modal-content NAO trunque overflow,
+   senao o footer (.modal-footer fixado no bottom) e a scrollbar somem. */
+#modalRegistroRapido .modal-dialog-scrollable .modal-content {
+    max-height: calc(100vh - 3.5rem);
+}
+#modalRegistroRapido .modal-dialog-scrollable .modal-body {
+    overflow-y: auto;
+}
+
+#modalRegistroRapido .modal-dialog-scrollable .modal-footer {
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
 }
 
 #modalRegistroRapido .modal-dialog {
