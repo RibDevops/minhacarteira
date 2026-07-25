@@ -179,45 +179,49 @@
     {% endblock %}
 
     {% if user.is_authenticated %}
-    <!-- Modal: Registro Rápido (menos cliques para lançar algo) -->
+    <!-- Modal: Registro Rápido (redesign) -->
     <div class="modal fade" id="modalRegistroRapido" tabindex="-1" aria-labelledby="modalRegistroRapidoLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
           <form id="formRegistroRapido" novalidate>
             {% csrf_token %}
             <div class="modal-header">
-              <h5 class="modal-title" id="modalRegistroRapidoLabel"><i class="bi bi-lightning-charge-fill text-warning"></i> Registro Rápido</h5>
+              <h5 class="modal-title" id="modalRegistroRapidoLabel">
+                <i class="bi bi-lightning-charge-fill"></i> Registro Rápido
+              </h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
             <div class="modal-body">
               <div id="quickAddErro" class="alert alert-danger d-none py-2 mb-3"></div>
 
-              <!-- Tipo: crédito ou débito, um toque só -->
-              <div class="btn-group w-100 mb-3" role="group" aria-label="Tipo">
+              <!-- Step 1: Tipo (Entrada/Saída) -->
+              <div class="tipo-selector" role="group" aria-label="Tipo de transação">
                 {% for tipo in tipos_quick_add %}
-                <input type="radio" class="btn-check" name="quickTipo" id="quickTipo{{ tipo.id }}" value="{{ tipo.id }}" data-codigo="{{ tipo.codigo }}" {% if tipo.codigo == 'D' %}checked{% endif %}>
-                <label class="btn {% if tipo.codigo == 'C' %}btn-outline-success{% else %}btn-outline-danger{% endif %}" for="quickTipo{{ tipo.id }}">
-                  {% if tipo.codigo == 'C' %}<i class="bi bi-arrow-down-circle"></i> Entrada{% else %}<i class="bi bi-arrow-up-circle"></i> Saída{% endif %}
+                <input type="radio" class="btn-check tipo-radio" name="quickTipo" id="quickTipo{{ tipo.id }}" value="{{ tipo.id }}" data-codigo="{{ tipo.codigo }}" {% if tipo.codigo == 'D' %}checked{% endif %}>
+                <label class="tipo-card {% if tipo.codigo == 'C' %}entrada{% else %}saida{% endif %}" for="quickTipo{{ tipo.id }}">
+                  <i class="bi {% if tipo.codigo == 'C' %}bi-arrow-down-circle{% else %}bi-arrow-up-circle{% endif %}"></i>
+                  <span>{% if tipo.codigo == 'C' %}Entrada{% else %}Saída{% endif %}</span>
                 </label>
                 {% endfor %}
               </div>
 
-              <!-- Valor primeiro: é o dado mais importante, auto-foco -->
-              <div class="mb-3">
-                <label for="quickValor" class="form-label">Valor</label>
-                <div class="input-group">
-                  <span class="input-group-text">R$</span>
-                  <input type="text" inputmode="decimal" class="form-control form-control-lg" id="quickValor" name="valor" placeholder="0,00" required autocomplete="off">
+              <!-- Step 2: Valor (destaque máximo) -->
+              <div class="valor-wrapper">
+                <span class="valor-label">Valor</span>
+                <div class="valor-input-group">
+                  <span class="valor-cifrao">R$</span>
+                  <input type="text" inputmode="decimal" id="quickValor" name="valor" placeholder="0,00" required autocomplete="off">
                 </div>
               </div>
 
-              <div class="mb-3">
-                <label for="quickTitulo" class="form-label">Título</label>
+              <!-- Step 3: Detalhes -->
+              <div class="campo-card">
+                <label for="quickTitulo">Título</label>
                 <input type="text" class="form-control" id="quickTitulo" name="titulo" placeholder="ex: Mercado, Uber, Salário" required autocomplete="off">
               </div>
 
-              <div class="mb-1">
-                <label for="quickCategoria" class="form-label">Categoria <span class="text-muted">(opcional)</span></label>
+              <div class="campo-card">
+                <label for="quickCategoria">Categoria <span class="text-muted fw-normal" style="text-transform:none;letter-spacing:0">(opcional)</span></label>
                 <select class="form-select" id="quickCategoria" name="categoria">
                   <option value="">Sem categoria</option>
                   {% for cat in categorias_quick_add %}
@@ -226,14 +230,10 @@
                 </select>
               </div>
 
-              <!-- Opções avançadas: escondidas por padrão pra não atrapalhar quem só quer registrar rápido -->
-              <button class="btn btn-sm btn-link px-0 mt-2" type="button" data-bs-toggle="collapse" data-bs-target="#quickOpcoesAvancadas" aria-expanded="false" aria-controls="quickOpcoesAvancadas">
-                <i class="bi bi-plus-slash-minus"></i> <span id="quickOpcoesAvancadasLabel">Opções avançadas (cartão, parcelas)</span>
-              </button>
-              <div class="collapse" id="quickOpcoesAvancadas">
-                <div class="row g-2 mt-1">
-                  <div class="col-7">
-                    <label for="quickCartao" class="form-label">Cartão <span class="text-muted">(opcional)</span></label>
+              <div id="quickOpcoesAvancadas">
+                <div class="row-opcoes">
+                  <div class="campo-card">
+                    <label for="quickCartao">Cartão <span class="text-muted fw-normal" style="text-transform:none;letter-spacing:0">(opcional)</span></label>
                     <select class="form-select" id="quickCartao" name="cartao">
                       <option value="">Sem cartão</option>
                       {% for cartao in cartoes_quick_add %}
@@ -241,19 +241,26 @@
                       {% endfor %}
                     </select>
                   </div>
-                  <div class="col-5">
-                    <label for="quickParcelas" class="form-label">Parcelas</label>
+                  <div class="campo-card">
+                    <label for="quickParcelas">Parcelas</label>
                     <input type="number" min="1" max="60" class="form-control" id="quickParcelas" name="parcelas" value="1">
                   </div>
                 </div>
                 {% if not cartoes_quick_add %}
                 <div class="form-text mt-1">Você ainda não tem cartões cadastrados. <a href="{% url 'cal:cartao_novo' %}">Cadastrar um cartão</a>.</div>
                 {% endif %}
+                <!-- Preview de parcelas × valor (aparece dinamicamente) -->
+                <div class="parcelas-preview" id="parcelasPreview">
+                  <i class="bi bi-info-circle-fill"></i>
+                  <span id="parcelasPreviewText">Total: R$ 0,00</span>
+                </div>
               </div>
             </div>
-            <div class="modal-footer justify-content-between">
-              <a href="{% url 'cal:transacao_nova' %}" class="btn btn-link btn-sm text-muted">Precisa de parcelas ou cartão? Formulário completo</a>
-              <button type="submit" class="btn btn-primary" id="quickAddSubmit">
+            <div class="modal-footer">
+              <a href="{% url 'cal:transacao_nova' %}" class="btn btn-link btn-sm text-muted text-decoration-none">
+                <i class="bi bi-sliders"></i> Formulário completo
+              </a>
+              <button type="submit" class="btn btn-primary btn-registrar" id="quickAddSubmit">
                 <i class="bi bi-check-lg"></i> Registrar
               </button>
             </div>
@@ -476,8 +483,6 @@ $(document).ready(function () {
 
         bootstrap.Modal.getOrCreateInstance(modalEl).hide();
         form.reset();
-        const opcoesAvancadas = document.getElementById('quickOpcoesAvancadas');
-        bootstrap.Collapse.getOrCreateInstance(opcoesAvancadas, { toggle: false }).hide();
 
         // Se a página tiver uma lista de transações do mês, recarrega pra já mostrar o novo lançamento.
         // Caso contrário, só confirma com uma mensagem simples.
