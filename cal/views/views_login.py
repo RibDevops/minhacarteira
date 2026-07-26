@@ -37,5 +37,10 @@ def register_view(request):
 
 
 class CustomLogoutView(LogoutView):
+    # Logout apenas via POST (CSRF-safe). GET retorna 405 ou redireciona para login.
     def get(self, request, *args, **kwargs):
-        return self.post(request, *args, **kwargs)
+        if request.user.is_authenticated:
+            # Usuário autenticado tentando GET logout -> redireciona para home com mensagem
+            messages.info(request, 'Para sair, use o botão "Sair" (requisição POST).')
+            return redirect('cal:home')
+        return redirect('login')

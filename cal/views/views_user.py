@@ -108,21 +108,6 @@ def excluir_usuario(request, user_id):
 
 @login_required
 @staff_member_required
-def resetar_senha(request, user_id):
-    usuario = get_object_or_404(User, id=user_id)
-    if request.method == 'POST':
-        form = UsuarioPasswordResetForm(request.POST)
-        if form.is_valid():
-            usuario.set_password(form.cleaned_data['new_password'])
-            usuario.save()
-            messages.success(request, 'Senha redefinida com sucesso!')
-            return redirect('cal:listar_usuarios')
-    else:
-        form = UsuarioPasswordResetForm()
-    return render(request, 'usuarios/form_usuario.html', {'form': form, 'titulo': 'Resetar Senha'})
-
-@login_required
-@staff_member_required
 def desativar_usuario(request, user_id):
     user = get_object_or_404(User, id=user_id)
     user.is_active = False

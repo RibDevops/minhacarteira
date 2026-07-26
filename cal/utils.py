@@ -2,6 +2,7 @@ import calendar
 import decimal
 import locale
 from datetime import date, datetime
+from html import escape
 
 from django.urls import reverse
 
@@ -128,9 +129,12 @@ class Calendar(calendar.HTMLCalendar):
         for t in transacoes_do_dia:
             try:
                 valor = t.valor if isinstance(t.valor, (int, float, decimal.Decimal)) else decimal.Decimal(str(t.valor))
-                item = f'<li><a href="{t.get_absolute_url()}">{t.titulo} - R$ {valor:.2f}</a></li>'
+                # Escape do título para evitar XSS
+                titulo_seguro = escape(t.titulo)
+                item = f'<li><a href="{t.get_absolute_url()}">{titulo_seguro} - R$ {valor:.2f}</a></li>'
             except (TypeError, ValueError, decimal.InvalidOperation):
-                item = f'<li><a href="{t.get_absolute_url()}">{t.titulo} - CC</a></li>'
+                titulo_seguro = escape(t.titulo)
+                item = f'<li><a href="{t.get_absolute_url()}">{titulo_seguro} - CC</a></li>'
             itens.append(item)
 
         itens_html = ''.join(itens)

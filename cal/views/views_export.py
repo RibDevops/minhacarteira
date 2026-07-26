@@ -27,9 +27,14 @@ def exportar_transacoes_csv(request):
     writer.writerow(['Data', 'Título', 'Categoria', 'Tipo', 'Cartão', 'Valor'])
 
     for t in transacoes:
+        # Proteção contra CSV Injection: prefixa com ' se começar com =, +, -, @
+        titulo = t.titulo or ''
+        if titulo and titulo[0] in ('=', '+', '-', '@'):
+            titulo = "'" + titulo
+
         writer.writerow([
             t.data.strftime('%d/%m/%Y'),
-            t.titulo,
+            titulo,
             t.categoria.nome if t.categoria else '-',
             t.tipo.descricao,
             t.cartao.nome if t.cartao else '-',

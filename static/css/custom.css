@@ -179,6 +179,8 @@
 }
 #modalRegistroRapido .modal-dialog-scrollable .modal-body {
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
 }
 
 /* O <form> fica entre .modal-content e o header/body/footer, o que quebra
@@ -196,10 +198,10 @@
     min-height: 0;
 }
 
-#modalRegistroRapido .modal-dialog-scrollable .modal-footer {
-    position: sticky;
-    bottom: 0;
-    z-index: 2;
+/* Header/footer nao devem encolher quando o body precisa de espaco pro scroll */
+#modalRegistroRapido .modal-dialog-scrollable .modal-content > form .modal-header,
+#modalRegistroRapido .modal-dialog-scrollable .modal-content > form .modal-footer {
+    flex-shrink: 0;
 }
 
 #modalRegistroRapido .modal-dialog {
@@ -639,5 +641,4 @@ body.dark-mode #modalRegistroRapido .modal-footer .btn-link {
     #modalRegistroRapido #quickAddErro:not(.d-none) {
         animation: none !important;
     }
-}
 }

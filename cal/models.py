@@ -6,6 +6,7 @@ from django.db import models
 from django.urls import reverse
 
 from dateutil.relativedelta import relativedelta
+from encrypted_model_fields.fields import EncryptedCharField, EncryptedDecimalField
 
 # ======================================================
 # BASE MODEL
@@ -182,12 +183,12 @@ class Transacao(BaseModel):
         blank=True
     )
 
-    titulo = models.CharField(
+    titulo = EncryptedCharField(
         max_length=200,
         verbose_name="Título"
     )
 
-    valor = models.DecimalField(
+    valor = EncryptedDecimalField(
         max_digits=15,
         decimal_places=2,
         null=True,
@@ -209,7 +210,7 @@ class Transacao(BaseModel):
         verbose_name="Data final"
     )
 
-    observacoes = models.CharField(
+    observacoes = EncryptedCharField(
         max_length=500,
         null=True,
         blank=True,
@@ -267,8 +268,8 @@ class Recorrencia(BaseModel):
     categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True, blank=True)
     cartao = models.ForeignKey(Cartao, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Cartão")
 
-    titulo = models.CharField(max_length=200, verbose_name="Título")
-    valor = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Valor mensal")
+    titulo = EncryptedCharField(max_length=200, verbose_name="Título")
+    valor = EncryptedDecimalField(max_digits=15, decimal_places=2, verbose_name="Valor mensal")
 
     dia_cobranca = models.PositiveSmallIntegerField(
         default=1,
@@ -282,7 +283,7 @@ class Recorrencia(BaseModel):
         help_text="Deixe em branco para repetir indefinidamente até ser desativada."
     )
     ativa = models.BooleanField(default=True, verbose_name="Ativa")
-    observacoes = models.CharField(max_length=500, null=True, blank=True)
+    observacoes = EncryptedCharField(max_length=500, null=True, blank=True)
 
     class Meta:
         verbose_name = "Recorrência"

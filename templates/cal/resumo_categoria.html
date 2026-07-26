@@ -77,6 +77,12 @@
 </div>
 
 <!-- Chart.js -->
+<script id="resumo_cat_labels_json" type="application/json">{{ cat_labels|json_script:"resumo_cat_labels_json" }}</script>
+<script id="resumo_cat_valores_json" type="application/json">{{ cat_valores|json_script:"resumo_cat_valores_json" }}</script>
+<script id="resumo_tipo_labels_json" type="application/json">{{ tipo_labels|json_script:"resumo_tipo_labels_json" }}</script>
+<script id="resumo_tipo_valores_json" type="application/json">{{ tipo_valores|json_script:"resumo_tipo_valores_json" }}</script>
+<script id="resumo_tipo_cores_json" type="application/json">{{ tipo_cores|json_script:"resumo_tipo_cores_json" }}</script>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     // Gráfico de Pizza por Categoria
@@ -84,9 +90,9 @@
     new Chart(ctxCat, {
         type: 'doughnut',
         data: {
-            labels: {{ cat_labels|safe }},
+            labels: JSON.parse(document.getElementById('resumo_cat_labels_json').textContent),
             datasets: [{
-                data: {{ cat_valores|safe }},
+                data: JSON.parse(document.getElementById('resumo_cat_valores_json').textContent),
                 backgroundColor: [
                     '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', 
                     '#FF9F40', '#8AC926', '#1982C4', '#6A4C93', '#F9844A'
@@ -112,10 +118,10 @@
     new Chart(ctxTipo, {
         type: 'pie',
         data: {
-            labels: {{ tipo_labels|safe }},
+            labels: JSON.parse(document.getElementById('resumo_tipo_labels_json').textContent),
             datasets: [{
-                data: {{ tipo_valores|safe }},
-                backgroundColor: {{ tipo_cores|safe }},
+                data: JSON.parse(document.getElementById('resumo_tipo_valores_json').textContent),
+                backgroundColor: JSON.parse(document.getElementById('resumo_tipo_cores_json').textContent),
                 hoverOffset: 15,
                 borderWidth: 0
             }]

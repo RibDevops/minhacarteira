@@ -1,177 +1,63 @@
 {% extends 'base.html' %}
 {% load humanize %}
 
+{% block title %}Transações do Mês{% endblock %}
+
 {% block content %}
-<div class="container mt-4">
-    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-4 gap-3 bg-white p-3 rounded-3 shadow-sm border-start border-4 border-primary">
-        <h2 class="fw-bold text-primary mb-0"><i class="bi bi-bar-chart-line"></i> Despesas</h2>
-        <div class="d-flex flex-wrap gap-2">
-            <a href="{% url 'cal:exportar_transacoes_csv' %}?mes={{ mes_atual.month }}&ano={{ mes_atual.year|stringformat:'d' }}" class="btn btn-outline-primary btn-sm">
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div>
+            <h1 class="h3 mb-0">Transações de {{ mes_atual|date:"F \d\e Y" }}</h1>
+            <p class="text-muted mb-0">
+                <a href="{% url 'cal:transacoes_mes' %}?mes={{ mes_anterior.month }}&ano={{ mes_anterior.year }}" class="text-decoration-none text-muted me-2">
+                    <i class="bi bi-chevron-left"></i> Mês anterior
+                </a>
+                <a href="{% url 'cal:transacoes_mes' %}?mes={{ mes_proximo.month }}&ano={{ mes_proximo.year }}" class="text-decoration-none text-muted">
+                    Próximo mês <i class="bi bi-chevron-right"></i>
+                </a>
+            </p>
+        </div>
+        <div class="d-flex gap-2 flex-wrap">
+            <a href="{% url 'cal:transacao_nova' %}" class="btn btn-primary">
+                <i class="bi bi-plus-lg"></i> Nova Transação
+            </a>
+            <a href="{% url 'cal:transacao_rapida' %}" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalTransacaoRapida">
+                <i class="bi bi-lightning-fill"></i> Registro Rápido
+            </a>
+            <a href="{% url 'cal:exportar_transacoes_csv' %}?mes={{ mes_atual.month }}&ano={{ mes_atual.year }}" class="btn btn-outline-secondary">
                 <i class="bi bi-download"></i> Exportar CSV
             </a>
-            <a href="{% url 'cal:transacao_nova' %}" class="btn btn-success btn-sm"><i class="bi bi-plus-circle"></i> Nova Despesa</a>
         </div>
     </div>
 
-    <div class="d-flex justify-content-center mb-4">
-        <div class="btn-group shadow-sm">
-            <a href="?mes={{ mes_anterior.month }}&ano={{ mes_anterior.year|stringformat:'d' }}" class="btn btn-outline-primary border-2 btn-sm">
-                <i class="bi bi-chevron-left"></i> {{ mes_anterior|date:"M/Y" }}
-            </a>
-            <span class="btn btn-primary fw-bold px-4 d-flex align-items-center btn-sm">
-                {{ mes_atual|date:"F Y"|upper }}
-            </span>
-            <a href="?mes={{ mes_proximo.month }}&ano={{ mes_proximo.year|stringformat:'d' }}" class="btn btn-outline-primary border-2 btn-sm">
-                {{ mes_proximo|date:"M/Y" }} <i class="bi bi-chevron-right"></i>
-            </a>
-        </div>
-    </div>
-
-    <!-- Cards de Resumo -->
-    <div class="row mb-4 g-2 justify-content-center">
-        <div class="col-md-5 col-lg-3">
-            <div class="card border-0 shadow-sm {% if saldo_total >= 0 %}bg-primary{% else %}bg-warning text-dark{% endif %} text-white h-100">
-                <div class="card-body py-2 text-center d-flex flex-column justify-content-center">
-                    <small class="card-title opacity-75 mb-0" style="font-size: 0.8rem;">Saldo Mensal</small>
-                    <h4 class="fw-bold mb-0">R$ {{ saldo_total|floatformat:2 }}</h4>
+    <!-- Resumo Financeiro -->
+    <div class="row mb-4">
+        <div class="col-md-4 mb-3">
+            <div class="card border-0 shadow-sm h-100 text-center bg-success bg-opacity-10">
+                <div class="card-body">
+                    <h6 class="text-success mb-1">Total Entradas (Crédito)</h6>
+                    <h3 class="mb-0 text-success">R$ {{ total_creditos|floatformat:2|intcomma }}</h3>
                 </div>
             </div>
         </div>
-        <div class="col-md-5 col-lg-3">
-            <div class="card border-0 shadow-sm bg-success text-white h-100">
-                <div class="card-body py-2 text-center d-flex flex-column justify-content-center">
-                    <small class="card-title opacity-75 mb-0" style="font-size: 0.8rem;">Total Créditos</small>
-                    <h4 class="fw-bold mb-0">R$ {{ total_creditos|floatformat:2 }}</h4>
+        <div class="col-md-4 mb-3">
+            <div class="card border-0 shadow-sm h-100 text-center bg-danger bg-opacity-10">
+                <div class="card-body">
+                    <h6 class="text-danger mb-1">Total Saídas (Débito)</h6>
+                    <h3 class="mb-0 text-danger">R$ {{ total_debitos|floatformat:2|intcomma }}</h3>
                 </div>
             </div>
         </div>
-        <div class="col-md-5 col-lg-3">
-            <div class="card border-0 shadow-sm bg-danger text-white h-100">
-                <div class="card-body py-2 text-center d-flex flex-column justify-content-center">
-                    <small class="card-title opacity-75 mb-0" style="font-size: 0.8rem;">Total Débitos</small>
-                    <h4 class="fw-bold mb-0">R$ {{ total_debitos|floatformat:2 }}</h4>
+        <div class="col-md-4 mb-3">
+            <div class="card border-0 shadow-sm h-100 text-center {% if saldo_total >= 0 %}bg-success bg-opacity-10{% else %}bg-danger bg-opacity-10{% endif %}">
+                <div class="card-body">
+                    <h6 class="{% if saldo_total >= 0 %}text-success{% else %}text-danger{% endif %} mb-1">Saldo do Mês</h6>
+                    <h3 class="mb-0 {% if saldo_total >= 0 %}text-success{% else %}text-danger{% endif %}">R$ {{ saldo_total|floatformat:2|intcomma }}</h3>
                 </div>
             </div>
         </div>
     </div>
 
-    
-
-    <!-- Desktop Table -->
-    <div class="card border-0 shadow-sm overflow-hidden d-none d-md-block">
-        <div class="table-responsive">
-            <table class="table table-hover mb-0 align-middle">
-                <thead class="bg-dark text-white">
-                    <tr>
-                        <th class="px-4 py-3">Título</th>
-                        <th class="py-3">Categoria</th>
-                        <th class="py-3">Tipo/Cartão</th>
-                        <th class="py-3 text-end">Valor</th>
-                        <th class="py-3 px-4 text-center">Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for transacao in transacoes %}
-                    <tr id="transacao-{{ transacao.id }}">
-                        <td class="px-4">
-                            <div class="d-flex align-items-center">
-                                {% if transacao.tipo.codigo == 'C' %}
-                                <i class="bi bi-plus-circle-fill text-success me-2"></i>
-                                {% else %}
-                                <i class="bi bi-dash-circle-fill text-danger me-2"></i>
-                                {% endif %}
-                                {{ transacao.titulo }}
-                                {% if transacao.grupo_id %}
-                                <i class="bi bi-layers-half text-info ms-2" title="Parte de um grupo/parcelamento"></i>
-                                {% endif %}
-                            </div>
-                            <small class="text-muted">{{ transacao.data|date:"d/m/Y" }}</small>
-                        </td>
-                        <td><span class="badge bg-light text-dark border">{{ transacao.categoria.nome|default:"-" }}</span></td>
-                        <td>
-                            <small class="d-block fw-bold text-muted">
-                                {{ transacao.tipo.descricao }}
-                            </small>
-                            {% if transacao.cartao %}
-                            <span class="badge bg-info text-dark" style="font-size: 0.75rem;">
-                                <i class="bi bi-credit-card-2-back"></i> {{ transacao.cartao.nome }}
-                            </span>
-                            {% endif %}
-                        </td>
-                        <td class="text-end fw-bold {% if transacao.tipo.codigo == 'C' %}text-success{% else %}text-danger{% endif %}">
-                            R$ {{ transacao.valor|floatformat:2 }}
-                        </td>
-                        <td class="text-center px-4">
-                            <div class="btn-group btn-group-sm">
-                                <a href="{% url 'cal:transacao_editar' transacao.id %}" class="btn btn-outline-primary"><i class="bi bi-pencil"></i></a>
-                                <button type="button" class="btn btn-outline-danger btn-excluir" data-url="{% url 'cal:transacao_excluir' transacao.id %}" data-id="{{ transacao.id }}"><i class="bi bi-trash"></i></button>
-                            </div>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr><td colspan="5" class="text-center py-4 text-muted">Nenhuma despesa.</td></tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- Mobile List -->
-    <div class="d-md-none">
-        {% for transacao in transacoes %}
-        <div class="card border-0 shadow-sm mb-3 {% if forloop.counter|divisibleby:2 %}bg-light{% else %}bg-white{% endif %}" id="transacao-mobile-{{ transacao.id }}">
-            <div class="card-body p-3">
-                <!-- Cabeçalho: Título e Valor -->
-                <div class="d-flex justify-content-between align-items-start mb-2">
-                    <div style="max-width: 65%;">
-                        <h6 class="fw-bold mb-0 text-truncate">
-                            {{ transacao.titulo }}
-                            {% if transacao.grupo_id %}
-                            <i class="bi bi-layers-half text-info ms-1 small"></i>
-                            {% endif %}
-                        </h6>
-                        <small class="text-muted">{{ transacao.data|date:"d/m/Y" }}</small>
-                    </div>
-                    <div class="text-end">
-                        <span class="fw-bold d-block {% if transacao.tipo.codigo == 'C' %}text-success{% else %}text-danger{% endif %}" style="font-size: 1.1rem;">
-                            {% if transacao.tipo.codigo == 'C' %}+{% else %}-{% endif %} R$ {{ transacao.valor|floatformat:2 }}
-                        </span>
-                    </div>
-                </div>
-                
-                <!-- Detalhes: Categoria, Tipo e Cartão -->
-                <div class="d-flex flex-wrap gap-1 align-items-center mb-3">
-                    <span class="badge bg-white text-dark border shadow-sm small py-1">
-                        <i class="bi bi-tag text-primary"></i> {{ transacao.categoria.nome|default:"Outros" }}
-                    </span>
-                    <span class="badge {% if transacao.tipo.codigo == 'C' %}bg-success-subtle text-success{% else %}bg-danger-subtle text-danger{% endif %} border-0 small py-1">
-                        {{ transacao.tipo.descricao }}
-                    </span>
-                    {% if transacao.cartao %}
-                    <span class="badge bg-info-subtle text-info-emphasis border-0 small py-1">
-                        <i class="bi bi-credit-card"></i> {{ transacao.cartao.nome }}
-                    </span>
-                    {% endif %}
-                </div>
-
-                <!-- Ações: Botões mais compactos e acessíveis -->
-                <div class="d-flex justify-content-between gap-2 border-top pt-2">
-                    <a href="{% url 'cal:transacao_editar' transacao.id %}" class="btn btn-sm btn-outline-primary flex-fill py-2">
-                        <i class="bi bi-pencil"></i> Editar
-                    </a>
-                    <button type="button" class="btn btn-sm btn-outline-danger flex-fill py-2 btn-excluir" data-url="{% url 'cal:transacao_excluir' transacao.id %}" data-id="{{ transacao.id }}">
-                        <i class="bi bi-trash"></i> Excluir
-                    </button>
-                </div>
-            </div>
-        </div>
-        {% empty %}
-        <div class="text-center py-5 text-muted">
-            <i class="bi bi-receipt d-block mb-2" style="font-size: 2rem;"></i>
-            Nenhuma despesa neste mês.
-        </div>
-        {% endfor %}
-    </div>
     <!-- Gráficos -->
     <div class="row mb-4">
         <div class="col-md-6 mb-3">
@@ -194,18 +80,24 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script id="grafico_labels_json" type="application/json">{{ grafico_labels|json_script:"grafico_labels_json" }}</script>
+<script id="grafico_valores_json" type="application/json">{{ grafico_valores|json_script:"grafico_valores_json" }}</script>
+<script id="grafico_categorias_json" type="application/json">{{ grafico_categorias|json_script:"grafico_categorias_json" }}</script>
+<script id="grafico_totais_categoria_json" type="application/json">{{ grafico_totais_categoria|json_script:"grafico_totais_categoria_json" }}</script>
 <script>
+    const labelsTipo = JSON.parse(document.getElementById('grafico_labels_json').textContent);
+    const valoresTipo = JSON.parse(document.getElementById('grafico_valores_json').textContent);
     const ctxTipo = document.getElementById('chartTipo').getContext('2d');
     new Chart(ctxTipo, {
         type: 'pie',
         data: {
-            labels: {{ grafico_labels|safe }},
+            labels: labelsTipo,
             datasets: [{
-                data: {{ grafico_valores|safe }},
-                backgroundColor: {{ grafico_labels|safe }}.map(label => {
-                    if (label.toLowerCase().includes('entrada') || label.toLowerCase().includes('crédito')) return '#4CAF50'; // Verde
-                    if (label.toLowerCase().includes('saída') || label.toLowerCase().includes('débito')) return '#F44336'; // Vermelho
-                    return '#2196F3'; // Azul (padrão)
+                data: valoresTipo,
+                backgroundColor: labelsTipo.map(label => {
+                    if (label.toLowerCase().includes('entrada') || label.toLowerCase().includes('crédito')) return '#4CAF50';
+                    if (label.toLowerCase().includes('saída') || label.toLowerCase().includes('débito')) return '#F44336';
+                    return '#2196F3';
                 }),
                 borderWidth: 0
             }]
@@ -213,20 +105,24 @@
         options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
     });
 
+    const labelsCat = JSON.parse(document.getElementById('grafico_categorias_json').textContent);
+    const valoresCat = JSON.parse(document.getElementById('grafico_totais_categoria_json').textContent);
     const ctxCat = document.getElementById('chartCategoria').getContext('2d');
     new Chart(ctxCat, {
         type: 'doughnut',
         data: {
-            labels: {{ grafico_categorias|safe }},
+            labels: labelsCat,
             datasets: [{
-                data: {{ grafico_totais_categoria|safe }},
+                data: valoresCat,
                 backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
                 borderWidth: 0
             }]
         },
         options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
     });
+</script>
 
+<script>
     document.querySelectorAll('.btn-excluir').forEach(button => {
         button.addEventListener('click', function() {
             let msg = 'Deseja realmente excluir esta despesa?';
@@ -247,25 +143,23 @@
                 const token = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
                 const formData = new FormData();
-                formData.append('excluir_proximas', excluirProximas ? 'true' : 'false');
+                formData.append('excluir_proximas', excluirProximas);
+                formData.append('csrfmiddlewaretoken', token);
 
                 fetch(url, {
                     method: 'POST',
                     body: formData,
-                    headers: {
-                        'X-CSRFToken': token,
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
                 })
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 'success') {
-                        window.location.reload(); 
+                        location.reload();
                     } else {
-                        alert('Erro ao excluir transação.');
+                        alert('Erro ao excluir: ' + (data.message || 'Tente novamente'));
                     }
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(() => alert('Erro de rede ao excluir'));
             }
         });
     });

@@ -96,12 +96,15 @@
     </div>
 </div>
 
+<script id="metas_labels_json" type="application/json">{{ grafico_labels|json_script:"metas_labels_json" }}</script>
+<script id="metas_valores_json" type="application/json">{{ grafico_valores|json_script:"metas_valores_json" }}</script>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         // Gráfico geral
-        const labels = {{ grafico_labels|safe }};
-        const valores = {{ grafico_valores|safe }};
+        const labels = JSON.parse(document.getElementById('metas_labels_json').textContent);
+        const valores = JSON.parse(document.getElementById('metas_valores_json').textContent);
         const ctx = document.getElementById("graficoGeralMetas").getContext("2d");
         new Chart(ctx, {
             type: "doughnut",

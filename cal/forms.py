@@ -1,10 +1,10 @@
-import calendar
 from datetime import date
 from decimal import Decimal, InvalidOperation
 
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 from django.forms.widgets import DateInput
@@ -283,6 +283,9 @@ class UserRegisterForm(forms.ModelForm):
         password2 = self.cleaned_data.get('password2')
         if password and password2 and password != password2:
             raise ValidationError("As senhas não coincidem.")
+        # Aplica os validadores de senha do Django (AUTH_PASSWORD_VALIDATORS)
+        if password:
+            validate_password(password)
         return password2
 
 
@@ -326,21 +329,6 @@ class CartaoForm(forms.ModelForm):
 
 
 
-class CustomUserCreationForm(UserCreationForm):
-    email = forms.EmailField(required=True, label="Endereço de email")
-    first_name = forms.CharField(label="Primeiro nome", required=True)
-    last_name = forms.CharField(label="Último nome", required=True)
-
-    class Meta:
-        model = User
-        fields = ['username', 'email', 'first_name', 'last_name', 'password1', 'password2']
-
-    def __init__(self, *args, **kwargs):
-        super(CustomUserCreationForm, self).__init__(*args, **kwargs)
-        for field in self.fields.values():
-            field.widget.attrs['class'] = 'form-control'
-
-
 class UsuarioForm(UserCreationForm):
     email = forms.EmailField(required=True)
     first_name = forms.CharField(label='Nome', required=False)
@@ -368,3 +356,9 @@ class UsuarioPasswordResetForm(forms.ModelForm):
     class Meta:
         model = User
         fields = []
+
+    def clean_new_password(self):
+        password = self.cleaned_data.get('new_password')
+        if password:
+            validate_password(password)
+        return password

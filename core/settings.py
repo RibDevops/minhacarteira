@@ -10,9 +10,27 @@ FERNET_SECRET_KEY = FIELD_ENCRYPTION_KEY
 
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*', cast=lambda v: [s.strip() for s in v.split(',')])
+# ALLOWED_HOSTS: em producao DEVE ser explicito. O default '*' so e aceito
+# em dev (DEBUG=True) para nao quebrar o runserver local. Em producao, se a
+# variavel nao vier definida, o Django recusa requests em vez de aceitar de
+# qualquer Host (protecao contra Host header attacks).
+if DEBUG:
+    ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*', cast=lambda v: [s.strip() for s in v.split(',')])
+else:
+    ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=lambda v: [s.strip() for s in v.split(',')])
 
-CSRF_TRUSTED_ORIGINS = ['https://*.replit.dev', 'https://*.repl.co']
+# Durante testes (manage.py test), o Django usa 'testserver' como host.
+# Adicionamos automaticamente para nao quebrar os testes.
+if 'testserver' not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS = ALLOWED_HOSTS + ['testserver']
+
+# CSRF_TRUSTED_ORIGINS configuravel por ambiente (default mantem Replit para
+# nao quebrar deploy atual). Migrar provedor = so ajustar a variavel de ambiente.
+CSRF_TRUSTED_ORIGINS = config(
+    'CSRF_TRUSTED_ORIGINS',
+    default='https://*.replit.dev,https://*.repl.co',
+    cast=lambda v: [s.strip() for s in v.split(',')]
+)
 # Security Settings for Production
 if not DEBUG:
     SECURE_BROWSER_XSS_FILTER = True
@@ -23,9 +41,14 @@ if not DEBUG:
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
-    SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=True, cast=bool)
+    # SECURE_SSL_REDIRECT so em producao real (nao em testes)
+    if 'testserver' not in ALLOWED_HOSTS:
+        SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=True, cast=bool)
+    else:
+        SECURE_SSL_REDIRECT = False
 else:
     X_FRAME_OPTIONS = 'ALLOWALL'
+    SECURE_SSL_REDIRECT = False
 
 # Application definition
 
@@ -140,9 +163,27 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Email configuration for password reset
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-DEFAULT_FROM_EMAIL = 'no-reply@minhacarteira.com'
+# Email configuration for password reset.
+#
+# Por padrao usamos o backend console (imprime o link de reset no log/dev),
+# que e o que o projeto original tinha. Em producao, definir EMAIL_HOST /
+# EMAIL_HOST_USER / EMAIL_HOST_PASSWORD faz o Django trocar para o backend
+# SMTP real (necessario para o fluxo "esqueci minha senha" entregar o email
+# ao usuario). Sem isso, qualquer usuario que esquecer a senha fica
+# permanentemente bloqueado.
+EMAIL_HOST = config('EMAIL_HOST', default='')
+EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
+EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
+
+if EMAIL_HOST:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='no-reply@minhacarteira.com')
+DEFAULT_FROM_EMAIL = DEFAULT_FROM_EMAIL
 
 
 

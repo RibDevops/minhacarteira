@@ -9,6 +9,7 @@ from django.urls import reverse
 
 from ..forms import MetaCategoriaForm
 from ..models import MetaCategoria, Transacao
+from ..utils import parse_mes_ano
 
 MESES_PT = {
     1: "Janeiro", 2: "Fevereiro", 3: "Março", 4: "Abril",
@@ -28,8 +29,7 @@ def get_mes_anterior_posterior(mes, ano):
 def metas_dashboard(request):
     user = request.user
     hoje = date.today()
-    mes = int(request.GET.get('mes', hoje.month))
-    ano = int(request.GET.get('ano', hoje.year))
+    ano, mes = parse_mes_ano(request)
 
     mes_nome = MESES_PT[mes]
     mes_anterior, mes_proximo = get_mes_anterior_posterior(mes, ano)
@@ -134,7 +134,7 @@ def meta_editar(request, pk):
 
 @login_required
 def meta_excluir(request, meta_id):
-    meta = get_object_or_404(MetaCategoria, id=meta_id)
+    meta = get_object_or_404(MetaCategoria, id=meta_id, user=request.user)
     mes_nome = MESES_PT.get(meta.mes, '-')
 
     if request.method == 'POST':

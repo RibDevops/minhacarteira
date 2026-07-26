@@ -79,18 +79,21 @@
     </div>
 </div>
 
+<script id="cartoes_labels_json" type="application/json">{{ labels|json_script:"cartoes_labels_json" }}</script>
+<script id="cartoes_consumo_json" type="application/json">{{ consumo|json_script:"cartoes_consumo_json" }}</script>
+<script id="cartoes_limites_json" type="application/json">{{ limites|json_script:"cartoes_limites_json" }}</script>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     // Gráficos Individuais
     {% for c in cartoes %}
     (function() {
         const ctx = document.getElementById('chart-{{ c.id }}').getContext('2d');
-        // Buscando o índice do cartão nos dados globais
-        const labels = {{ labels|safe }};
-        const idx = labels.indexOf('{{ c.nome }}');
-        const consumo = {{ consumo|safe }}[idx];
-        const limite = {{ limites|safe }}[idx];
-        
+        const labels = JSON.parse(document.getElementById('cartoes_labels_json').textContent);
+        const idx = labels.indexOf('{{ c.nome|escapejs }}');
+        const consumo = JSON.parse(document.getElementById('cartoes_consumo_json').textContent)[idx];
+        const limite = JSON.parse(document.getElementById('cartoes_limites_json').textContent)[idx];
+
         new Chart(ctx, {
             type: 'bar',
             data: {
@@ -137,20 +140,24 @@
 
     // Dashboard Consolidado
     const ctxConsolidado = document.getElementById('chartCartoes').getContext('2d');
+    const labels = JSON.parse(document.getElementById('cartoes_labels_json').textContent);
+    const consumoData = JSON.parse(document.getElementById('cartoes_consumo_json').textContent);
+    const limitesData = JSON.parse(document.getElementById('cartoes_limites_json').textContent);
+
     new Chart(ctxConsolidado, {
         type: 'bar',
         data: {
-            labels: {{ labels|safe }},
+            labels: labels,
             datasets: [
                 {
                     label: 'Consumo Atual',
-                    data: {{ consumo|safe }},
+                    data: consumoData,
                     backgroundColor: '#F44336',
                     borderRadius: 5
                 },
                 {
                     label: 'Limite Total',
-                    data: {{ limites|safe }},
+                    data: limitesData,
                     backgroundColor: '#e9ecef',
                     borderRadius: 5
                 }
