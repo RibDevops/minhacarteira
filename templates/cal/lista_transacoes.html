@@ -53,28 +53,6 @@
         </div>
     </div>
 
-    <!-- Gráficos: consolidados aqui — antes viviam duplicados em
-         /transacoes-mes/ e /resumo-categoria/, duas páginas diferentes
-         mostrando exatamente a mesma informação. -->
-    <div class="row mb-4">
-        <div class="col-md-6 mb-3">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body">
-                    <h6 class="card-title text-center text-primary mb-3">Resumo por Tipo</h6>
-                    <canvas id="chartTipo" height="200"></canvas>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 mb-3">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body">
-                    <h6 class="card-title text-center text-primary mb-3">Resumo por Categoria</h6>
-                    <canvas id="chartCategoria" height="200"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Filtros -->
     <div class="card border-0 shadow-sm mb-4 bg-light">
         <div class="card-body">
@@ -195,6 +173,29 @@
                     {% endfor %}
                 </tbody>
             </table>
+        </div>
+    </div>
+
+    <!-- Gráficos: consolidados aqui — antes viviam duplicados em
+         /transacoes-mes/ e /resumo-categoria/, duas páginas diferentes
+         mostrando exatamente a mesma informação. Movidos para depois da
+         lista, já que a lista é a informação principal da página. -->
+    <div class="row mt-4">
+        <div class="col-md-6 mb-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="card-title text-center text-primary mb-3">Resumo por Tipo</h6>
+                    <canvas id="chartTipo" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <h6 class="card-title text-center text-primary mb-3">Resumo por Categoria</h6>
+                    <canvas id="chartCategoria" height="200"></canvas>
+                </div>
+            </div>
         </div>
     </div>
 </div>
