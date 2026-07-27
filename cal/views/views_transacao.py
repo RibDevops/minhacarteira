@@ -267,51 +267,14 @@ class TransacaoUpdateView(LoginRequiredMixin, UpdateView):
 
 @login_required
 def transacoes_mes_view(request):
-    ano, mes = parse_mes_ano(request)
-    data_inicio, data_fim = intervalo_do_mes(ano, mes)
-
-    transacoes = Transacao.objects.filter(
-        user=request.user,
-        data__gte=data_inicio,
-        data__lt=data_fim
-    ).select_related('tipo', 'categoria', 'cartao').order_by('-data')
-
-    # Totais
-    total_creditos = transacoes.filter(tipo__codigo='C').aggregate(Sum('valor'))['valor__sum'] or 0
-    total_debitos = transacoes.filter(tipo__codigo='D').aggregate(Sum('valor'))['valor__sum'] or 0
-    saldo_total = total_creditos - total_debitos
-
-    # Gráfico por tipo (Crédito/Débito)
-    dados_por_tipo = transacoes.values('tipo__descricao', 'tipo__codigo').annotate(total=Sum('valor'))
-
-    labels = [item['tipo__descricao'] for item in dados_por_tipo]
-    valores = []
-    for item in dados_por_tipo:
-        val = float(item['total'])
-        if item['tipo__codigo'] == 'D':
-            val = -val
-        valores.append(val)
-
-    # Gráfico por categoria (exclui transações sem categoria)
-    dados_categoria = transacoes.filter(categoria__isnull=False).values('categoria__nome').annotate(total=Sum('valor'))
-
-    categorias = [item['categoria__nome'] for item in dados_categoria]
-    totais_categoria = [float(item['total']) for item in dados_categoria]
-
-    contexto = {
-        'transacoes': transacoes,
-        'mes_atual': date(ano, mes, 1),
-        'mes_anterior': date(ano, mes, 1) - relativedelta(months=1),
-        'mes_proximo': date(ano, mes, 1) + relativedelta(months=1),
-        'grafico_labels': labels,
-        'grafico_valores': valores,
-        'grafico_categorias': categorias,
-        'grafico_totais_categoria': totais_categoria,
-        'total_creditos': total_creditos,
-        'total_debitos': total_debitos,
-        'saldo_total': saldo_total,
-    }
-    return render(request, 'cal/transacoes_mes.html', contexto)
+    """
+    Removida: esta view/página duplicava os gráficos que já existem em
+    /transacoes/ (TransacaoListView) para o mesmo mês, e nunca chegou a
+    ter uma lista de transações — só totais e gráficos. Isso confundia
+    quem clicava em "Despesas" e não via nenhuma transação listada.
+    Mantida como redirect para não quebrar links/favoritos salvos.
+    """
+    return redirect('cal:listar_transacoes')
 
 
 @login_required

@@ -1,0 +1,827 @@
+diff --git a/ALTERACOES_PENDENTES.md b/ALTERACOES_PENDENTES.md
+new file mode 100644
+index 0000000..c086e2e
+--- /dev/null
++++ b/ALTERACOES_PENDENTES.md
+@@ -0,0 +1,187 @@
++# Alterações — Minha Carteira Digital
++### Arquivo de acompanhamento (atualizado a cada sessão)
++
++> **Como usar este arquivo:** sempre que for continuar o trabalho comigo em uma
++> nova conversa, envie este arquivo junto (upload) e diga "continue a partir
++> daqui". Eu leio o status de cada item e sigo de onde parou. Eu atualizo este
++> arquivo a cada mudança concluída — depois de aplicar um patch, salve a
++> versão mais nova dele por cima da antiga.
++
++**Última atualização:** 28/07/2026 — sessão de diagnóstico pós-substituição do repositório
++
++---
++
++## ⚠️ Contexto importante desta sessão
++
++O `git pull` mostrou que o repositório remoto (`github.com/RibDevops/minhacarteira`)
++foi **substituído por completo** — o histórico agora tem **1 commit só**
++(`4be24ba`), sem nenhum dos patches que eu tinha gerado em sessões anteriores
++(bugs de segurança, modal de registro rápido, recorrências, sistema de design).
++
++Pelos arquivos que vieram junto (`replit_progress.md`, `RELATORIO_ALTERACOES.md`,
++`attached_assets/`), tudo indica que o **Replit Agent** trabalhou no projeto em
++paralelo e o resultado foi commitado por cima, apagando o histórico anterior.
++
++**A boa notícia:** o trabalho do Replit Agent foi sério e bem documentado —
++implementou criptografia AES-256 nos campos sensíveis, corrigiu XSS via
++`json_script`, corrigiu um IDOR em `meta_excluir`, restringiu CRUD de `Tipo` a
++staff, validação de senha consistente, proteção contra CSV injection, entre
++outras coisas (ver `RELATORIO_ALTERACOES.md` no repo pra lista completa).
++
++**A má notícia:** nenhuma correção/feature que eu tinha implementado antes
++sobreviveu (bugs de UX, modal de registro rápido, recorrências, sistema de
++design/CSS). Terei que reavaliar cada item nesse código novo e refazer o que
++ainda fizer sentido — daí este arquivo existir, pra não perder o controle de
++novo se isso voltar a acontecer.
++
++**Recomendação para evitar que isso se repita:** decidir UM lugar como fonte
++da verdade (ou só o Replit Agent, ou só eu) e usar o outro apenas para revisão/
++consulta — trabalhar com os dois editando e commitando o mesmo repo em
++paralelo tende a gerar exatamente esse tipo de perda de trabalho.
++
++---
++
++## 🐛 Bug relatado: "transações do mês não estão listando"
++
++**Causa raiz confirmada** (reproduzi localmente com dados de teste):
++
++A página **"Despesas"** do menu principal aponta para `/transacoes-mes/`
++(view `transacoes_mes_view`, template `transacoes_mes.html`). Esse template
++**nunca teve uma tabela/lista de transações** — ele só renderiza os cards de
++totais e os dois gráficos. Os dados existem (confirmei que os totais batem),
++só não há `{% for %}` nenhum para desenhar as linhas.
++
++A lista de verdade (com filtro por tipo/categoria, cards mobile, tudo
++funcionando) existe em outro lugar: `/transacoes/` (view `listar_transacoes`,
++template `lista_transacoes.html`) — só que o link pra essa página está
++**comentado no menu** (`<!-- ... Despesas Filtro ... -->` em `navbar.html`),
++então ninguém acha ela.
++
++**Status:** ⬜ Pendente de correção nesta sessão (ver plano abaixo).
++
++---
++
++## 🔁 Páginas duplicadas/sobrepostas (pedido: unificar)
++
++Confirmei **3 páginas**, não 2, cobrindo o mesmo assunto:
++
++| URL | View | Template | O que mostra | Link no menu |
++|---|---|---|---|---|
++| `/transacoes-mes/` | `transacoes_mes_view` | `transacoes_mes.html` | Totais + 2 gráficos (tipo, categoria). **Sem lista.** | "Despesas" (ativo) |
++| `/transacoes/` | `listar_transacoes` | `lista_transacoes.html` | Lista completa + filtros + cards mobile. **Sem gráficos.** | "Despesas Filtro" (comentado, inacessível) |
++| `/resumo-categoria/` | `resumo_categoria_view` | `resumo_categoria.html` | Os mesmos 2 gráficos de novo, recalculados na mão. | "Balanço Mensal" (ativo) |
++
++**Plano de unificação:**
++1. Fazer de `lista_transacoes.html` (`/transacoes/`) a página única — já tem a
++   base mais completa (lista + filtros + mobile).
++2. Portar os 2 gráficos de `transacoes_mes.html`/`resumo_categoria.html` pra
++   dentro dela.
++3. `transacoes_mes_view` e `resumo_categoria_view` passam a ser **redirects**
++   para `listar_transacoes` (não quebra favoritos/links salvos).
++4. Menu: "Despesas" passa a apontar pra `listar_transacoes`; remover "Despesas
++   Filtro" e "Balanço Mensal" (viram a mesma página).
++
++**Status:** ⬜ Pendente de execução nesta sessão.
++
++---
++
++## ✅ O que o Replit Agent já corrigiu neste código (não precisa refazer)
++
++- [x] Segredos reais expostos no Git (`.env` fora do tracking, chaves rotacionadas)
++- [x] Criptografia AES-256 em `Transacao.titulo/valor/observacoes` e `Recorrencia` equivalentes
++- [x] XSS via `|safe` em gráficos — trocado por `json_script` (6 templates)
++- [x] IDOR em `meta_excluir`
++- [x] CRUD de `Tipo` restrito a staff
++- [x] Validação de senha consistente em todos os formulários
++- [x] Proteção contra CSV injection na exportação
++- [x] `parse_mes_ano()` centralizado (mesma ideia que eu tinha implementado antes)
++- [x] `Calendar.formatday` com `html.escape` (proteção XSS no calendário)
++
++## ⬜ Itens que eu tinha implementado antes e **precisam ser reavaliados/refeitos** neste código
++
++| Item | Status neste código | Ação |
++|---|---|---|
++| Modal de registro rápido (FAB) | Não verificado ainda | ⬜ Conferir se existe; se não, reimplementar |
++| Recorrências (assinaturas) | **Já existe** (`Recorrencia`, migrations 0002-0005) — implementação própria do Replit Agent, diferente da minha (usa `management/commands/gerar_recorrencias.py` em vez de geração preguiçosa via context processor) | ⬜ Revisar se funciona corretamente, não duplicar |
++| Sistema de design (`brand.css`, paleta única) | **Não existe** — CSS morto (`all.css`, `calendar.css`, `fontawesome.min.css`, `simple-sidebar.css`) ainda presente | ⬜ Reaplicar depois de resolver o bug e a duplicação |
++| Login sem estilo | Não verificado ainda | ⬜ Conferir |
++| `.btn-fab` duplicado 4x | Provavelmente ainda duplicado (CSS não mudou) | ⬜ Conferir e consolidar |
++
++---
++
++## 📋 Plano desta sessão (ordem de execução)
++
++1. ✅ Unificar `/transacoes-mes/`, `/transacoes/` e `/resumo-categoria/` em uma
++   página só, corrigindo o bug da listagem no processo.
++2. ✅ Testar (`manage.py check`, os 22 testes automatizados do projeto, e
++   simulação de usuário logado criando/listando transações).
++3. ✅ Gerar patch e atualizar este arquivo com o resultado.
++4. ⬜ (Próxima sessão, se aprovado) Reaplicar sistema de design/CSS.
++
++---
++
++## ✅ Concluído nesta sessão (28/07/2026)
++
++### Bug "transações do mês não listam" — CORRIGIDO
++- Causa raiz confirmada: `/transacoes-mes/` nunca teve tabela de transações,
++  só totais e gráficos. A lista real (`/transacoes/`, `TransacaoListView`)
++  existia mas estava inacessível (link comentado no menu).
++- **Correção:** `TransacaoListView.get_context_data()` (`cal/views/views_cbv.py`)
++  agora também calcula os dados dos gráficos (reaproveitando
++  `resumo_categorias_e_tipos()` de `cal/services.py`, sem duplicar lógica).
++  `templates/cal/lista_transacoes.html` ganhou os cards de totais
++  (entradas/saídas/saldo) e os 2 gráficos (por tipo, por categoria), além da
++  lista que já tinha.
++
++### Unificação das 3 páginas — CONCLUÍDA
++- `/transacoes-mes/` (`transacoes_mes_view` em `cal/views/views_transacao.py`)
++  agora é um `redirect('cal:listar_transacoes')`.
++- `/resumo-categoria/` (`resumo_categoria_view` em `cal/views/views_cartao.py`)
++  agora é um `redirect('cal:listar_transacoes')`.
++- Templates órfãos removidos: `templates/cal/transacoes_mes.html`,
++  `templates/cal/resumo_categoria.html`.
++- Menu (`navbar.html`) e home (`home.html`) atualizados: um só link/botão
++  "Despesas" apontando pra `listar_transacoes`; removidos "Despesas Filtro"
++  (estava comentado/morto) e "Balanço Mensal" (duplicava o mesmo conteúdo).
++  De brinde, corrigi uma tag `</li>` órfã que já existia na navbar.
++- FAB (`base.html`) atualizado pra apontar direto pra `listar_transacoes`
++  (evita um redirect a mais no fluxo mais usado do app).
++
++### Validação
++- `manage.py check`: sem problemas.
++- **Os 22 testes automatizados do projeto continuam passando** (rodei
++  `manage.py test cal` depois de todas as mudanças).
++- Teste manual: criei um usuário + 2 transações do mês atual (uma com
++  categoria, uma sem) e confirmei via `Client()` que ambas aparecem na
++  listagem, os gráficos renderizam com `chartTipo`/`chartCategoria`, os
++  redirects de `/transacoes-mes/` e `/resumo-categoria/` funcionam, e a home
++  não mostra mais o botão duplicado.
++
++### Arquivos alterados
++```
++cal/views/views_cbv.py          # TransacaoListView: + dados dos gráficos no contexto
++cal/views/views_transacao.py    # transacoes_mes_view -> redirect
++cal/views/views_cartao.py       # resumo_categoria_view -> redirect
++templates/cal/lista_transacoes.html   # + totais + gráficos (unificado)
++templates/cal/transacoes_mes.html     # REMOVIDO
++templates/cal/resumo_categoria.html   # REMOVIDO
++templates/navbar.html           # menu unificado, tag <li> órfã corrigida
++templates/home.html             # botão duplicado removido
++templates/base.html             # FAB aponta direto pra listar_transacoes
++```
++Patch: `unificacao_despesas.patch` (aplicar com `git apply` na raiz do projeto).
++
++---
++
++## 📋 Próximos passos sugeridos (não iniciados)
++
++1. ⬜ Reaplicar o sistema de design (`brand.css`, paleta única, remoção de CSS
++   morto: `all.css`, `calendar.css`, `fontawesome.min.css`,
++   `simple-sidebar.css`) — nenhum desses arquivos foi tocado nesta sessão.
++2. ⬜ Conferir se o modal de registro rápido (FAB) existe neste código; a
++   `transacao_rapida` view existe (`cal/views/views_transacao.py`) mas não
++   confirmei se o modal em `base.html` está completo/funcional aqui.
++3. ⬜ Revisar a implementação de Recorrências deste código (usa
++   `management/commands/gerar_recorrencias.py`, diferente da abordagem
++   anterior) — só conferir se está funcionando, não recriar.
++4. ⬜ `.btn-fab` duplicado (se ainda for o caso, não reconferido nesta sessão).
+diff --git a/cal/views/views_cartao.py b/cal/views/views_cartao.py
+index 844dcaf..05a8331 100644
+--- a/cal/views/views_cartao.py
++++ b/cal/views/views_cartao.py
+@@ -83,28 +83,9 @@ def cartoes_resumo_view(request):
+ 
+ @login_required
+ def resumo_categoria_view(request):
+-    ano, mes = parse_mes_ano(request)
+-    data_inicio, data_fim = intervalo_do_mes(ano, mes)
+-
+-    transacoes = Transacao.objects.filter(
+-        user=request.user,
+-        data__gte=data_inicio,
+-        data__lt=data_fim
+-    ).select_related('tipo', 'categoria', 'cartao')
+-
+-    dados = resumo_categorias_e_tipos(transacoes)
+-
+-    contexto = {
+-        "cat_labels": dados['cat_labels'],
+-        "cat_valores": dados['cat_valores'],
+-        "tipo_labels": dados['tipo_labels'],
+-        "tipo_valores": dados['tipo_valores'],
+-        "tipo_cores": dados['tipo_cores'],
+-        "total_creditos": dados['total_creditos'],
+-        "total_debitos": dados['total_debitos'],
+-        "saldo": dados['saldo'],
+-        "mes_atual": date(ano, mes, 1),
+-        "mes_anterior": date(ano, mes, 1) - relativedelta(months=1),
+-        "mes_proximo": date(ano, mes, 1) + relativedelta(months=1),
+-    }
+-    return render(request, "cal/resumo_categoria.html", contexto)
++    """
++    Removida: duplicava exatamente os gráficos que já existem em
++    /transacoes/ (TransacaoListView) para o mesmo mês. Mantida como
++    redirect para não quebrar links/favoritos salvos.
++    """
++    return redirect('cal:listar_transacoes')
+diff --git a/cal/views/views_cbv.py b/cal/views/views_cbv.py
+index 5176298..c6324b5 100644
+--- a/cal/views/views_cbv.py
++++ b/cal/views/views_cbv.py
+@@ -65,6 +65,12 @@ class TransacaoListView(LoginRequiredMixin, UserOwnsObjectMixin, ListView):
+         total_creditos = transacoes.filter(tipo__codigo='C').aggregate(Sum('valor'))['valor__sum'] or 0
+         total_debitos = transacoes.filter(tipo__codigo='D').aggregate(Sum('valor'))['valor__sum'] or 0
+ 
++        # Dados dos gráficos (Resumo por Tipo / por Categoria) — antes viviam
++        # duplicados em transacoes_mes_view e resumo_categoria_view, cada um
++        # recalculando a mesma coisa numa página separada. Reaproveita o
++        # mesmo service usado por resumo_categoria_view.
++        dados_graficos = resumo_categorias_e_tipos(transacoes)
++
+         ctx.update({
+             'tipos': Tipo.objects.all(),
+             'categorias': Categoria.get_for_user(self.request.user),
+@@ -72,6 +78,12 @@ class TransacaoListView(LoginRequiredMixin, UserOwnsObjectMixin, ListView):
+             'mes_anterior': data_atual - relativedelta(months=1),
+             'mes_proximo': data_atual + relativedelta(months=1),
+             'saldo_total': total_creditos - total_debitos,
++            'total_creditos': total_creditos,
++            'total_debitos': total_debitos,
++            'grafico_tipo_labels': dados_graficos['tipo_labels'],
++            'grafico_tipo_valores': dados_graficos['tipo_valores'],
++            'grafico_categoria_labels': dados_graficos['cat_labels'],
++            'grafico_categoria_valores': dados_graficos['cat_valores'],
+         })
+         return ctx
+ 
+diff --git a/cal/views/views_transacao.py b/cal/views/views_transacao.py
+index 29da8a8..082c665 100644
+--- a/cal/views/views_transacao.py
++++ b/cal/views/views_transacao.py
+@@ -267,51 +267,14 @@ class TransacaoUpdateView(LoginRequiredMixin, UpdateView):
+ 
+ @login_required
+ def transacoes_mes_view(request):
+-    ano, mes = parse_mes_ano(request)
+-    data_inicio, data_fim = intervalo_do_mes(ano, mes)
+-
+-    transacoes = Transacao.objects.filter(
+-        user=request.user,
+-        data__gte=data_inicio,
+-        data__lt=data_fim
+-    ).select_related('tipo', 'categoria', 'cartao').order_by('-data')
+-
+-    # Totais
+-    total_creditos = transacoes.filter(tipo__codigo='C').aggregate(Sum('valor'))['valor__sum'] or 0
+-    total_debitos = transacoes.filter(tipo__codigo='D').aggregate(Sum('valor'))['valor__sum'] or 0
+-    saldo_total = total_creditos - total_debitos
+-
+-    # Gráfico por tipo (Crédito/Débito)
+-    dados_por_tipo = transacoes.values('tipo__descricao', 'tipo__codigo').annotate(total=Sum('valor'))
+-
+-    labels = [item['tipo__descricao'] for item in dados_por_tipo]
+-    valores = []
+-    for item in dados_por_tipo:
+-        val = float(item['total'])
+-        if item['tipo__codigo'] == 'D':
+-            val = -val
+-        valores.append(val)
+-
+-    # Gráfico por categoria (exclui transações sem categoria)
+-    dados_categoria = transacoes.filter(categoria__isnull=False).values('categoria__nome').annotate(total=Sum('valor'))
+-
+-    categorias = [item['categoria__nome'] for item in dados_categoria]
+-    totais_categoria = [float(item['total']) for item in dados_categoria]
+-
+-    contexto = {
+-        'transacoes': transacoes,
+-        'mes_atual': date(ano, mes, 1),
+-        'mes_anterior': date(ano, mes, 1) - relativedelta(months=1),
+-        'mes_proximo': date(ano, mes, 1) + relativedelta(months=1),
+-        'grafico_labels': labels,
+-        'grafico_valores': valores,
+-        'grafico_categorias': categorias,
+-        'grafico_totais_categoria': totais_categoria,
+-        'total_creditos': total_creditos,
+-        'total_debitos': total_debitos,
+-        'saldo_total': saldo_total,
+-    }
+-    return render(request, 'cal/transacoes_mes.html', contexto)
++    """
++    Removida: esta view/página duplicava os gráficos que já existem em
++    /transacoes/ (TransacaoListView) para o mesmo mês, e nunca chegou a
++    ter uma lista de transações — só totais e gráficos. Isso confundia
++    quem clicava em "Despesas" e não via nenhuma transação listada.
++    Mantida como redirect para não quebrar links/favoritos salvos.
++    """
++    return redirect('cal:listar_transacoes')
+ 
+ 
+ @login_required
+diff --git a/templates/base.html b/templates/base.html
+index b59530c..2431ae2 100644
+--- a/templates/base.html
++++ b/templates/base.html
+@@ -293,7 +293,7 @@
+     </a>
+ 
+     <!-- Anual -->
+-    <a href="{% url 'cal:transacoes_mes' %}" class="btn btn-success shadow btn-fab mb-2">
++    <a href="{% url 'cal:listar_transacoes' %}" class="btn btn-success shadow btn-fab mb-2">
+       <span class="fab-label">Despesas</span>
+       <i class="bi bi-list-ul"></i>
+     </a>
+diff --git a/templates/cal/lista_transacoes.html b/templates/cal/lista_transacoes.html
+index c49889e..9828f9f 100644
+--- a/templates/cal/lista_transacoes.html
++++ b/templates/cal/lista_transacoes.html
+@@ -5,6 +5,9 @@
+         <h2 class="fw-bold text-primary mb-0"><i class="bi bi-cash-stack"></i> Despesas</h2>
+         <div class="d-flex flex-wrap gap-2">
+             <a href="{% url 'cal:transacao_nova' %}" class="btn btn-success btn-sm"><i class="bi bi-plus-circle"></i> Nova Despesa</a>
++            <a href="{% url 'cal:exportar_transacoes_csv' %}?mes={{ mes_atual.month }}&ano={{ mes_atual.year }}" class="btn btn-outline-secondary btn-sm">
++                <i class="bi bi-download"></i> Exportar CSV
++            </a>
+         </div>
+     </div>
+ 
+@@ -22,18 +25,56 @@
+         </div>
+     </div>
+ 
+-    <!-- Card de Saldo Mensal Centralizado -->
+-    <div class="row mb-2 justify-content-center">
+-        <div class="col-md-5 col-lg-3">
+-            <div class="card border-0 shadow-sm {% if saldo_total >= 0 %}bg-primary{% else %}bg-warning text-dark{% endif %} text-white">
+-                <div class="card-body py-2 text-center">
+-                    <small class="card-title opacity-75 mb-0" style="font-size: 0.8rem;">Saldo Mensal</small>
++    <!-- Resumo Financeiro -->
++    <div class="row mb-4">
++        <div class="col-md-4 mb-3">
++            <div class="card border-0 shadow-sm h-100 text-center bg-success bg-opacity-10">
++                <div class="card-body py-3">
++                    <h6 class="text-success mb-1">Total Entradas</h6>
++                    <h4 class="mb-0 text-success">R$ {{ total_creditos|default:"0"|floatformat:2 }}</h4>
++                </div>
++            </div>
++        </div>
++        <div class="col-md-4 mb-3">
++            <div class="card border-0 shadow-sm h-100 text-center bg-danger bg-opacity-10">
++                <div class="card-body py-3">
++                    <h6 class="text-danger mb-1">Total Saídas</h6>
++                    <h4 class="mb-0 text-danger">R$ {{ total_debitos|default:"0"|floatformat:2 }}</h4>
++                </div>
++            </div>
++        </div>
++        <div class="col-md-4 mb-3">
++            <div class="card border-0 shadow-sm h-100 text-center {% if saldo_total >= 0 %}bg-primary{% else %}bg-warning text-dark{% endif %} text-white">
++                <div class="card-body py-3">
++                    <h6 class="mb-1 opacity-75">Saldo do Mês</h6>
+                     <h4 class="fw-bold mb-0">R$ {{ saldo_total|default:"0,00"|floatformat:2 }}</h4>
+                 </div>
+             </div>
+         </div>
+     </div>
+ 
++    <!-- Gráficos: consolidados aqui — antes viviam duplicados em
++         /transacoes-mes/ e /resumo-categoria/, duas páginas diferentes
++         mostrando exatamente a mesma informação. -->
++    <div class="row mb-4">
++        <div class="col-md-6 mb-3">
++            <div class="card border-0 shadow-sm h-100">
++                <div class="card-body">
++                    <h6 class="card-title text-center text-primary mb-3">Resumo por Tipo</h6>
++                    <canvas id="chartTipo" height="200"></canvas>
++                </div>
++            </div>
++        </div>
++        <div class="col-md-6 mb-3">
++            <div class="card border-0 shadow-sm h-100">
++                <div class="card-body">
++                    <h6 class="card-title text-center text-primary mb-3">Resumo por Categoria</h6>
++                    <canvas id="chartCategoria" height="200"></canvas>
++                </div>
++            </div>
++        </div>
++    </div>
++
+     <!-- Filtros -->
+     <div class="card border-0 shadow-sm mb-4 bg-light">
+         <div class="card-body">
+@@ -158,6 +199,48 @@
+     </div>
+ </div>
+ 
++<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
++{{ grafico_tipo_labels|json_script:"grafico_tipo_labels_json" }}
++{{ grafico_tipo_valores|json_script:"grafico_tipo_valores_json" }}
++{{ grafico_categoria_labels|json_script:"grafico_categoria_labels_json" }}
++{{ grafico_categoria_valores|json_script:"grafico_categoria_valores_json" }}
++<script>
++    const labelsTipo = JSON.parse(document.getElementById('grafico_tipo_labels_json').textContent);
++    const valoresTipo = JSON.parse(document.getElementById('grafico_tipo_valores_json').textContent);
++    new Chart(document.getElementById('chartTipo').getContext('2d'), {
++        type: 'pie',
++        data: {
++            labels: labelsTipo,
++            datasets: [{
++                data: valoresTipo,
++                backgroundColor: labelsTipo.map(label => {
++                    const l = label.toLowerCase();
++                    if (l.includes('entrada') || l.includes('crédito')) return '#4CAF50';
++                    if (l.includes('saída') || l.includes('débito')) return '#F44336';
++                    return '#2196F3';
++                }),
++                borderWidth: 0
++            }]
++        },
++        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
++    });
++
++    const labelsCat = JSON.parse(document.getElementById('grafico_categoria_labels_json').textContent);
++    const valoresCat = JSON.parse(document.getElementById('grafico_categoria_valores_json').textContent);
++    new Chart(document.getElementById('chartCategoria').getContext('2d'), {
++        type: 'doughnut',
++        data: {
++            labels: labelsCat,
++            datasets: [{
++                data: valoresCat,
++                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'],
++                borderWidth: 0
++            }]
++        },
++        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
++    });
++</script>
++
+ <script>
+     document.querySelectorAll('.btn-excluir').forEach(button => {
+         button.addEventListener('click', function() {
+diff --git a/templates/cal/resumo_categoria.html b/templates/cal/resumo_categoria.html
+deleted file mode 100644
+index 49999ac..0000000
+--- a/templates/cal/resumo_categoria.html
++++ /dev/null
+@@ -1,140 +0,0 @@
+-{% extends 'base.html' %}
+-{% block content %}
+-<div class="container mt-4">
+-    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-4 p-3 bg-white rounded-3 shadow-sm border-start border-4 border-primary gap-3">
+-        <h2 class="fw-bold mb-0 text-primary d-flex align-items-center gap-2">
+-            <i class="bi bi-bar-chart-line"></i> Mensal
+-        </h2>
+-    </div>
+-
+-    <div class="d-flex justify-content-center mb-4">
+-        <div class="btn-group shadow-sm">
+-            <a href="?mes={{ mes_anterior.month }}&ano={{ mes_anterior.year }}" class="btn btn-outline-primary border-2 btn-sm">
+-                <i class="bi bi-chevron-left"></i> {{ mes_anterior|date:"M/Y" }}
+-            </a>
+-            <span class="btn btn-primary fw-bold px-4 d-flex align-items-center btn-sm">
+-                {{ mes_atual|date:"F Y"|upper }}
+-            </span>
+-            <a href="?mes={{ mes_proximo.month }}&ano={{ mes_proximo.year }}" class="btn btn-outline-primary border-2 btn-sm">
+-                {{ mes_proximo|date:"M/Y" }} <i class="bi bi-chevron-right"></i>
+-            </a>
+-        </div>
+-    </div>
+-
+-    <!-- Cards de Resumo -->
+-    <div class="row mb-4 g-3">
+-        <div class="col-md-4">
+-            <div class="card border-0 shadow-sm bg-success text-white">
+-                <div class="card-body py-4">
+-                    <h6 class="card-title opacity-75 mb-0">Total Créditos</h6>
+-                    <h3 class="fw-bold mb-0">R$ {{ total_creditos|floatformat:2 }}</h3>
+-                </div>
+-            </div>
+-        </div>
+-        <div class="col-md-4">
+-            <div class="card border-0 shadow-sm bg-danger text-white">
+-                <div class="card-body py-4">
+-                    <h6 class="card-title opacity-75 mb-0">Total Débitos</h6>
+-                    <h3 class="fw-bold mb-0">R$ {{ total_debitos|floatformat:2 }}</h3>
+-                </div>
+-            </div>
+-        </div>
+-        <div class="col-md-4">
+-            <div class="card border-0 shadow-sm {% if saldo >= 0 %}bg-primary{% else %}bg-warning text-dark{% endif %} text-white">
+-                <div class="card-body py-4">
+-                    <h6 class="card-title opacity-75 mb-0">Saldo Mensal</h6>
+-                    <h3 class="fw-bold mb-0">R$ {{ saldo|floatformat:2 }}</h3>
+-                </div>
+-            </div>
+-        </div>
+-    </div>
+-
+-    <div class="row">
+-        <!-- Gráfico por Categoria (Débitos) -->
+-        <div class="col-md-6 mb-4">
+-            <div class="card border-0 shadow-sm h-100">
+-                <div class="card-body">
+-                    <h5 class="card-title mb-4 fw-bold text-center text-primary border-bottom pb-2">Distribuição de Gastos por Categoria</h5>
+-                    <div style="max-height: 400px; position: relative;">
+-                        <canvas id="chartCategoria"></canvas>
+-                    </div>
+-                </div>
+-            </div>
+-        </div>
+-
+-        <!-- Gráfico por Tipo -->
+-        <div class="col-md-6 mb-4">
+-            <div class="card border-0 shadow-sm h-100">
+-                <div class="card-body text-center">
+-                    <h5 class="card-title mb-4 fw-bold text-center text-primary border-bottom pb-2">Crédito vs Débito</h5>
+-                    <div style="max-height: 300px; position: relative; display: inline-block; width: 100%;">
+-                        <canvas id="chartTipo"></canvas>
+-                    </div>
+-                </div>
+-            </div>
+-        </div>
+-    </div>
+-</div>
+-
+-{{ cat_labels|json_script:"resumo_cat_labels_json" }}
+-{{ cat_valores|json_script:"resumo_cat_valores_json" }}
+-{{ tipo_labels|json_script:"resumo_tipo_labels_json" }}
+-{{ tipo_valores|json_script:"resumo_tipo_valores_json" }}
+-{{ tipo_cores|json_script:"resumo_tipo_cores_json" }}
+-
+-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+-<script>
+-    // Gráfico de Pizza por Categoria
+-    const ctxCat = document.getElementById('chartCategoria').getContext('2d');
+-    new Chart(ctxCat, {
+-        type: 'doughnut',
+-        data: {
+-            labels: JSON.parse(document.getElementById('resumo_cat_labels_json').textContent),
+-            datasets: [{
+-                data: JSON.parse(document.getElementById('resumo_cat_valores_json').textContent),
+-                backgroundColor: [
+-                    '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', 
+-                    '#FF9F40', '#8AC926', '#1982C4', '#6A4C93', '#F9844A'
+-                ],
+-                hoverOffset: 15,
+-                borderWidth: 0
+-            }]
+-        },
+-        options: {
+-            responsive: true,
+-            maintainAspectRatio: false,
+-            plugins: {
+-                legend: {
+-                    position: 'bottom',
+-                    labels: { padding: 20, font: { size: 12 } }
+-                }
+-            }
+-        }
+-    });
+-
+-    // Gráfico de Pizza por Tipo
+-    const ctxTipo = document.getElementById('chartTipo').getContext('2d');
+-    new Chart(ctxTipo, {
+-        type: 'pie',
+-        data: {
+-            labels: JSON.parse(document.getElementById('resumo_tipo_labels_json').textContent),
+-            datasets: [{
+-                data: JSON.parse(document.getElementById('resumo_tipo_valores_json').textContent),
+-                backgroundColor: JSON.parse(document.getElementById('resumo_tipo_cores_json').textContent),
+-                hoverOffset: 15,
+-                borderWidth: 0
+-            }]
+-        },
+-        options: {
+-            responsive: true,
+-            maintainAspectRatio: false,
+-            plugins: {
+-                legend: {
+-                    position: 'bottom',
+-                    labels: { padding: 20, font: { size: 12 } }
+-                }
+-            }
+-        }
+-    });
+-</script>
+-{% endblock %}
+diff --git a/templates/cal/transacoes_mes.html b/templates/cal/transacoes_mes.html
+deleted file mode 100644
+index 12d44fb..0000000
+--- a/templates/cal/transacoes_mes.html
++++ /dev/null
+@@ -1,168 +0,0 @@
+-{% extends 'base.html' %}
+-{% load humanize %}
+-
+-{% block title %}Transações do Mês{% endblock %}
+-
+-{% block content %}
+-<div class="container py-4">
+-    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+-        <div>
+-            <h1 class="h3 mb-0">Transações de {{ mes_atual|date:"F \d\e Y" }}</h1>
+-            <p class="text-muted mb-0">
+-                <a href="{% url 'cal:transacoes_mes' %}?mes={{ mes_anterior.month }}&ano={{ mes_anterior.year }}" class="text-decoration-none text-muted me-2">
+-                    <i class="bi bi-chevron-left"></i> Mês anterior
+-                </a>
+-                <a href="{% url 'cal:transacoes_mes' %}?mes={{ mes_proximo.month }}&ano={{ mes_proximo.year }}" class="text-decoration-none text-muted">
+-                    Próximo mês <i class="bi bi-chevron-right"></i>
+-                </a>
+-            </p>
+-        </div>
+-        <div class="d-flex gap-2 flex-wrap">
+-            <a href="{% url 'cal:transacao_nova' %}" class="btn btn-primary">
+-                <i class="bi bi-plus-lg"></i> Nova Transação
+-            </a>
+-            <a href="{% url 'cal:transacao_rapida' %}" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalTransacaoRapida">
+-                <i class="bi bi-lightning-fill"></i> Registro Rápido
+-            </a>
+-            <a href="{% url 'cal:exportar_transacoes_csv' %}?mes={{ mes_atual.month }}&ano={{ mes_atual.year }}" class="btn btn-outline-secondary">
+-                <i class="bi bi-download"></i> Exportar CSV
+-            </a>
+-        </div>
+-    </div>
+-
+-    <!-- Resumo Financeiro -->
+-    <div class="row mb-4">
+-        <div class="col-md-4 mb-3">
+-            <div class="card border-0 shadow-sm h-100 text-center bg-success bg-opacity-10">
+-                <div class="card-body">
+-                    <h6 class="text-success mb-1">Total Entradas (Crédito)</h6>
+-                    <h3 class="mb-0 text-success">R$ {{ total_creditos|floatformat:2|intcomma }}</h3>
+-                </div>
+-            </div>
+-        </div>
+-        <div class="col-md-4 mb-3">
+-            <div class="card border-0 shadow-sm h-100 text-center bg-danger bg-opacity-10">
+-                <div class="card-body">
+-                    <h6 class="text-danger mb-1">Total Saídas (Débito)</h6>
+-                    <h3 class="mb-0 text-danger">R$ {{ total_debitos|floatformat:2|intcomma }}</h3>
+-                </div>
+-            </div>
+-        </div>
+-        <div class="col-md-4 mb-3">
+-            <div class="card border-0 shadow-sm h-100 text-center {% if saldo_total >= 0 %}bg-success bg-opacity-10{% else %}bg-danger bg-opacity-10{% endif %}">
+-                <div class="card-body">
+-                    <h6 class="{% if saldo_total >= 0 %}text-success{% else %}text-danger{% endif %} mb-1">Saldo do Mês</h6>
+-                    <h3 class="mb-0 {% if saldo_total >= 0 %}text-success{% else %}text-danger{% endif %}">R$ {{ saldo_total|floatformat:2|intcomma }}</h3>
+-                </div>
+-            </div>
+-        </div>
+-    </div>
+-
+-    <!-- Gráficos -->
+-    <div class="row mb-4">
+-        <div class="col-md-6 mb-3">
+-            <div class="card border-0 shadow-sm h-100">
+-                <div class="card-body">
+-                    <h5 class="card-title text-center text-primary mb-3">Resumo por Tipo</h5>
+-                    <canvas id="chartTipo" height="200"></canvas>
+-                </div>
+-            </div>
+-        </div>
+-        <div class="col-md-6 mb-3">
+-            <div class="card border-0 shadow-sm h-100">
+-                <div class="card-body">
+-                    <h5 class="card-title text-center text-primary mb-3">Resumo por Categoria</h5>
+-                    <canvas id="chartCategoria" height="200"></canvas>
+-                </div>
+-            </div>
+-        </div>
+-    </div>
+-</div>
+-
+-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+-    {{ grafico_labels|json_script:"grafico_labels_json" }}
+-    {{ grafico_valores|json_script:"grafico_valores_json" }}
+-    {{ grafico_categorias|json_script:"grafico_categorias_json" }}
+-    {{ grafico_totais_categoria|json_script:"grafico_totais_categoria_json" }}
+-
+-    <script>
+-    const labelsTipo = JSON.parse(document.getElementById('grafico_labels_json').textContent);
+-    const valoresTipo = JSON.parse(document.getElementById('grafico_valores_json').textContent);
+-    const ctxTipo = document.getElementById('chartTipo').getContext('2d');
+-    new Chart(ctxTipo, {
+-        type: 'pie',
+-        data: {
+-            labels: labelsTipo,
+-            datasets: [{
+-                data: valoresTipo,
+-                backgroundColor: labelsTipo.map(label => {
+-                    if (label.toLowerCase().includes('entrada') || label.toLowerCase().includes('crédito')) return '#4CAF50';
+-                    if (label.toLowerCase().includes('saída') || label.toLowerCase().includes('débito')) return '#F44336';
+-                    return '#2196F3';
+-                }),
+-                borderWidth: 0
+-            }]
+-        },
+-        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+-    });
+-
+-    const labelsCat = JSON.parse(document.getElementById('grafico_categorias_json').textContent);
+-    const valoresCat = JSON.parse(document.getElementById('grafico_totais_categoria_json').textContent);
+-    const ctxCat = document.getElementById('chartCategoria').getContext('2d');
+-    new Chart(ctxCat, {
+-        type: 'doughnut',
+-        data: {
+-            labels: labelsCat,
+-            datasets: [{
+-                data: valoresCat,
+-                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
+-                borderWidth: 0
+-            }]
+-        },
+-        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+-    });
+-</script>
+-
+-<script>
+-    document.querySelectorAll('.btn-excluir').forEach(button => {
+-        button.addEventListener('click', function() {
+-            let msg = 'Deseja realmente excluir esta despesa?';
+-            let excluirProximas = false;
+-
+-            // Se for parte de um grupo, oferece opção de cascata
+-            const transacaoId = this.getAttribute('data-id');
+-            const ehParcelada = document.querySelector(`#transacao-${transacaoId} .bi-layers-half`) || 
+-                               document.querySelector(`#transacao-mobile-${transacaoId} .bi-layers-half`);
+-
+-            if (confirm(msg)) {
+-                if (ehParcelada) {
+-                    excluirProximas = confirm('Esta transação faz parte de um grupo/parcelamento. Deseja excluir também todas as parcelas futuras?');
+-                }
+-
+-                const url = this.getAttribute('data-url');
+-                const id = this.getAttribute('data-id');
+-                const token = document.querySelector('[name=csrfmiddlewaretoken]').value;
+-
+-                const formData = new FormData();
+-                formData.append('excluir_proximas', excluirProximas);
+-                formData.append('csrfmiddlewaretoken', token);
+-
+-                fetch(url, {
+-                    method: 'POST',
+-                    body: formData,
+-                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+-                })
+-                .then(response => response.json())
+-                .then(data => {
+-                    if (data.status === 'success') {
+-                        location.reload();
+-                    } else {
+-                        alert('Erro ao excluir: ' + (data.message || 'Tente novamente'));
+-                    }
+-                })
+-                .catch(() => alert('Erro de rede ao excluir'));
+-            }
+-        });
+-    });
+-</script>
+-{% endblock %}
+\ No newline at end of file
+diff --git a/templates/home.html b/templates/home.html
+index 1e32f3a..208ced8 100644
+--- a/templates/home.html
++++ b/templates/home.html
+@@ -9,13 +9,9 @@
+       <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-lg-start">
+         {% if user.is_authenticated %}
+ 
+-        <a href="{% url 'cal:transacoes_mes' %}" class="btn btn-success btn-lg px-4 gap-3">
++        <a href="{% url 'cal:listar_transacoes' %}" class="btn btn-success btn-lg px-4 gap-3">
+           <i class="bi bi-list-ul"></i> Despesas
+         </a>
+-        
+-          <a href="{% url 'cal:resumo_categoria' %}" class="btn btn-primary btn-lg px-4 gap-3">
+-            <i class="bi bi-pie-chart-fill"></i> Mensal
+-          </a>
+ 
+         <a href="{% url 'cal:dashboard' %}" class="btn btn-primary btn-lg px-4 gap-3">
+           <i class="bi bi-graph-up-arrow"></i> Anual
+diff --git a/templates/navbar.html b/templates/navbar.html
+index 6a6c5ee..81731e2 100644
+--- a/templates/navbar.html
++++ b/templates/navbar.html
+@@ -43,16 +43,8 @@
+     </a>
+   </li>
+                     <li class="nav-item">
+-                        <a class="nav-link" href="{% url 'cal:transacoes_mes' %}"><i class="bi bi-list-ul"></i> Despesas</a>
++                        <a class="nav-link" href="{% url 'cal:listar_transacoes' %}"><i class="bi bi-list-ul"></i> Despesas</a>
+                       </li>
+-                    <!--<li class="nav-item">
+-                        <a class="nav-link" href="{% url 'cal:listar_transacoes' %}"><i class="bi bi-list-ul"></i> Despesas Filtro</a>
+-                      </li>-->
+-                    <li class="nav-item">
+-                        <a class="nav-link" href="{% url 'cal:resumo_categoria' %}">
+-                          <i class="bi bi-pie-chart-fill"></i> Balanço Mensal
+-                        </a>
+-                    
+   <li class="nav-item">
+     <a class="nav-link" href="{% url 'cal:dashboard' %}">
+       <i class="bi bi-graph-up"></i> Balanço Anual

@@ -9,13 +9,9 @@
       <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-lg-start">
         {% if user.is_authenticated %}
 
-        <a href="{% url 'cal:transacoes_mes' %}" class="btn btn-success btn-lg px-4 gap-3">
+        <a href="{% url 'cal:listar_transacoes' %}" class="btn btn-success btn-lg px-4 gap-3">
           <i class="bi bi-list-ul"></i> Despesas
         </a>
-        
-          <a href="{% url 'cal:resumo_categoria' %}" class="btn btn-primary btn-lg px-4 gap-3">
-            <i class="bi bi-pie-chart-fill"></i> Mensal
-          </a>
 
         <a href="{% url 'cal:dashboard' %}" class="btn btn-primary btn-lg px-4 gap-3">
           <i class="bi bi-graph-up-arrow"></i> Anual

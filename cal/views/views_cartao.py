@@ -83,28 +83,9 @@ def cartoes_resumo_view(request):
 
 @login_required
 def resumo_categoria_view(request):
-    ano, mes = parse_mes_ano(request)
-    data_inicio, data_fim = intervalo_do_mes(ano, mes)
-
-    transacoes = Transacao.objects.filter(
-        user=request.user,
-        data__gte=data_inicio,
-        data__lt=data_fim
-    ).select_related('tipo', 'categoria', 'cartao')
-
-    dados = resumo_categorias_e_tipos(transacoes)
-
-    contexto = {
-        "cat_labels": dados['cat_labels'],
-        "cat_valores": dados['cat_valores'],
-        "tipo_labels": dados['tipo_labels'],
-        "tipo_valores": dados['tipo_valores'],
-        "tipo_cores": dados['tipo_cores'],
-        "total_creditos": dados['total_creditos'],
-        "total_debitos": dados['total_debitos'],
-        "saldo": dados['saldo'],
-        "mes_atual": date(ano, mes, 1),
-        "mes_anterior": date(ano, mes, 1) - relativedelta(months=1),
-        "mes_proximo": date(ano, mes, 1) + relativedelta(months=1),
-    }
-    return render(request, "cal/resumo_categoria.html", contexto)
+    """
+    Removida: duplicava exatamente os gráficos que já existem em
+    /transacoes/ (TransacaoListView) para o mesmo mês. Mantida como
+    redirect para não quebrar links/favoritos salvos.
+    """
+    return redirect('cal:listar_transacoes')
