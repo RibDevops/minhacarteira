@@ -76,12 +76,11 @@
     </div>
 </div>
 
-<!-- Chart.js -->
-<script id="resumo_cat_labels_json" type="application/json">{{ cat_labels|json_script:"resumo_cat_labels_json" }}</script>
-<script id="resumo_cat_valores_json" type="application/json">{{ cat_valores|json_script:"resumo_cat_valores_json" }}</script>
-<script id="resumo_tipo_labels_json" type="application/json">{{ tipo_labels|json_script:"resumo_tipo_labels_json" }}</script>
-<script id="resumo_tipo_valores_json" type="application/json">{{ tipo_valores|json_script:"resumo_tipo_valores_json" }}</script>
-<script id="resumo_tipo_cores_json" type="application/json">{{ tipo_cores|json_script:"resumo_tipo_cores_json" }}</script>
+{{ cat_labels|json_script:"resumo_cat_labels_json" }}
+{{ cat_valores|json_script:"resumo_cat_valores_json" }}
+{{ tipo_labels|json_script:"resumo_tipo_labels_json" }}
+{{ tipo_valores|json_script:"resumo_tipo_valores_json" }}
+{{ tipo_cores|json_script:"resumo_tipo_cores_json" }}
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>

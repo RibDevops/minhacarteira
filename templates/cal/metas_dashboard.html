@@ -96,8 +96,8 @@
     </div>
 </div>
 
-<script id="metas_labels_json" type="application/json">{{ grafico_labels|json_script:"metas_labels_json" }}</script>
-<script id="metas_valores_json" type="application/json">{{ grafico_valores|json_script:"metas_valores_json" }}</script>
+{{ grafico_labels|json_script:"metas_labels_json" }}
+{{ grafico_valores|json_script:"metas_valores_json" }}
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>

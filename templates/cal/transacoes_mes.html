@@ -80,11 +80,12 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script id="grafico_labels_json" type="application/json">{{ grafico_labels|json_script:"grafico_labels_json" }}</script>
-<script id="grafico_valores_json" type="application/json">{{ grafico_valores|json_script:"grafico_valores_json" }}</script>
-<script id="grafico_categorias_json" type="application/json">{{ grafico_categorias|json_script:"grafico_categorias_json" }}</script>
-<script id="grafico_totais_categoria_json" type="application/json">{{ grafico_totais_categoria|json_script:"grafico_totais_categoria_json" }}</script>
-<script>
+    {{ grafico_labels|json_script:"grafico_labels_json" }}
+    {{ grafico_valores|json_script:"grafico_valores_json" }}
+    {{ grafico_categorias|json_script:"grafico_categorias_json" }}
+    {{ grafico_totais_categoria|json_script:"grafico_totais_categoria_json" }}
+
+    <script>
     const labelsTipo = JSON.parse(document.getElementById('grafico_labels_json').textContent);
     const valoresTipo = JSON.parse(document.getElementById('grafico_valores_json').textContent);
     const ctxTipo = document.getElementById('chartTipo').getContext('2d');

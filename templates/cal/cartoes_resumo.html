@@ -79,12 +79,12 @@
     </div>
 </div>
 
-<script id="cartoes_labels_json" type="application/json">{{ labels|json_script:"cartoes_labels_json" }}</script>
-<script id="cartoes_consumo_json" type="application/json">{{ consumo|json_script:"cartoes_consumo_json" }}</script>
-<script id="cartoes_limites_json" type="application/json">{{ limites|json_script:"cartoes_limites_json" }}</script>
+{{ labels|json_script:"cartoes_labels_json" }}
+    {{ consumo|json_script:"cartoes_consumo_json" }}
+    {{ limites|json_script:"cartoes_limites_json" }}
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
     // Gráficos Individuais
     {% for c in cartoes %}
     (function() {

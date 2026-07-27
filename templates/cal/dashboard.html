@@ -110,17 +110,14 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    const COLORS = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#C9CBCF'];
 
 {% for num, dados in meses_detalhe.items %}
 {% if dados.tem_dados %}
-<script id="dashboard_labels_{{ num }}" type="application/json">{{ dados.grafico_labels|json_script:"dashboard_labels_{{ num }}" }}</script>
-<script id="dashboard_valores_{{ num }}" type="application/json">{{ dados.grafico_valores|json_script:"dashboard_valores_{{ num }}" }}</script>
+    {{ dados.grafico_labels|json_script:"dashboard_labels_"|add:num }}
+    {{ dados.grafico_valores|json_script:"dashboard_valores_"|add:num }}
 {% endif %}
 {% endfor %}
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     const COLORS = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#C9CBCF'];
 
