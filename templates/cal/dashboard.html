@@ -113,8 +113,8 @@
 
 {% for num, dados in meses_detalhe.items %}
 {% if dados.tem_dados %}
-    {{ dados.grafico_labels|json_script:"dashboard_labels_"|add:num }}
-    {{ dados.grafico_valores|json_script:"dashboard_valores_"|add:num }}
+<script id="dashboard_labels_{{ num }}" type="application/json">{{ dados.grafico_labels|safe }}</script>
+<script id="dashboard_valores_{{ num }}" type="application/json">{{ dados.grafico_valores|safe }}</script>
 {% endif %}
 {% endfor %}
 
