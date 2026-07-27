@@ -8,6 +8,25 @@ from django.urls import reverse
 from dateutil.relativedelta import relativedelta
 from encrypted_model_fields.fields import EncryptedCharField, EncryptedDecimalField
 
+
+# ======================================================
+# CONSTANTES / CHOICES
+# ======================================================
+
+FORMA_PAGAMENTO_CHOICES = [
+    ('DEBITO', 'Débito (à vista)'),
+    ('CREDITO', 'Crédito (a prazo)'),
+    ('DINHEIRO', 'Dinheiro'),
+    ('PIX', 'Pix'),
+]
+
+FORMA_PAGAMENTO_EXIGE_CARTAO = {
+    'CREDITO': True,
+    'DEBITO': True,
+    'DINHEIRO': False,
+    'PIX': False,
+}
+
 # ======================================================
 # BASE MODEL
 # ======================================================
@@ -92,40 +111,6 @@ class Tipo(models.Model):
 
 
 # ======================================================
-# FORMA DE PAGAMENTO
-# ======================================================
-
-class FormaPagamento(models.Model):
-    DEBITO = 'DEBITO'
-    CREDITO = 'CREDITO'
-    DINHEIRO = 'DINHEIRO'
-    PIX = 'PIX'
-
-    CODIGO_CHOICES = (
-        (DEBITO, 'Débito (à vista)'),
-        (CREDITO, 'Crédito (a prazo)'),
-        (DINHEIRO, 'Dinheiro'),
-        (PIX, 'Pix'),
-    )
-
-    codigo = models.CharField(
-        max_length=20,
-        choices=CODIGO_CHOICES,
-        unique=True
-    )
-
-    descricao = models.CharField(max_length=100)
-
-    exige_cartao = models.BooleanField(
-        default=False,
-        help_text="Se marcado, esta forma de pagamento exige cartão."
-    )
-
-    def __str__(self) -> str:
-        return str(self.descricao)
-
-
-# ======================================================
 # CARTÃO
 # ======================================================
 
@@ -135,9 +120,12 @@ class Cartao(models.Model):
     limite = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     dia_fechamento = models.PositiveIntegerField(default=1)
 
-    is_credito = models.BooleanField(
-        default=True,
-        help_text="Cartão de crédito (gera débito contábil)"
+    tipo = models.ForeignKey(
+        'Tipo',
+        on_delete=models.PROTECT,
+        verbose_name="Tipo contábil",
+        help_text="Crédito (entrada no extrato do cartão = débito contábil) ou Débito",
+        null=True, blank=True
     )
     is_active = models.BooleanField(default=True, verbose_name="Ativo")
 
@@ -160,9 +148,9 @@ class Transacao(BaseModel):
         verbose_name="Tipo contábil"
     )
 
-    forma_pagamento = models.ForeignKey(
-        FormaPagamento,
-        on_delete=models.PROTECT,
+    forma_pagamento = models.CharField(
+        max_length=20,
+        choices=FORMA_PAGAMENTO_CHOICES,
         verbose_name="Forma de pagamento",
         null=True,
         blank=True
@@ -197,6 +185,10 @@ class Transacao(BaseModel):
     )
 
     data = models.DateField(verbose_name="Data da transação")
+
+    # Para unique_together com recorrencia (índice funcional não suportado no SQLite)
+    ano = models.PositiveIntegerField(null=True, blank=True, db_index=True)
+    mes = models.PositiveIntegerField(null=True, blank=True, db_index=True)
 
     parcelas = models.PositiveIntegerField(
         null=True,
@@ -235,6 +227,15 @@ class Transacao(BaseModel):
         help_text="Preenchido automaticamente quando esta transação foi gerada por uma assinatura/recorrência."
     )
 
+    class Meta:
+        unique_together = ['recorrencia', 'ano', 'mes']
+
+    def save(self, *args, **kwargs):
+        if self.data and (self.ano is None or self.mes is None):
+            self.ano = self.data.year
+            self.mes = self.data.month
+        super().save(*args, **kwargs)
+
     @property
     def valor_decimal(self):
         return self.valor if self.valor is not None else Decimal('0')
@@ -260,9 +261,10 @@ class Recorrencia(BaseModel):
     que o usuário a desative.
 
     As transações efetivas de cada mês são criadas sob demanda por
-    `cal.utils.gerar_transacoes_pendentes()` (chamada a cada request
-    autenticado), não por um cron/worker separado — mantém a infraestrutura
-    do projeto simples, sem depender de Celery/agendador externo.
+    `cal.utils.gerar_transacoes_pendentes()` (chamada via management command
+    ou cron diário), não a cada request autenticado — evita N queries extra
+    por page view e race conditions. Constraint única em
+    Transacao(recorrencia, ano, mes) garante idempotência.
     """
     tipo = models.ForeignKey(Tipo, on_delete=models.PROTECT, verbose_name="Tipo contábil")
     categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True, blank=True)

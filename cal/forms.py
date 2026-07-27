@@ -319,10 +319,10 @@ class CartaoForm(forms.ModelForm):
 
     class Meta:
         model = Cartao
-        fields = ['nome', 'limite', 'dia_fechamento', 'is_credito']
+        fields = ['nome', 'limite', 'dia_fechamento', 'tipo']
         widgets = {
             'nome': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex: Nubank, Visa...'}),
-            'is_credito': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'tipo': forms.Select(attrs={'class': 'form-select'}),
         }
 
 

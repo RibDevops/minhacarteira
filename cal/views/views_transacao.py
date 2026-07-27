@@ -213,7 +213,6 @@ def transacao_view(request):
         transacao.user = request.user
 
         tipo = transacao.tipo
-        forma_pagamento = transacao.forma_pagamento
         categoria = transacao.categoria
         data = transacao.data
         parcelas = int(form.cleaned_data.get('parcelas') or 1)
@@ -232,7 +231,6 @@ def transacao_view(request):
             Transacao.objects.create(
                 user=request.user,
                 tipo=tipo,
-                forma_pagamento=forma_pagamento,
                 cartao=transacao.cartao,
                 categoria=categoria,
                 titulo=f"{transacao.titulo} ({i + 1}/{parcelas})" if parcelas > 1 else transacao.titulo,

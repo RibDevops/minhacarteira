@@ -78,11 +78,12 @@ class TransacaoCrudTest(TestCase):
 class TransacaoCartaoTest(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(username='bob', password='p')
-        self.tipo = Tipo.objects.create(codigo='D', descricao='Débito')
+        self.tipo_debito = Tipo.objects.create(codigo='D', descricao='Débito')
+        self.tipo_credito = Tipo.objects.create(codigo='C', descricao='Crédito')
         self.categoria = Categoria.objects.create(user=self.user, nome='Online')
         self.cartao = Cartao.objects.create(
             user=self.user, nome='Nubank', limite=Decimal('5000'),
-            dia_fechamento=1, is_credito=True, is_active=True
+            dia_fechamento=1, tipo=self.tipo_credito, is_active=True
         )
         self.client.force_login(self.user)
 
@@ -92,7 +93,7 @@ class TransacaoCartaoTest(TestCase):
         independente do dia da compra.
         """
         self.client.post(reverse('cal:transacao_nova'), {
-            'tipo': self.tipo.id,
+            'tipo': self.tipo_debito.id,
             'titulo': 'Compra Online',
             'cartao': self.cartao.id,
             'categoria': self.categoria.id,

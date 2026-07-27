@@ -5,16 +5,17 @@ from cal.views import views_categoria, views_dashboard, views_recorrencia
 from cal.views import views_tipo, views_user, views_meta
 from cal.views.views_cal import CalendarView
 from cal.views.views_login import register_view
-from cal.views.views_transacao import (
-    listar_transacoes, transacao_view, transacao_rapida, transacao_editar,
-    excluir_transacao, excluir_transacao_lista, transacoes_mes_view,
-    TransacaoUpdateView,
-)
-from cal.views.views_cartao import (
-    cartao_novo, cartao_editar, cartao_excluir, cartao_alternar_status,
-    cartoes_resumo_view, resumo_categoria_view,
-)
+from cal.views.views_transacao import transacao_rapida, transacoes_mes_view, excluir_transacao_lista
+from cal.views.views_cartao import cartao_alternar_status, resumo_categoria_view
 from cal.views.views_export import exportar_transacoes_csv
+from cal.views.views_cbv import (
+    TransacaoListView, TransacaoCreateView, TransacaoUpdateView, TransacaoDeleteView,
+    CartaoListView, CartaoCreateView, CartaoUpdateView, CartaoDeleteView,
+    CategoriaListView, CategoriaCreateView, CategoriaUpdateView, CategoriaDeleteView,
+    MetaCategoriaListView, MetaCategoriaCreateView, MetaCategoriaUpdateView, MetaCategoriaDeleteView,
+    RecorrenciaListView, RecorrenciaCreateView, RecorrenciaUpdateView, RecorrenciaDeleteView, RecorrenciaToggleStatusView,
+    TipoListView, TipoCreateView, TipoUpdateView, TipoDeleteView,
+)
 
 app_name = 'cal'
 
@@ -24,11 +25,11 @@ urlpatterns = [
     path('calendar/', CalendarView.as_view(), name='calendar'),
 
     # Transações
-    path('transacoes/', listar_transacoes, name='listar_transacoes'),
-    path('transacao/nova/', transacao_view, name='transacao_nova'),
+    path('transacoes/', TransacaoListView.as_view(), name='listar_transacoes'),
+    path('transacao/nova/', TransacaoCreateView.as_view(), name='transacao_nova'),
     path('transacao/rapida/', transacao_rapida, name='transacao_rapida'),
-    path('transacao/editar/<int:pk>/', transacao_editar, name='transacao_editar'),
-    path('transacao/excluir/<int:pk>/', excluir_transacao, name='transacao_excluir'),
+    path('transacao/editar/<int:pk>/', TransacaoUpdateView.as_view(), name='transacao_editar'),
+    path('transacao/excluir/<int:pk>/', TransacaoDeleteView.as_view(), name='transacao_excluir'),
     path('excluir_transacao_lista/<int:pk>/', excluir_transacao_lista, name='excluir_transacao_lista'),
     path('transacoes-mes/', transacoes_mes_view, name='transacoes_mes'),
     path('transacoes/exportar/', exportar_transacoes_csv, name='exportar_transacoes_csv'),
@@ -36,28 +37,28 @@ urlpatterns = [
     path('transacao/<int:pk>/editar/', TransacaoUpdateView.as_view(), name='transacao_update'),
 
     # Cartões
-    path('cartoes/resumo/', cartoes_resumo_view, name='cartoes_resumo'),
-    path('cartao/novo/', cartao_novo, name='cartao_novo'),
-    path('cartao/editar/<int:pk>/', cartao_editar, name='cartao_editar'),
-    path('cartao/excluir/<int:pk>/', cartao_excluir, name='cartao_excluir'),
+    path('cartoes/resumo/', CartaoListView.as_view(), name='cartoes_resumo'),
+    path('cartao/novo/', CartaoCreateView.as_view(), name='cartao_novo'),
+    path('cartao/editar/<int:pk>/', CartaoUpdateView.as_view(), name='cartao_editar'),
+    path('cartao/excluir/<int:pk>/', CartaoDeleteView.as_view(), name='cartao_excluir'),
     path('cartao/alternar-status/<int:pk>/', cartao_alternar_status, name='cartao_alternar_status'),
 
     # Registro (login e logout vêm de django.contrib.auth.urls no core/urls.py)
     path('register/', register_view, name='register'),
 
     # Tipos
-    path('tipos/', views_tipo.tipo_list, name='tipo_list'),
-    path('tipos/novo/', views_tipo.tipo_create, name='tipo_create'),
-    path('tipos/<int:pk>/editar/', views_tipo.tipo_update, name='tipo_update'),
-    path('tipos/<int:pk>/excluir/', views_tipo.tipo_delete, name='tipo_delete'),
+    path('tipos/', TipoListView.as_view(), name='tipo_list'),
+    path('tipos/novo/', TipoCreateView.as_view(), name='tipo_create'),
+    path('tipos/<int:pk>/editar/', TipoUpdateView.as_view(), name='tipo_update'),
+    path('tipos/<int:pk>/excluir/', TipoDeleteView.as_view(), name='tipo_delete'),
 
     # Categorias
-    path('categorias/', views_categoria.categoria_list, name='categorias'),
-    path('categorias/nova/', views_categoria.categoria_nova, name='categoria_nova'),
-    path('categorias/<int:pk>/editar/', views_categoria.categoria_update, name='categoria_update'),
-    path('categorias/<int:pk>/excluir/', views_categoria.categoria_delete, name='categoria_delete'),
+    path('categorias/', CategoriaListView.as_view(), name='categorias'),
+    path('categorias/nova/', CategoriaCreateView.as_view(), name='categoria_nova'),
+    path('categorias/<int:pk>/editar/', CategoriaUpdateView.as_view(), name='categoria_update'),
+    path('categorias/<int:pk>/excluir/', CategoriaDeleteView.as_view(), name='categoria_delete'),
 
-    # Usuários
+    # Usuários (keep existing FBVs for now - staff only)
     path('usuarios/', views_user.listar_usuarios, name='listar_usuarios'),
     path('usuarios/adicionar/', views_user.adicionar_usuario, name='adicionar_usuario'),
     path('usuarios/editar/<int:user_id>/', views_user.editar_usuario, name='editar_usuario'),
@@ -66,11 +67,11 @@ urlpatterns = [
     path('usuarios/desativar_usuario/<int:user_id>/', views_user.desativar_usuario, name='desativar_usuario'),
 
     # Recorrências
-    path('recorrencias/', views_recorrencia.recorrencia_listar, name='recorrencia_listar'),
-    path('recorrencia/nova/', views_recorrencia.recorrencia_nova, name='recorrencia_nova'),
-    path('recorrencia/<int:pk>/editar/', views_recorrencia.recorrencia_editar, name='recorrencia_editar'),
-    path('recorrencia/<int:pk>/alternar-status/', views_recorrencia.recorrencia_alternar_status, name='recorrencia_alternar_status'),
-    path('recorrencia/<int:pk>/excluir/', views_recorrencia.recorrencia_excluir, name='recorrencia_excluir'),
+    path('recorrencias/', RecorrenciaListView.as_view(), name='recorrencia_listar'),
+    path('recorrencia/nova/', RecorrenciaCreateView.as_view(), name='recorrencia_nova'),
+    path('recorrencia/<int:pk>/editar/', RecorrenciaUpdateView.as_view(), name='recorrencia_editar'),
+    path('recorrencia/<int:pk>/alternar-status/', RecorrenciaToggleStatusView.as_view(), name='recorrencia_alternar_status'),
+    path('recorrencia/<int:pk>/excluir/', RecorrenciaDeleteView.as_view(), name='recorrencia_excluir'),
 
     # Páginas públicas
     path('manual/', views_user.manual_publico, name='manual_publico'),
@@ -78,10 +79,10 @@ urlpatterns = [
     path('perfil/', views_user.perfil_usuario, name='perfil'),
 
     # Metas
-    path('metas/', views_meta.metas_dashboard, name='metas_categoria'),
-    path('metas/nova/', views_meta.meta_adicionar, name='meta_criar'),
-    path('metas/<int:pk>/editar/', views_meta.meta_editar, name='meta_editar'),
-    path('metas/<int:meta_id>/excluir/', views_meta.meta_excluir, name='meta_excluir'),
+    path('metas/', MetaCategoriaListView.as_view(), name='metas_categoria'),
+    path('metas/nova/', MetaCategoriaCreateView.as_view(), name='meta_criar'),
+    path('metas/<int:pk>/editar/', MetaCategoriaUpdateView.as_view(), name='meta_editar'),
+    path('metas/<int:pk>/excluir/', MetaCategoriaDeleteView.as_view(), name='meta_excluir'),
 
     # Reset de senha nativo
     path('password-reset/', auth_views.PasswordResetView.as_view(

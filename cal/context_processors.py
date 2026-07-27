@@ -3,7 +3,6 @@ from decimal import Decimal
 
 from .models import Categoria, Cartao, Tipo, Transacao
 from .services import saldos_consecutivos
-from .utils import gerar_transacoes_pendentes
 
 
 def saldos_mensais(request):
@@ -12,10 +11,6 @@ def saldos_mensais(request):
 
     user = request.user
     hoje = date.today()
-
-    # Gera lançamentos de assinaturas/recorrências pendentes antes de calcular
-    # qualquer saldo, pra que o mês já apareça correto na primeira tela vista.
-    gerar_transacoes_pendentes(user)
 
     saldos = saldos_consecutivos(user, hoje.year, hoje.month)
     atual = saldos['atual']

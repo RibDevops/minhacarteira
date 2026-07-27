@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.admin.views.decorators import staff_member_required
 
 from django.contrib.auth.forms import PasswordChangeForm
-from ..models import Transacao, Tipo, Cartao, FormaPagamento
+from ..models import Transacao, Tipo, Cartao
 
 @login_required
 def perfil_usuario(request):
