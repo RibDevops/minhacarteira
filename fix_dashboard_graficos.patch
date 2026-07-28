@@ -1,0 +1,42 @@
+diff --git a/cal/services.py b/cal/services.py
+index b031d39..f1f7c76 100644
+--- a/cal/services.py
++++ b/cal/services.py
+@@ -7,7 +7,6 @@ Centralizar aqui evita reescrever a mesma query/aggregate em N lugares
+ (cada um com pequenas variações que viravam bugs sutis) e facilita
+ futuros testes isolados da lógica financeira.
+ """
+-import json
+ from collections import defaultdict, OrderedDict
+ from datetime import date
+ from decimal import Decimal
+@@ -117,8 +116,8 @@ def detalhe_mensal_ano(user, ano):
+             'credito': creditos,
+             'debito': debitos,
+             'saldo': saldo,
+-            'grafico_labels': json.dumps(cat_labels),
+-            'grafico_valores': json.dumps(cat_valores),
++            'grafico_labels': cat_labels,
++            'grafico_valores': cat_valores,
+             'tem_dados': qs_mes.exists(),
+         }
+     return detalhe
+diff --git a/templates/cal/dashboard.html b/templates/cal/dashboard.html
+index 6ae9581..ee70703 100644
+--- a/templates/cal/dashboard.html
++++ b/templates/cal/dashboard.html
+@@ -113,8 +113,12 @@
+ 
+ {% for num, dados in meses_detalhe.items %}
+ {% if dados.tem_dados %}
+-<script id="dashboard_labels_{{ num }}" type="application/json">{{ dados.grafico_labels|safe }}</script>
+-<script id="dashboard_valores_{{ num }}" type="application/json">{{ dados.grafico_valores|safe }}</script>
++    {% with num_str=num|stringformat:"s" %}
++    {% with id_labels="dashboard_labels_"|add:num_str id_valores="dashboard_valores_"|add:num_str %}
++    {{ dados.grafico_labels|json_script:id_labels }}
++    {{ dados.grafico_valores|json_script:id_valores }}
++    {% endwith %}
++    {% endwith %}
+ {% endif %}
+ {% endfor %}
+ 
