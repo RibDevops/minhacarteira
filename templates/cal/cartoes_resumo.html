@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Resumo de Cartões{% endblock %}
 
 {% block content %}
@@ -83,7 +84,7 @@
     {{ consumo|json_script:"cartoes_consumo_json" }}
     {{ limites|json_script:"cartoes_limites_json" }}
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{% static 'vendor/chartjs/chart.umd.min.js' %}"></script>
     <script>
     // Gráficos Individuais
     {% for c in cartoes %}
