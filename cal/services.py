@@ -7,7 +7,8 @@ Centralizar aqui evita reescrever a mesma query/aggregate em N lugares
 (cada um com pequenas variações que viravam bugs sutis) e facilita
 futuros testes isolados da lógica financeira.
 """
-from collections import defaultdict
+import json
+from collections import defaultdict, OrderedDict
 from datetime import date
 from decimal import Decimal
 
@@ -99,7 +100,6 @@ def detalhe_mensal_ano(user, ano):
         '', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
         'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
     ]
-    from collections import OrderedDict
     detalhe = OrderedDict()
     for mes_num in range(1, 13):
         qs_mes = Transacao.objects.filter(
@@ -117,8 +117,8 @@ def detalhe_mensal_ano(user, ano):
             'credito': creditos,
             'debito': debitos,
             'saldo': saldo,
-            'grafico_labels': cat_labels,
-            'grafico_valores': cat_valores,
+            'grafico_labels': json.dumps(cat_labels),
+            'grafico_valores': json.dumps(cat_valores),
             'tem_dados': qs_mes.exists(),
         }
     return detalhe
