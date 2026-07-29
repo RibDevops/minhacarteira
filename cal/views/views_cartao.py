@@ -5,6 +5,7 @@ from dateutil.relativedelta import relativedelta
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.views.decorators.http import require_POST
 
 from ..forms import CartaoForm
@@ -88,4 +89,7 @@ def resumo_categoria_view(request):
     /transacoes/ (TransacaoListView) para o mesmo mês. Mantida como
     redirect para não quebrar links/favoritos salvos.
     """
-    return redirect('cal:listar_transacoes')
+    destino = reverse('cal:listar_transacoes')
+    if request.GET:
+        destino += f'?{request.GET.urlencode()}'
+    return redirect(destino)

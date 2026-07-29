@@ -177,19 +177,10 @@
         </div>
     </div>
 
-    <!-- Gráficos: consolidados aqui — antes viviam duplicados em
-         /transacoes-mes/ e /resumo-categoria/, duas páginas diferentes
-         mostrando exatamente a mesma informação. Movidos para depois da
-         lista, já que a lista é a informação principal da página. -->
-    <div class="row mt-4">
-        <div class="col-md-6 mb-3">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body">
-                    <h6 class="card-title text-center text-primary mb-3">Resumo por Tipo</h6>
-                    <canvas id="chartTipo" height="200"></canvas>
-                </div>
-            </div>
-        </div>
+    <!-- Gráfico por categoria: o gráfico por tipo (crédito/débito) foi
+         removido daqui porque os cards de totais logo acima já mostram
+         essa mesma informação — eram duas formas de dizer a mesma coisa. -->
+    <div class="row mt-4 justify-content-center">
         <div class="col-md-6 mb-3">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-body">
@@ -202,31 +193,9 @@
 </div>
 
 <script src="{% static 'vendor/chartjs/chart.umd.min.js' %}"></script>
-{{ grafico_tipo_labels|json_script:"grafico_tipo_labels_json" }}
-{{ grafico_tipo_valores|json_script:"grafico_tipo_valores_json" }}
 {{ grafico_categoria_labels|json_script:"grafico_categoria_labels_json" }}
 {{ grafico_categoria_valores|json_script:"grafico_categoria_valores_json" }}
 <script>
-    const labelsTipo = JSON.parse(document.getElementById('grafico_tipo_labels_json').textContent);
-    const valoresTipo = JSON.parse(document.getElementById('grafico_tipo_valores_json').textContent);
-    new Chart(document.getElementById('chartTipo').getContext('2d'), {
-        type: 'pie',
-        data: {
-            labels: labelsTipo,
-            datasets: [{
-                data: valoresTipo,
-                backgroundColor: labelsTipo.map(label => {
-                    const l = label.toLowerCase();
-                    if (l.includes('entrada') || l.includes('crédito')) return '#4CAF50';
-                    if (l.includes('saída') || l.includes('débito')) return '#F44336';
-                    return '#2196F3';
-                }),
-                borderWidth: 0
-            }]
-        },
-        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
-    });
-
     const labelsCat = JSON.parse(document.getElementById('grafico_categoria_labels_json').textContent);
     const valoresCat = JSON.parse(document.getElementById('grafico_categoria_valores_json').textContent);
     new Chart(document.getElementById('chartCategoria').getContext('2d'), {

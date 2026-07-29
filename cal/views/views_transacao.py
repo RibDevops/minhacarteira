@@ -9,7 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Sum
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.views.decorators.http import require_POST
 from django.views.generic.edit import UpdateView
 
@@ -274,7 +274,10 @@ def transacoes_mes_view(request):
     quem clicava em "Despesas" e não via nenhuma transação listada.
     Mantida como redirect para não quebrar links/favoritos salvos.
     """
-    return redirect('cal:listar_transacoes')
+    destino = reverse('cal:listar_transacoes')
+    if request.GET:
+        destino += f'?{request.GET.urlencode()}'
+    return redirect(destino)
 
 
 @login_required

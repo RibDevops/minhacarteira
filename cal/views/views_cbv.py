@@ -80,8 +80,6 @@ class TransacaoListView(LoginRequiredMixin, UserOwnsObjectMixin, ListView):
             'saldo_total': total_creditos - total_debitos,
             'total_creditos': total_creditos,
             'total_debitos': total_debitos,
-            'grafico_tipo_labels': dados_graficos['tipo_labels'],
-            'grafico_tipo_valores': dados_graficos['tipo_valores'],
             'grafico_categoria_labels': dados_graficos['cat_labels'],
             'grafico_categoria_valores': dados_graficos['cat_valores'],
         })
