@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load humanize %}
 {% block content %}
 <div class="container mt-4">
@@ -82,7 +83,7 @@
                                 </div>
                             </div>
                             <div class="text-center mt-3">
-                                <a href="{% url 'cal:transacoes_mes' %}?mes={{ num }}&ano={{ ano_selecionado|stringformat:'d' }}" class="btn btn-sm btn-outline-secondary">
+                                <a href="{% url 'cal:listar_transacoes' %}?mes={{ num }}&ano={{ ano_selecionado|stringformat:'d' }}" class="btn btn-sm btn-outline-secondary">
                                     <i class="bi bi-list-task"></i> Detalhes do Mês
                                 </a>
                             </div>
@@ -109,7 +110,7 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'vendor/chartjs/chart.umd.min.js' %}"></script>
 
 {% for num, dados in meses_detalhe.items %}
 {% if dados.tem_dados %}

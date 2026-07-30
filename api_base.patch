@@ -1,0 +1,281 @@
+diff --git a/MIGRACAO_FLUTTER.md b/MIGRACAO_FLUTTER.md
+new file mode 100644
+index 0000000..1c21335
+--- /dev/null
++++ b/MIGRACAO_FLUTTER.md
+@@ -0,0 +1,81 @@
++# Migração Flutter — Minha Carteira Digital
++### Documento de acompanhamento (atualizar a cada etapa)
++
++> Enviar este arquivo no início de cada nova conversa + "continue a partir
++> daqui". Não pedir para reexplicar decisões já tomadas abaixo.
++
++**Última atualização:** 31/07/2026
++
++---
++
++## Decisões fixadas (não perguntar de novo)
++- Web (Django templates) e App (Flutter) rodam **em paralelo**, mesmo backend.
++- Auth API: **Token simples do DRF** (não JWT).
++- Stack Flutter: dio, go_router, shared_preferences, flutter_secure_storage,
++  provider (bloc só se justificar).
++- Estrutura: `lib/{models,services,repositories,screens,widgets,providers,utils,theme}/`
++- Regra: reaproveitar Django/models/regras de negócio; nunca reescrever
++  módulo que já funciona; perguntar antes de decisão ambígua.
++
++---
++
++## Status por etapa
++
++| # | Etapa | Status | Commit/patch |
++|---|---|---|---|
++| 1 | Analisar estrutura atual / identificar backend | ✅ Concluído | — |
++| 2 | API REST (DRF) — base | ✅ Concluído | `api_base.patch` (não commitado no repo ainda) |
++| 3 | API — Metas | ⬜ Pendente | |
++| 4 | API — Recorrências | ⬜ Pendente | |
++| 5 | API — Dashboard/gráficos (endpoint agregado) | ⬜ Pendente | |
++| 6 | Criar projeto Flutter (estrutura de pastas) | ⬜ Pendente | |
++| 7 | Camada `services/` (dio) + login | ⬜ Pendente | |
++| 8 | Telas: login | ⬜ Pendente | |
++| 9 | Telas: lista de transações | ⬜ Pendente | |
++| 10 | Telas: registro rápido | ⬜ Pendente | |
++| 11 | Telas: dashboard/calendário | ⬜ Pendente | |
++| 12 | Telas: cartões/metas/recorrências | ⬜ Pendente | |
++| 13 | Navegação (go_router) | ⬜ Pendente | |
++| 14 | Build Android (.apk/.aab) | ⬜ Pendente | |
++| 15 | Build iOS (.ipa) | ⬜ Pendente | |
++
++---
++
++## Etapa 2 — API base (detalhe)
++
++**Criados:** `cal/api/__init__.py`, `cal/api/serializers.py`, `cal/api/views.py`, `cal/api/urls.py`
++**Modificados:** `core/settings.py` (DRF + token auth ativados), `core/urls.py` (`/api/`)
++
++**Endpoints ativos:**
++```
++POST /api/auth/token/              {username, password} -> {token}
++GET/POST      /api/transacoes/     ?mes=X&ano=Y filtra
++GET/PUT/DELETE /api/transacoes/{id}/
++GET/POST      /api/categorias/
++GET/POST      /api/cartoes/
++GET           /api/tipos/          (somente leitura, global)
++```
++
++Autenticação: header `Authorization: Token <token>`.
++Todos os endpoints filtram por `request.user`; categoria/cartão de outro
++usuário são rejeitados (400) — mesma regra de segurança das views web.
++
++**Testado:** 22 testes web (sem quebra), obtenção de token, CRUD de
++transação, bloqueio de IDOR, 401 sem token.
++
++**Pendente de aplicar no repo real:** rodar
++```bash
++git apply api_base.patch
++python manage.py migrate
++python manage.py test cal
++git add cal/api/ core/settings.py core/urls.py
++git commit -m "feat: API REST base (DRF) para o app Flutter"
++git push origin main
++```
++Confirmar aqui quando aplicado, pra eu marcar como commitado.
++
++---
++
++## Próximo passo
++Etapa 3: API de Metas (`MetaCategoria` — serializer + viewset, mesmo padrão
++da Transação). Aguardando confirmação para iniciar.
+diff --git a/cal/api/__init__.py b/cal/api/__init__.py
+new file mode 100644
+index 0000000..e69de29
+diff --git a/cal/api/serializers.py b/cal/api/serializers.py
+new file mode 100644
+index 0000000..50e0371
+--- /dev/null
++++ b/cal/api/serializers.py
+@@ -0,0 +1,57 @@
++from rest_framework import serializers
++from ..models import Transacao, Categoria, Cartao, Tipo, MetaCategoria
++
++
++class TipoSerializer(serializers.ModelSerializer):
++    class Meta:
++        model = Tipo
++        fields = ['id', 'codigo', 'descricao']
++
++
++class CategoriaSerializer(serializers.ModelSerializer):
++    class Meta:
++        model = Categoria
++        fields = ['id', 'nome', 'is_global']
++        read_only_fields = ['is_global']
++
++
++class CartaoSerializer(serializers.ModelSerializer):
++    class Meta:
++        model = Cartao
++        fields = ['id', 'nome', 'limite', 'is_active']
++
++
++class TransacaoSerializer(serializers.ModelSerializer):
++    class Meta:
++        model = Transacao
++        fields = [
++            'id', 'tipo', 'categoria', 'cartao', 'titulo', 'valor',
++            'data', 'parcelas', 'data_fim', 'observacoes', 'created_at',
++        ]
++        read_only_fields = ['created_at']
++
++    def validate_categoria(self, categoria):
++        # Mesma regra de segurança já usada nas views web: nunca aceitar
++        # categoria de outro usuário.
++        request = self.context['request']
++        if categoria and categoria.user_id not in (None, request.user.id):
++            raise serializers.ValidationError("Categoria inválida.")
++        return categoria
++
++    def validate_cartao(self, cartao):
++        request = self.context['request']
++        if cartao and cartao.user_id != request.user.id:
++            raise serializers.ValidationError("Cartão inválido.")
++        return cartao
++
++
++class MetaCategoriaSerializer(serializers.ModelSerializer):
++    class Meta:
++        model = MetaCategoria
++        fields = ['id', 'categoria', 'limite', 'mes', 'ano']
++
++    def validate_categoria(self, categoria):
++        request = self.context['request']
++        if categoria.user_id not in (None, request.user.id):
++            raise serializers.ValidationError("Categoria inválida.")
++        return categoria
+diff --git a/cal/api/urls.py b/cal/api/urls.py
+new file mode 100644
+index 0000000..1dfa870
+--- /dev/null
++++ b/cal/api/urls.py
+@@ -0,0 +1,16 @@
++from django.urls import path, include
++from rest_framework.routers import DefaultRouter
++from rest_framework.authtoken.views import obtain_auth_token
++from .views import TransacaoViewSet, CategoriaViewSet, CartaoViewSet, TipoViewSet, MetaCategoriaViewSet
++
++router = DefaultRouter()
++router.register('transacoes', TransacaoViewSet, basename='api-transacoes')
++router.register('categorias', CategoriaViewSet, basename='api-categorias')
++router.register('cartoes', CartaoViewSet, basename='api-cartoes')
++router.register('tipos', TipoViewSet, basename='api-tipos')
++router.register('metas', MetaCategoriaViewSet, basename='api-metas')
++
++urlpatterns = [
++    path('auth/token/', obtain_auth_token, name='api-token-auth'),
++    path('', include(router.urls)),
++]
+diff --git a/cal/api/views.py b/cal/api/views.py
+new file mode 100644
+index 0000000..eaf495c
+--- /dev/null
++++ b/cal/api/views.py
+@@ -0,0 +1,64 @@
++from rest_framework import viewsets, permissions
++from ..models import Transacao, Categoria, Cartao, Tipo, MetaCategoria
++from .serializers import (
++    TransacaoSerializer, CategoriaSerializer, CartaoSerializer, TipoSerializer,
++    MetaCategoriaSerializer,
++)
++
++
++class TipoViewSet(viewsets.ReadOnlyModelViewSet):
++    """Tipo (Crédito/Débito) é global do sistema, não pertence a um usuário."""
++    queryset = Tipo.objects.all()
++    serializer_class = TipoSerializer
++
++
++class CategoriaViewSet(viewsets.ModelViewSet):
++    serializer_class = CategoriaSerializer
++
++    def get_queryset(self):
++        return Categoria.get_for_user(self.request.user)
++
++    def perform_create(self, serializer):
++        serializer.save(user=self.request.user)
++
++
++class CartaoViewSet(viewsets.ModelViewSet):
++    serializer_class = CartaoSerializer
++
++    def get_queryset(self):
++        return Cartao.objects.filter(user=self.request.user)
++
++    def perform_create(self, serializer):
++        serializer.save(user=self.request.user)
++
++
++class MetaCategoriaViewSet(viewsets.ModelViewSet):
++    serializer_class = MetaCategoriaSerializer
++
++    def get_queryset(self):
++        qs = MetaCategoria.objects.filter(user=self.request.user).select_related('categoria')
++        mes = self.request.query_params.get('mes')
++        ano = self.request.query_params.get('ano')
++        if mes and ano:
++            qs = qs.filter(mes=mes, ano=ano)
++        return qs
++
++    def perform_create(self, serializer):
++        serializer.save(user=self.request.user)
++
++
++class TransacaoViewSet(viewsets.ModelViewSet):
++    serializer_class = TransacaoSerializer
++
++    def get_queryset(self):
++        qs = Transacao.objects.filter(user=self.request.user).select_related(
++            'tipo', 'categoria', 'cartao'
++        ).order_by('-data')
++        mes = self.request.query_params.get('mes')
++        ano = self.request.query_params.get('ano')
++        if mes and ano:
++            qs = qs.filter(data__month=mes, data__year=ano)
++        return qs
++
++    def perform_create(self, serializer):
++        serializer.save(user=self.request.user)
+diff --git a/core/settings.py b/core/settings.py
+index de402f9..72ac970 100644
+--- a/core/settings.py
++++ b/core/settings.py
+@@ -62,8 +62,19 @@ INSTALLED_APPS = [
+     "cal",
+     'django.contrib.humanize',
+     'encrypted_model_fields',
++    'rest_framework',
++    'rest_framework.authtoken',
+ ]
+ 
++REST_FRAMEWORK = {
++    'DEFAULT_AUTHENTICATION_CLASSES': [
++        'rest_framework.authentication.TokenAuthentication',
++    ],
++    'DEFAULT_PERMISSION_CLASSES': [
++        'rest_framework.permissions.IsAuthenticated',
++    ],
++}
++
+ MIDDLEWARE = [
+     "django.middleware.security.SecurityMiddleware",
+     "django.middleware.gzip.GZipMiddleware",
+diff --git a/core/urls.py b/core/urls.py
+index 61a6a98..e74eb2b 100644
+--- a/core/urls.py
++++ b/core/urls.py
+@@ -20,6 +20,7 @@ from django.urls import path, include
+ 
+ urlpatterns = [
+     path("admin/", admin.site.urls),
++    path('api/', include('cal.api.urls')),
+     path('', include('cal.urls', namespace='cal')),
+     path('accounts/', include('django.contrib.auth.urls')),
+ ]
