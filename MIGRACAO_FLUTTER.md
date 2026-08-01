@@ -26,8 +26,8 @@
 | 1 | Analisar estrutura atual / identificar backend | ✅ Concluído | — |
 | 2 | API REST (DRF) — base | ✅ Concluído | `f7b6247` |
 | 3 | API — Metas | ✅ Concluído | `f7b6247` |
-| 4 | API — Recorrências | ⬜ Pendente | |
-| 5 | API — Dashboard/gráficos (endpoint agregado) | ⬜ Pendente | |
+| 4 | API — Recorrências | ✅ Concluído (Manus) | `61066ec` |
+| 5 | API — Dashboard/gráficos (endpoint agregado) | ✅ Concluído (Manus) | `61066ec` |
 | 6 | Criar projeto Flutter (estrutura de pastas) | ⬜ Pendente | |
 | 7 | Camada `services/` (dio) + login | ⬜ Pendente | |
 | 8 | Telas: login | ⬜ Pendente | |
@@ -91,5 +91,25 @@ Mesma validação de categoria-de-outro-usuário da Transação.
 
 ---
 
+## Etapas 4 e 5 — Recorrências + Dashboard agregado (feito pela Manus)
+
+```
+GET/POST       /api/recorrencias/
+GET/PUT/DELETE /api/recorrencias/{id}/
+GET            /api/dashboard/?mes=X&ano=Y
+```
+`DashboardAPIView` retorna num único payload: saldos do mês, dados dos dois
+gráficos (categoria/tipo) e progresso das metas — pensado pra tela inicial
+do app não precisar de várias chamadas separadas.
+
+**Validado por mim (Claude):** 22 testes web OK, endpoints testados com
+dados reais (token, listagem de recorrências, dashboard com saldos/gráficos/
+metas retornando corretamente).
+
+**Pendência de organização:** ver `COORDENACAO_IAS.md` — pasta `manus/` com
+cópias redundantes a limpar.
+
+---
+
 ## Próximo passo
-Etapa 4: API de Recorrências. Aguardando confirmação.
+Etapa 6: criar o projeto Flutter (estrutura de pastas). Aguardando confirmação.
