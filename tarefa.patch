@@ -1,0 +1,158 @@
+diff --git a/cal/api/serializers.py b/cal/api/serializers.py
+index 50e0371..b0f0e84 100644
+--- a/cal/api/serializers.py
++++ b/cal/api/serializers.py
+@@ -1,5 +1,5 @@
+ from rest_framework import serializers
+-from ..models import Transacao, Categoria, Cartao, Tipo, MetaCategoria
++from ..models import Transacao, Categoria, Cartao, Tipo, MetaCategoria, Recorrencia
+
+
+ class TipoSerializer(serializers.ModelSerializer):
+@@ -55,3 +55,24 @@ class MetaCategoriaSerializer(serializers.ModelSerializer):
+         if categoria.user_id not in (None, request.user.id):
+             raise serializers.ValidationError("Categoria inválida.")
+         return categoria
++
++
++class RecorrenciaSerializer(serializers.ModelSerializer):
++    class Meta:
++        model = Recorrencia
++        fields = [
++            'id', 'tipo', 'categoria', 'cartao', 'titulo', 'valor',
++            'dia_cobranca', 'data_inicio', 'data_fim', 'ativa', 'observacoes'
++        ]
++
++    def validate_categoria(self, categoria):
++        request = self.context['request']
++        if categoria and categoria.user_id not in (None, request.user.id):
++            raise serializers.ValidationError("Categoria inválida.")
++        return categoria
++
++    def validate_cartao(self, cartao):
++        request = self.context['request']
++        if cartao and cartao.user_id != request.user.id:
++            raise serializers.ValidationError("Cartão inválido.")
++        return cartao
+diff --git a/cal/api/urls.py b/cal/api/urls.py
+index 1dfa870..5044c3b 100644
+--- a/cal/api/urls.py
++++ b/cal/api/urls.py
+@@ -1,7 +1,10 @@
+ from django.urls import path, include
+ from rest_framework.routers import DefaultRouter
+ from rest_framework.authtoken.views import obtain_auth_token
+-from .views import TransacaoViewSet, CategoriaViewSet, CartaoViewSet, TipoViewSet, MetaCategoriaViewSet
++from .views import (
++    TransacaoViewSet, CategoriaViewSet, CartaoViewSet, TipoViewSet,
++    MetaCategoriaViewSet, RecorrenciaViewSet, DashboardAPIView
++)
+
+ router = DefaultRouter()
+ router.register('transacoes', TransacaoViewSet, basename='api-transacoes')
+@@ -9,8 +12,10 @@ router.register('categorias', CategoriaViewSet, basename='api-categorias')
+ router.register('cartoes', CartaoViewSet, basename='api-cartoes')
+ router.register('tipos', TipoViewSet, basename='api-tipos')
+ router.register('metas', MetaCategoriaViewSet, basename='api-metas')
++router.register('recorrencias', RecorrenciaViewSet, basename='api-recorrencias')
+
+ urlpatterns = [
+     path('auth/token/', obtain_auth_token, name='api-token-auth'),
++    path('dashboard/', DashboardAPIView.as_view(), name='api-dashboard'),
+     path('', include(router.urls)),
+ ]
+diff --git a/cal/api/views.py b/cal/api/views.py
+index eaf495c..db238d7 100644
+--- a/cal/api/views.py
++++ b/cal/api/views.py
+@@ -1,8 +1,13 @@
+ from rest_framework import viewsets, permissions
+-from ..models import Transacao, Categoria, Cartao, Tipo, MetaCategoria
++from rest_framework.views import APIView
++from rest_framework.response import Response
++from django.utils import timezone
++from django.db.models import Sum
++from ..models import Transacao, Categoria, Cartao, Tipo, MetaCategoria, Recorrencia
++from ..services import saldos_do_mes, detalhe_mensal_ano, resumo_categorias_e_tipos
+ from .serializers import (
+     TransacaoSerializer, CategoriaSerializer, CartaoSerializer, TipoSerializer,
+-    MetaCategoriaSerializer,
++    MetaCategoriaSerializer, RecorrenciaSerializer
+ )
+
+
+@@ -62,3 +67,74 @@ class TransacaoViewSet(viewsets.ModelViewSet):
+
+     def perform_create(self, serializer):
+         serializer.save(user=self.request.user)
++
++
++class RecorrenciaViewSet(viewsets.ModelViewSet):
++    serializer_class = RecorrenciaSerializer
++
++    def get_queryset(self):
++        return Recorrencia.objects.filter(user=self.request.user).select_related(
++            'tipo', 'categoria', 'cartao'
++        )
++
++    def perform_create(self, serializer):
++        serializer.save(user=self.request.user)
++
++
++class DashboardAPIView(APIView):
++    """
++    Endpoint agregado para o app mobile.
++    Retorna saldos, dados de gráficos e metas do mês atual.
++    """
++    permission_classes = [permissions.IsAuthenticated]
++
++    def get(self, request):
++        hoje = timezone.now()
++        mes = int(request.query_params.get('mes', hoje.month))
++        ano = int(request.query_params.get('ano', hoje.year))
++
++        # 1. Saldos e Transações
++        dados_saldos = saldos_do_mes(request.user, ano, mes)
++
++        # 2. Resumo para Gráficos
++        resumo = resumo_categorias_e_tipos(dados_saldos['transacoes'])
++
++        # 3. Metas
++        metas = MetaCategoria.objects.filter(user=request.user, mes=mes, ano=ano).select_related('categoria')
++        dados_metas = []
++        for m in metas:
++            gasto_cat = Transacao.objects.filter(
++                user=request.user,
++                categoria=m.categoria,
++                data__month=mes,
++                data__year=ano,
++                tipo__codigo='D'
++            ).aggregate(total=Sum('valor'))['total'] or 0
++
++            dados_metas.append({
++                'categoria': m.categoria.nome,
++                'limite': float(m.limite),
++                'gasto': float(gasto_cat),
++                'percentual': float((gasto_cat / m.limite) * 100) if m.limite > 0 else 0
++            })
++
++        return Response({
++            'mes': mes,
++            'ano': ano,
++            'saldos': {
++                'creditos': float(dados_saldos['creditos']),
++                'debitos': float(dados_saldos['debitos']),
++                'saldo': float(dados_saldos['saldo']),
++            },
++            'graficos': {
++                'categorias': {
++                    'labels': resumo['cat_labels'],
++                    'valores': resumo['cat_valores'],
++                },
++                'tipos': {
++                    'labels': resumo['tipo_labels'],
++                    'valores': resumo['tipo_valores'],
++                }
++            },
++            'metas': dados_metas
++        })

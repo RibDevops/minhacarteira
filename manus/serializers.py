@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import Transacao, Categoria, Cartao, Tipo, MetaCategoria, Recorrencia
+from ..models import Transacao, Categoria, Cartao, Tipo, MetaCategoria
 
 
 class TipoSerializer(serializers.ModelSerializer):
@@ -55,24 +55,3 @@ class MetaCategoriaSerializer(serializers.ModelSerializer):
         if categoria.user_id not in (None, request.user.id):
             raise serializers.ValidationError("Categoria inválida.")
         return categoria
-
-
-class RecorrenciaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Recorrencia
-        fields = [
-            'id', 'tipo', 'categoria', 'cartao', 'titulo', 'valor',
-            'dia_cobranca', 'data_inicio', 'data_fim', 'ativa', 'observacoes'
-        ]
-
-    def validate_categoria(self, categoria):
-        request = self.context['request']
-        if categoria and categoria.user_id not in (None, request.user.id):
-            raise serializers.ValidationError("Categoria inválida.")
-        return categoria
-
-    def validate_cartao(self, cartao):
-        request = self.context['request']
-        if cartao and cartao.user_id != request.user.id:
-            raise serializers.ValidationError("Cartão inválido.")
-        return cartao

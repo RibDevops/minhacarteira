@@ -24,8 +24,8 @@
 | # | Etapa | Status | Commit/patch |
 |---|---|---|---|
 | 1 | Analisar estrutura atual / identificar backend | ✅ Concluído | — |
-| 2 | API REST (DRF) — base | ✅ Concluído | `f7b6247` |
-| 3 | API — Metas | ✅ Concluído | `f7b6247` |
+| 2 | API REST (DRF) — base | ✅ Concluído | `api_base.patch` (não commitado no repo ainda) |
+| 3 | API — Metas | ✅ Concluído | `api_base.patch` (acumulado, não commitado no repo ainda) |
 | 4 | API — Recorrências | ⬜ Pendente | |
 | 5 | API — Dashboard/gráficos (endpoint agregado) | ⬜ Pendente | |
 | 6 | Criar projeto Flutter (estrutura de pastas) | ⬜ Pendente | |
