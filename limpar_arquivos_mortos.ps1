@@ -78,6 +78,17 @@ if (-not (Select-String -Path $gitIgnorePath -Pattern $staticfilesDir -Quiet -Er
     Write-Host "  - '$staticfilesDir' já está no '$gitIgnorePath'."
 }
 
+Write-Host "`n== 4. Removendo pasta manus/ (scratch redundante, superada por cal/api/) ==`n"
+
+$manusDir = "manus"
+if (Test-Path $manusDir) {
+    git rm -r --cached $manusDir -ErrorAction SilentlyContinue
+    Remove-Item -Path $manusDir -Recurse -Force -ErrorAction SilentlyContinue
+    Write-Host "  - Diretório '$manusDir' removido."
+} else {
+    Write-Host "  - Diretório '$manusDir' não encontrado (já removido)."
+}
+
 Write-Host "`n== Concluído. Revise antes de commitar: ==`n"
 # Exibe o status atual do Git para que o usuário possa revisar as alterações.
 git status --short
