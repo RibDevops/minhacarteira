@@ -101,7 +101,7 @@ class Tipo(models.Model):
         max_length=1,
         choices=TIPO_CHOICES,
         default='D',
-        unique=False
+        unique=True
     )
 
     descricao = models.CharField(max_length=50)
