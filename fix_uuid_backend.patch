@@ -1,0 +1,109 @@
+diff --git a/cal/migrations/0008_add_uuid_nullable.py b/cal/migrations/0008_add_uuid_nullable.py
+new file mode 100644
+--- /dev/null
++++ b/cal/migrations/0008_add_uuid_nullable.py
+@@ -0,0 +1,41 @@
++# -*- coding: utf-8 -*-
++from django.db import migrations, models
++import uuid
++
++class Migration(migrations.Migration):
++
++    dependencies = [
++        ('cal', '0006_initial'), # Ajuste se necessário
++    ]
++
++    operations = [
++        # Transação
++        migrations.AddField(
++            model_name='transacao',
++            name='uuid',
++            field=models.UUIDField(null=True, unique=True, editable=False),
++        ),
++        migrations.AddField(
++            model_name='transacao',
++            name='updated_at',
++            field=models.DateTimeField(null=True),
++        ),
++        # Recorrência
++        migrations.AddField(
++            model_name='recorrencia',
++            name='uuid',
++            field=models.UUIDField(null=True, unique=True, editable=False),
++        ),
++        migrations.AddField(
++            model_name='recorrencia',
++            name='updated_at',
++            field=models.DateTimeField(null=True),
++        ),
++    ]
+diff --git a/cal/migrations/0009_populate_uuid.py b/cal/migrations/0009_populate_uuid.py
+new file mode 100644
+--- /dev/null
++++ b/cal/migrations/0009_populate_uuid.py
+@@ -0,0 +1,28 @@
++# -*- coding: utf-8 -*-
++from django.db import migrations
++import uuid
++
++def set_unique_uuid(apps, schema_editor):
++    Transacao = apps.get_model('cal', 'Transacao')
++    Recorrencia = apps.get_model('cal', 'Recorrencia')
++
++    # Transação
++    for obj in Transacao.objects.filter(uuid__isnull=True):
++        obj.uuid = uuid.uuid4()
++        obj.save(update_fields=['uuid'])
++
++    # Recorrência
++    for obj in Recorrencia.objects.filter(uuid__isnull=True):
++        obj.uuid = uuid.uuid4()
++        obj.save(update_fields=['uuid'])
++
++class Migration(migrations.Migration):
++
++    dependencies = [
++        ('cal', '0008_add_uuid_nullable'),
++    ]
++
++    operations = [
++        migrations.RunPython(set_unique_uuid, migrations.RunPython.noop),
++    ]
+diff --git a/cal/migrations/0010_make_uuid_non_null.py b/cal/migrations/0010_make_uuid_non_null.py
+new file mode 100644
+--- /dev/null
++++ b/cal/migrations/0010_make_uuid_non_null.py
+@@ -0,0 +1,33 @@
++# -*- coding: utf-8 -*-
++from django.db import migrations, models
++
++class Migration(migrations.Migration):
++
++    dependencies = [
++        ('cal', '0009_populate_uuid'),
++    ]
++
++    operations = [
++        # Transação
++        migrations.AlterField(
++            model_name='transacao',
++            name='uuid',
++            field=models.UUIDField(null=False, unique=True, editable=False),
++        ),
++        migrations.AlterField(
++            model_name='transacao',
++            name='updated_at',
++            field=models.DateTimeField(null=False),
++        ),
++        # Recorrência
++        migrations.AlterField(
++            model_name='recorrencia',
++            name='uuid',
++            field=models.UUIDField(null=False, unique=True, editable=False),
++        ),
++        migrations.AlterField(
++            model_name='recorrencia',
++            name='updated_at',
++            field=models.DateTimeField(null=False),
++        ),
++    ]

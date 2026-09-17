@@ -1,13 +1,11 @@
 from decimal import Decimal
-
+import uuid
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
-from django.urls import reverse
-
+from django.utils import timezone
 from dateutil.relativedelta import relativedelta
 from encrypted_model_fields.fields import EncryptedCharField, EncryptedDecimalField
-
 
 # ======================================================
 # CONSTANTES / CHOICES
@@ -35,6 +33,8 @@ class BaseModel(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Usuário")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Criado em")
+    uuid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         abstract = True
@@ -266,6 +266,7 @@ class Recorrencia(BaseModel):
     por page view e race conditions. Constraint única em
     Transacao(recorrencia, ano, mes) garante idempotência.
     """
+
     tipo = models.ForeignKey(Tipo, on_delete=models.PROTECT, verbose_name="Tipo contábil")
     categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True, blank=True)
     cartao = models.ForeignKey(Cartao, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Cartão")
@@ -297,3 +298,35 @@ class Recorrencia(BaseModel):
 
     def get_absolute_url(self):
         return reverse('cal:recorrencia_editar', args=[self.id])
+
+
+from rest_framework import viewsets, status
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from django.utils.dateparse import parse_datetime
+from .models import Transacao, Categoria
+from .serializers import TransacaoSerializer, CategoriaSerializer
+
+class TransacaoViewSet(viewsets.ModelViewSet):
+    queryset = Transacao.objects.all()
+    serializer_class = TransacaoSerializer
+
+    # Endpoint especial: /api/transacoes/sync_pull/?last_sync=ISO_DATE
+    @action(detail=False, methods=['get'])
+    def sync_pull(self, request):
+        last_sync_str = request.query_params.get('last_sync')
+        
+        if last_sync_str:
+            last_sync = parse_datetime(last_sync_str)
+            if last_sync:
+                # Busca apenas o que foi atualizado após a última sincronização
+                queryset = self.queryset.filter(updated_at__gt=last_sync)
+                serializer = self.get_serializer(queryset, many=True)
+                return Response(serializer.data)
+        
+        return Response({"detail": "Data de última sincronização inválida ou ausente."}, 
+                        status=status.HTTP_400_BAD_REQUEST)
+
+class CategoriaViewSet(viewsets.ModelViewSet):
+    queryset = Categoria.objects.all()
+    serializer_class = CategoriaSerializer

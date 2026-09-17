@@ -101,3 +101,15 @@ urlpatterns = [
         template_name='usuarios/password_reset_complete.html'
     ), name='password_reset_complete'),
 ]
+
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import TransacaoViewSet, CategoriaViewSet
+
+router = DefaultRouter()
+router.register(r'transacoes', TransacaoViewSet)
+router.register(r'categorias', CategoriaViewSet)
+
+urlpatterns = [
+    path('api/', include(router.urls)),
+]
