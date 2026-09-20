@@ -1,6 +1,5 @@
 from django.urls import path, reverse_lazy
 from django.contrib.auth import views as auth_views
-
 from cal.views import views_categoria, views_dashboard, views_recorrencia
 from cal.views import views_tipo, views_user, views_meta
 from cal.views.views_cal import CalendarView
