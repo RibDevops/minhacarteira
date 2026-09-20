@@ -1,0 +1,9 @@
+{
+  "name": "meu-projeto-django",
+  "version": "1.0.0",
+  "skills": [
+    "jeffallan/django-expert",
+    "hermes/skill-retriever",
+    "hermes/planning-with-files"
+  ]
+}
