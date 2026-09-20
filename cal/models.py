@@ -6,6 +6,8 @@ from django.db import models
 from django.utils import timezone
 from dateutil.relativedelta import relativedelta
 from encrypted_model_fields.fields import EncryptedCharField, EncryptedDecimalField
+from django.urls import reverse
+
 
 # ======================================================
 # CONSTANTES / CHOICES
