@@ -1,0 +1,157 @@
+diff --git a/static/manifest.json b/static/manifest.json
+index e385984..ea19cde 100644
+--- a/static/manifest.json
++++ b/static/manifest.json
+@@ -1,21 +1,22 @@
+ {
+   "name": "Minha Carteira",
+   "short_name": "Carteira",
++  "id": "/",
+   "start_url": "/",
++  "scope": "/",
+   "display": "standalone",
++  "orientation": "portrait-primary",
++  "lang": "pt-BR",
++  "dir": "ltr",
+   "background_color": "#ffffff",
+   "theme_color": "#0d6efd",
+   "description": "Gestão de finanças pessoais simples e segura.",
+   "icons": [
+     {
+       "src": "/static/img/logo.png",
+-      "sizes": "192x192",
+-      "type": "image/png"
+-    },
+-    {
+-      "src": "/static/img/logo.png",
+-      "sizes": "512x512",
+-      "type": "image/png"
++      "sizes": "500x500",
++      "type": "image/png",
++      "purpose": "any maskable"
+     }
+   ]
+-}
+\ No newline at end of file
++}
+diff --git a/static/sw.js b/static/sw.js
+index cf40f53..9210e01 100644
+--- a/static/sw.js
++++ b/static/sw.js
+@@ -1,22 +1,72 @@
+-const CACHE_NAME = 'minha-carteira-v1';
+-const urlsToCache = [
+-  '/',
++const CACHE_NAME = 'minha-carteira-v2';
++const STATIC_CACHE = [
+   '/static/css/custom.css',
++  '/static/css/dark-mode.css',
++  '/static/css/fab.css',
++  '/static/vendor/bootstrap/css/bootstrap.min.css',
++  '/static/vendor/bootstrap/js/bootstrap.bundle.min.js',
++  '/static/vendor/bootstrap-icons/font/bootstrap-icons.min.css',
++  '/static/vendor/chartjs/chart.umd.min.js',
+   '/static/img/logo.png',
+-  'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css',
+-  'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css'
++  '/static/manifest.json'
+ ];
+ 
+ self.addEventListener('install', event => {
+   event.waitUntil(
+     caches.open(CACHE_NAME)
+-      .then(cache => cache.addAll(urlsToCache))
++      .then(cache => cache.addAll(STATIC_CACHE))
++      .then(() => self.skipWaiting())
+   );
+ });
+ 
+-self.addEventListener('fetch', event => {
+-  event.respondWith(
+-    caches.match(event.request)
+-      .then(response => response || fetch(event.request))
++self.addEventListener('activate', event => {
++  event.waitUntil(
++    caches.keys()
++      .then(keys => Promise.all(
++        keys
++          .filter(key => key !== CACHE_NAME)
++          .map(key => caches.delete(key))
++      ))
++      .then(() => self.clients.claim())
+   );
+-});
+\ No newline at end of file
++});
++
++self.addEventListener('fetch', event => {
++  const request = event.request;
++  const url = new URL(request.url);
++
++  // Nunca intercepte POST/PUT/DELETE: formulários e ações AJAX devem ir à rede.
++  if (request.method !== 'GET') return;
++
++  // Não armazene respostas privadas, login, logout ou API no cache do dispositivo.
++  if (
++    url.origin !== self.location.origin ||
++    url.pathname.startsWith('/accounts/') ||
++    url.pathname.startsWith('/api/') ||
++    url.pathname.startsWith('/admin/')
++  ) {
++    return;
++  }
++
++  const isStatic = url.pathname.startsWith('/static/');
++
++  if (isStatic) {
++    event.respondWith(
++      caches.match(request).then(cached => {
++        const network = fetch(request).then(response => {
++          if (response.ok) {
++            const copy = response.clone();
++            caches.open(CACHE_NAME).then(cache => cache.put(request, copy));
++          }
++          return response;
++        });
++        return cached || network;
++      })
++    );
++    return;
++  }
++
++  // Não armazene páginas HTML: elas podem conter dados financeiros privados.
++  // Se estiver offline, o navegador exibirá a própria tela de indisponibilidade.
++  event.respondWith(fetch(request));
++});
+diff --git a/templates/base.html b/templates/base.html
+index 03d7a0e..10e0264 100644
+--- a/templates/base.html
++++ b/templates/base.html
+@@ -6,7 +6,7 @@
+ <html lang="pt-br">
+ <head>
+     <meta charset="utf-8">
+-    <meta name="viewport" content="width=device-width, initial-scale=1">
++    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+   <!-- Bootstrap 5 -->
+ <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+ <link href="{% static 'css/dark-mode.css' %}" rel="stylesheet">
+@@ -367,9 +367,16 @@
+             target.href.startsWith(window.location.origin) && 
+             !target.getAttribute('target') && 
+             !target.href.includes('#') &&
++            !target.hasAttribute('download') &&
+             !target.classList.contains('no-loader')) {
+-            document.getElementById('preloader').style.visibility = 'visible';
+-            document.getElementById('preloader').style.opacity = '1';
++            // Evita piscar a tela em navegações rápidas; o servidor só exibe
++            // o preloader se a próxima página demorar mais que 250 ms.
++            window.setTimeout(() => {
++                if (document.visibilityState === 'visible') {
++                    document.getElementById('preloader').style.visibility = 'visible';
++                    document.getElementById('preloader').style.opacity = '1';
++                }
++            }, 250);
+         }
+     });
+ 

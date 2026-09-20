@@ -6,7 +6,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <!-- Bootstrap 5 -->
 <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 <link href="{% static 'css/dark-mode.css' %}" rel="stylesheet">
@@ -367,9 +367,16 @@
             target.href.startsWith(window.location.origin) && 
             !target.getAttribute('target') && 
             !target.href.includes('#') &&
+            !target.hasAttribute('download') &&
             !target.classList.contains('no-loader')) {
-            document.getElementById('preloader').style.visibility = 'visible';
-            document.getElementById('preloader').style.opacity = '1';
+            // Evita piscar a tela em navegações rápidas; o servidor só exibe
+            // o preloader se a próxima página demorar mais que 250 ms.
+            window.setTimeout(() => {
+                if (document.visibilityState === 'visible') {
+                    document.getElementById('preloader').style.visibility = 'visible';
+                    document.getElementById('preloader').style.opacity = '1';
+                }
+            }, 250);
         }
     });
 
