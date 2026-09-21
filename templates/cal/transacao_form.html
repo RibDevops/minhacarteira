@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="container mt-3 mt-md-4">
+<div class="container mt-3 mt-md-4 pagina-form {% if form.instance.pk %}modo-edicao{% else %}modo-novo{% endif %}">
   <div class="row justify-content-center">
     <div class="col-12 col-md-10 col-lg-8">
       <div class="card border-0 shadow-sm rounded-3">
@@ -36,8 +36,8 @@
             {% csrf_token %}
             <div class="row g-2 g-md-3">
               {% for field in form %}
-                <div class="col-12 col-md-6 mb-2" id="div_{{ field.name }}">
-                  <label for="{{ field.id_for_label }}" class="form-label fw-bold small text-muted text-uppercase mb-1">{{ field.label }}</label>
+                <div class="col-12 col-md-6 mb-2 campo-card border-primary" id="div_{{ field.name }}">
+                  <label for="{{ field.id_for_label }}" class="fw-bold text-primary">{{ field.label }}</label>
                   {{ field }}
                   {% if field.name == 'cartao' %}
                     <div class="form-text text-danger small fw-bold">
@@ -93,41 +93,4 @@
     </div>
   </div>
 </div>
-
-<style>
-  /* Melhorias para inputs no Mobile */
-  .form-control, .form-select {
-    border-radius: 10px;
-    padding: 12px 15px; /* Padding maior para facilitar toque no mobile */
-    border: 1px solid #ced4da;
-    transition: all 0.2s ease-in-out;
-    font-size: 16px; /* Evita zoom automático no iPhone ao focar no input */
-  }
-
-  .form-control:focus, .form-select:focus {
-    {% if form.instance.pk %}
-    border-color: #0d6efd;
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
-    {% else %}
-    border-color: #198754;
-    box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.15);
-    {% endif %}
-  }
-
-  /* Ajustes para telas muito pequenas */
-  @media (max-width: 576px) {
-    .container {
-      padding-left: 10px;
-      padding-right: 10px;
-    }
-    .card-body {
-      padding: 1.25rem !important;
-    }
-    .btn {
-      width: 100%; /* Botões ocupam largura total no mobile empilhados */
-      padding-top: 10px;
-      padding-bottom: 10px;
-    }
-  }
-</style>
 {% endblock %}

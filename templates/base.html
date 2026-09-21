@@ -222,13 +222,17 @@
               </div>
 
               <!-- Step 3: Detalhes -->
-              <div class="campo-card">
-                <label for="quickTitulo">Título</label>
+              <div class="campo-card mb-3 border-primary">
+                <label for="quickTitulo" class="fw-bold text-primary">
+                  <i class="bi bi-pencil"></i> Título
+                </label>
                 <input type="text" class="form-control" id="quickTitulo" name="titulo" placeholder="ex: Mercado, Uber, Salário" required autocomplete="off">
               </div>
 
-              <div class="campo-card">
-                <label for="quickCategoria">Categoria <span class="text-muted fw-normal" style="text-transform:none;letter-spacing:0">(opcional)</span></label>
+              <div class="campo-card mb-3 border-primary">
+                <label for="quickCategoria" class="fw-bold text-primary">
+                  <i class="bi bi-tag"></i> Categoria <span class="text-muted fw-normal" style="text-transform:none;letter-spacing:0">(opcional)</span>
+                </label>
                 <select class="form-select" id="quickCategoria" name="categoria">
                   <option value="">Sem categoria</option>
                   {% for cat in categorias_quick_add %}
@@ -239,8 +243,10 @@
 
               <div id="quickOpcoesAvancadas">
                 <div class="row-opcoes">
-                  <div class="campo-card">
-                    <label for="quickCartao">Cartão <span class="text-muted fw-normal" style="text-transform:none;letter-spacing:0">(opcional)</span></label>
+                  <div class="campo-card mb-3 border-primary">
+                    <label for="quickCartao" class="fw-bold text-primary">
+                      <i class="bi bi-credit-card"></i> Cartão <span class="text-muted fw-normal" style="text-transform:none;letter-spacing:0">(opcional)</span>
+                    </label>
                     <select class="form-select" id="quickCartao" name="cartao">
                       <option value="">Sem cartão</option>
                       {% for cartao in cartoes_quick_add %}
@@ -248,8 +254,10 @@
                       {% endfor %}
                     </select>
                   </div>
-                  <div class="campo-card">
-                    <label for="quickParcelas">Parcelas</label>
+                  <div class="campo-card mb-3 border-primary">
+                    <label for="quickParcelas" class="fw-bold text-primary">
+                      <i class="bi bi-123"></i> Parcelas
+                    </label>
                     <input type="number" min="1" max="60" class="form-control" id="quickParcelas" name="parcelas" value="1">
                   </div>
                 </div>

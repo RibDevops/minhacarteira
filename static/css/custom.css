@@ -429,7 +429,7 @@ body.dark-mode #modalRegistroRapido #quickValor::placeholder {
 }
 
 /* Campos secundários em "cards" separados */
-#modalRegistroRapido .campo-card {
+:is(#modalRegistroRapido, .pagina-form) .campo-card {
     background: #fff;
     border: 1px solid #e9ecef;
     border-radius: 12px;
@@ -438,21 +438,21 @@ body.dark-mode #modalRegistroRapido #quickValor::placeholder {
     transition: border-color 0.18s, box-shadow 0.18s;
 }
 
-body.dark-mode #modalRegistroRapido .campo-card {
+body.dark-mode :is(#modalRegistroRapido, .pagina-form) .campo-card {
     background: #16213e;
     border-color: #0f3460;
 }
 
-#modalRegistroRapido .campo-card:focus-within {
+:is(#modalRegistroRapido, .pagina-form) .campo-card:focus-within {
     border-color: #b6d4fe;
     box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.08);
 }
 
-body.dark-mode #modalRegistroRapido .campo-card:focus-within {
+body.dark-mode :is(#modalRegistroRapido, .pagina-form) .campo-card:focus-within {
     border-color: #0d6efd;
 }
 
-#modalRegistroRapido .campo-card label {
+:is(#modalRegistroRapido, .pagina-form) .campo-card label {
     font-size: 0.72rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -461,12 +461,12 @@ body.dark-mode #modalRegistroRapido .campo-card:focus-within {
     margin-bottom: 0.25rem;
 }
 
-body.dark-mode #modalRegistroRapido .campo-card label {
+body.dark-mode :is(#modalRegistroRapido, .pagina-form) .campo-card label {
     color: #adb5bd;
 }
 
-#modalRegistroRapido .campo-card .form-control,
-#modalRegistroRapido .campo-card .form-select {
+:is(#modalRegistroRapido, .pagina-form) .campo-card .form-control,
+:is(#modalRegistroRapido, .pagina-form) .campo-card .form-select {
     border: none;
     background: transparent;
     box-shadow: none;
@@ -475,17 +475,17 @@ body.dark-mode #modalRegistroRapido .campo-card label {
     color: #212529;
 }
 
-body.dark-mode #modalRegistroRapido .campo-card .form-control,
-body.dark-mode #modalRegistroRapido .campo-card .form-select {
+body.dark-mode :is(#modalRegistroRapido, .pagina-form) .campo-card .form-control,
+body.dark-mode :is(#modalRegistroRapido, .pagina-form) .campo-card .form-select {
     color: #e9ecef;
 }
 
-#modalRegistroRapido .campo-card .form-control::placeholder {
+:is(#modalRegistroRapido, .pagina-form) .campo-card .form-control::placeholder {
     color: #adb5bd;
 }
 
-#modalRegistroRapido .campo-card .form-control:focus,
-#modalRegistroRapido .campo-card .form-select:focus {
+:is(#modalRegistroRapido, .pagina-form) .campo-card .form-control:focus,
+:is(#modalRegistroRapido, .pagina-form) .campo-card .form-select:focus {
     box-shadow: none;
     background: transparent;
 }
@@ -631,7 +631,7 @@ body.dark-mode #modalRegistroRapido .modal-footer .btn-link {
     #modalRegistroRapido .tipo-card,
     #modalRegistroRapido .tipo-card i,
     #modalRegistroRapido .valor-wrapper,
-    #modalRegistroRapido .campo-card,
+    :is(#modalRegistroRapido, .pagina-form) .campo-card,
     #modalRegistroRapido .btn-registrar,
     #modalRegistroRapido .parcelas-preview,
     #modalRegistroRapido .modal-header .btn-close {
@@ -640,5 +640,58 @@ body.dark-mode #modalRegistroRapido .modal-footer .btn-link {
     }
     #modalRegistroRapido #quickAddErro:not(.d-none) {
         animation: none !important;
+    }
+}
+
+/* Página de formulário (ex.: transacao_form.html) — mesmo visual de
+   campo-card do Registro Rápido via :is() acima. Regras movidas do
+   <style> inline do template para cá (cache + dark-mode centralizado). */
+.pagina-form .form-control,
+.pagina-form .form-select {
+    border-radius: 10px;
+    padding: 12px 15px; /* Padding maior para facilitar toque no mobile */
+    border: 1px solid #ced4da;
+    transition: all 0.2s ease-in-out;
+    font-size: 16px; /* Evita zoom automático no iPhone ao focar no input */
+}
+
+.pagina-form.modo-edicao .form-control:focus,
+.pagina-form.modo-edicao .form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+}
+
+.pagina-form.modo-novo .form-control:focus,
+.pagina-form.modo-novo .form-select:focus {
+    border-color: #198754;
+    box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.15);
+}
+
+/* Preserva o dark-mode (dark-mode.css) sobre as regras acima */
+body.dark-mode .pagina-form .form-control,
+body.dark-mode .pagina-form .form-select {
+    border-color: #0f3460;
+}
+
+body.dark-mode .pagina-form .form-control:focus,
+body.dark-mode .pagina-form .form-select:focus {
+    background-color: #1a1a2e;
+    border-color: #e94560;
+    color: #fff;
+}
+
+/* Ajustes para telas muito pequenas (escopo da página; antes era global) */
+@media (max-width: 576px) {
+    .pagina-form {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    .pagina-form .card-body {
+        padding: 1.25rem !important;
+    }
+    .pagina-form .btn {
+        width: 100%; /* Botões ocupam largura total no mobile empilhados */
+        padding-top: 10px;
+        padding-bottom: 10px;
     }
 }

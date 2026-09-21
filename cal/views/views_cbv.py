@@ -442,7 +442,7 @@ class MetaCategoriaDeleteView(LoginRequiredMixin, UserOwnsObjectMixin, DeleteVie
 
 class RecorrenciaListView(LoginRequiredMixin, UserOwnsObjectMixin, ListView):
     model = Recorrencia
-    template_name = 'cal/recorrencia_listar.html'
+    template_name = 'cal/recorrencia_list.html'
     context_object_name = 'recorrencias'
 
 
