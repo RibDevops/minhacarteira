@@ -1,4 +1,5 @@
 import uuid
+import calendar
 from datetime import date
 from decimal import Decimal, InvalidOperation
 
@@ -102,7 +103,7 @@ def transacao_rapida(request):
     """
     Endpoint enxuto para o modal de registro rápido (menos cliques).
 
-    Campos essenciais: título, valor, tipo, categoria (opcional).
+    Campos essenciais: título, valor, tipo, mês do lançamento e categoria (opcional).
     Campos avançados (opcionais, ficam escondidos atrás de um "+ opções" no
     modal): cartão e parcelas. Quando informados, reaproveita a mesma regra
     de fatura usada no formulário completo (calcular_proxima_fatura) para
@@ -113,6 +114,7 @@ def transacao_rapida(request):
     categoria_id = request.POST.get('categoria') or None
     cartao_id = request.POST.get('cartao') or None
     parcelas_raw = request.POST.get('parcelas') or '1'
+    mes_lancamento = (request.POST.get('mes_lancamento') or '').strip()
 
     erros = []
     if not titulo:
@@ -149,13 +151,26 @@ def transacao_rapida(request):
         parcelas = 1
         erros.append('Número de parcelas inválido.')
 
+    hoje = date.today()
+    data_lancamento = hoje
+    if mes_lancamento:
+        try:
+            ano, mes = (int(parte) for parte in mes_lancamento.split('-', 1))
+            if ano < 2000 or not 1 <= mes <= 12:
+                raise ValueError
+            # Mantém o dia escolhido quando possível; em fevereiro e meses
+            # menores, usa o último dia válido do mês.
+            dia = min(hoje.day, calendar.monthrange(ano, mes)[1])
+            data_lancamento = date(ano, mes, dia)
+        except (ValueError, TypeError):
+            erros.append('Selecione um mês válido para o lançamento.')
+
     if erros:
         return JsonResponse({'status': 'error', 'errors': erros}, status=400)
 
-    hoje = date.today()
     valor_parcela = valor_total.quantize(Decimal('0.01'))
 
-    data_base_parcela = calcular_proxima_fatura(hoje) if cartao else hoje
+    data_base_parcela = calcular_proxima_fatura(data_lancamento) if cartao else data_lancamento
 
     grupo_id = str(uuid.uuid4()) if parcelas > 1 else None
 

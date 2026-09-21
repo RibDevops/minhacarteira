@@ -192,6 +192,15 @@
             <div class="modal-body">
               <div id="quickAddErro" class="alert alert-danger d-none py-2 mb-3"></div>
 
+              <!-- O mês fica explícito antes dos demais dados do lançamento. -->
+              <div class="campo-card mb-3 border-primary">
+                <label for="quickMesLancamento" class="fw-bold text-primary">
+                  <i class="bi bi-calendar3"></i> Mês do lançamento
+                </label>
+                <input type="month" class="form-control" id="quickMesLancamento" name="mes_lancamento" required>
+                <div class="form-text">Escolha o mês do lançamento. Compras no cartão seguem a regra da próxima fatura.</div>
+              </div>
+
               <!-- Step 1: Tipo (Entrada/Saída) -->
               <div class="tipo-selector" role="group" aria-label="Tipo de transação">
                 {% for tipo in tipos_quick_add %}
@@ -424,10 +433,17 @@ $(document).ready(function () {
 
   const erroBox = document.getElementById('quickAddErro');
   const submitBtn = document.getElementById('quickAddSubmit');
+  const mesLancamento = document.getElementById('quickMesLancamento');
+
+  function mesAtual() {
+    const hoje = new Date();
+    return `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, '0')}`;
+  }
 
   // Ao abrir o modal: foco direto no valor (é o dado que a pessoa mais digita)
   // e restaura a última categoria/tipo usados, pra não ter que escolher de novo toda vez.
   modalEl.addEventListener('shown.bs.modal', function () {
+    if (!mesLancamento.value) mesLancamento.value = mesAtual();
     document.getElementById('quickValor').focus();
     erroBox.classList.add('d-none');
 
