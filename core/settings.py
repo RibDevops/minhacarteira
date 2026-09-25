@@ -1,115 +1,107 @@
-import os
 from pathlib import Path
-from decouple import config
-import dj_database_url
+import os
 
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = config('SECRET_KEY')
-FIELD_ENCRYPTION_KEY = config('FIELD_ENCRYPTION_KEY')
-FERNET_SECRET_KEY = FIELD_ENCRYPTION_KEY
 
-DEBUG = config('DEBUG', default=False, cast=bool)
+# Ler .env manualmente (simples e robusto)
+env_file = BASE_DIR / '.env'
+if env_file.exists():
+    with open(env_file) as f:
+        for line in f:
+            line = line.strip()
+            if line and not line.startswith('#') and '=' in line:
+                key, value = line.split('=', 1)
+                os.environ.setdefault(key, value)
 
-# ALLOWED_HOSTS: em producao DEVE ser explicito. O default '*' so e aceito
-# em dev (DEBUG=True) para nao quebrar o runserver local. Em producao, se a
-# variavel nao vier definida, o Django recusa requests em vez de aceitar de
-# qualquer Host (protecao contra Host header attacks).
-if DEBUG:
-    ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*', cast=lambda v: [s.strip() for s in v.split(',')])
-else:
-    ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=lambda v: [s.strip() for s in v.split(',')])
+# Helper para converter strings do .env
+def get_env(key, default='', cast=str):
+    value = os.environ.get(key, default)
+    if cast == bool:
+        return value.lower() in ('true', '1', 'yes')
+    elif cast == list:
+        return [v.strip() for v in value.split(',') if v.strip()]
+    elif cast == int:
+        return int(value) if value else 0
+    return value
 
-# Durante testes (manage.py test), o Django usa 'testserver' como host.
-# Adicionamos automaticamente para nao quebrar os testes.
-if 'testserver' not in ALLOWED_HOSTS:
-    ALLOWED_HOSTS = ALLOWED_HOSTS + ['testserver']
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = get_env('SECRET_KEY', 'django-insecure-k3y#9@k_2m5p8q7r&t$w^z%a1b*c4d6e8f!g')
+if SECRET_KEY.startswith('django-insecure-') and not get_env('DEBUG', 'True', bool):
+    raise ValueError(
+        "SECRET_KEY deve ser definida em produção. "
+        "Gere uma com: python manage.py shell -c "
+        '"from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"'
+    )
 
-# CSRF_TRUSTED_ORIGINS configuravel por ambiente (default mantem Replit para
-# nao quebrar deploy atual). Migrar provedor = so ajustar a variavel de ambiente.
-CSRF_TRUSTED_ORIGINS = config(
-    'CSRF_TRUSTED_ORIGINS',
-    default='https://*.replit.dev,https://*.repl.co',
-    cast=lambda v: [s.strip() for s in v.split(',')]
-)
-# Security Settings for Production
-if not DEBUG:
-    SECURE_BROWSER_XSS_FILTER = True
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    X_FRAME_OPTIONS = 'DENY'
-    SECURE_HSTS_SECONDS = 31536000
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
-    # SECURE_SSL_REDIRECT so em producao real (nao em testes)
-    if 'testserver' not in ALLOWED_HOSTS:
-        SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=True, cast=bool)
-    else:
-        SECURE_SSL_REDIRECT = False
-else:
-    X_FRAME_OPTIONS = 'ALLOWALL'
-    SECURE_SSL_REDIRECT = False
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = get_env('DEBUG', 'True', bool)
+
+ALLOWED_HOSTS = get_env('ALLOWED_HOSTS', 'localhost,127.0.0.1', list)
+CSRF_TRUSTED_ORIGINS = get_env('CSRF_TRUSTED_ORIGINS', 'http://localhost:8000,http://127.0.0.1:8000', list)
+
+# Segurança de cookies (condicional por ambiente)
+SESSION_COOKIE_SECURE = get_env('SESSION_COOKIE_SECURE', 'False', bool)
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SECURE = get_env('CSRF_COOKIE_SECURE', 'False', bool)
+CSRF_COOKIE_SAMESITE = 'Lax'
+
+# Headers de segurança
+SECURE_SSL_REDIRECT = get_env('SECURE_SSL_REDIRECT', 'False', bool)
+SECURE_HSTS_SECONDS = get_env('SECURE_HSTS_SECONDS', '0', int)
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
+X_FRAME_OPTIONS = 'DENY'
+
 
 # Application definition
 
 INSTALLED_APPS = [
-    "django.contrib.admin",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
+    'django.contrib.admin',
     'django.contrib.auth',
-    "cal",
-    'django.contrib.humanize',
-    'encrypted_model_fields',
-    'rest_framework',
-    'rest_framework.authtoken',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'cal',
+    'django_celery_beat',
 ]
-
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-    ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ],
-}
 
 MIDDLEWARE = [
-    "django.middleware.security.SecurityMiddleware",
-    "django.middleware.gzip.GZipMiddleware",
-    "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = "core.urls"
+ROOT_URLCONF = 'minhacarteira.urls'
 
 TEMPLATES = [
     {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
-        "APP_DIRS": True,
-        "OPTIONS": {
-            "context_processors": [
-                "django.template.context_processors.debug",
-                "django.template.context_processors.request",
-                "django.contrib.auth.context_processors.auth",
-                "django.contrib.messages.context_processors.messages",
-                "cal.context_processors.saldos_mensais",
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [BASE_DIR / 'templates'],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = "core.wsgi.application"
+WSGI_APPLICATION = 'minhacarteira.wsgi.application'
+
 
 # Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -120,131 +112,77 @@ DATABASES = {
 
 
 # Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
+# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
 
 
 # Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
+# https://docs.djangoproject.com/en/4.2/topics/i18n/
 
 LANGUAGE_CODE = 'pt-br'
+
 TIME_ZONE = 'America/Sao_Paulo'
 
 USE_I18N = True
-USE_TZ = True
 
-# Formatação de números e datas
-USE_THOUSAND_SEPARATOR = True
-THOUSAND_SEPARATOR = '.'
-DECIMAL_SEPARATOR = ','
-NUMBER_GROUPING = 3
+USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
+# https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-# STATIC_URL = "static/"
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
+    BASE_DIR / 'static',
 ]
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
+# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Static and Media files
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-# Email configuration for password reset.
-#
-# Por padrao usamos o backend console (imprime o link de reset no log/dev),
-# que e o que o projeto original tinha. Em producao, definir EMAIL_HOST /
-# EMAIL_HOST_USER / EMAIL_HOST_PASSWORD faz o Django trocar para o backend
-# SMTP real (necessario para o fluxo "esqueci minha senha" entregar o email
-# ao usuario). Sem isso, qualquer usuario que esquecer a senha fica
-# permanentemente bloqueado.
-EMAIL_HOST = config('EMAIL_HOST', default='')
-EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
-EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
-EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
-
-if EMAIL_HOST:
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-else:
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='no-reply@minhacarteira.com')
-DEFAULT_FROM_EMAIL = DEFAULT_FROM_EMAIL
-
-
-
-LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
-
-# Garante que a pasta de logs exista. Sem isso, o Django falha na
-# inicialização (django.setup() levanta ValueError) em qualquer clone novo
-# do repositório, porque o handler 'file' abaixo aponta para um arquivo
-# dentro de uma pasta que nunca é criada.
-os.makedirs(os.path.join(BASE_DIR, 'logs'), exist_ok=True)
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '{levelname} {asctime} {module} {message}',
-            'style': '{',
-        },
-    },
-    'handlers': {
-        'console': {  # adicionar handler console
-            'class': 'logging.StreamHandler',
-            'level': 'DEBUG',
-            'formatter': 'verbose',
-        },
-        'file': {
-            'level': 'WARNING',
-            'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs/django.log'),
-            'formatter': 'verbose',
-        },
-    },
-    'root': {
-        'handlers': ['console'],  # Logs para console em DEBUG+
-        'level': 'DEBUG',
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file'],  # Logs para arquivo em WARNING+
-            'level': 'WARNING',
-            'propagate': True,
-        },
-    },
+# Cache (desenvolvimento local)
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'minhacarteira-cache',
+    }
 }
 
-INTERNAL_IPS = [
-    # ...
-    "127.0.0.1",
-    # ...
-]
+# Celery
+CELERY_BROKER_URL = get_env('CELERY_BROKER_URL', 'redis://localhost:6379/0')
+CELERY_RESULT_BACKEND = CELERY_BROKER_URL.replace('/0', '/1')
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'America/Sao_Paulo'
+
+# Criptografia de campos sensíveis
+from cryptography.fernet import Fernet
+
+FERNET_SECRET_KEY = get_env('FERNET_SECRET_KEY', '')
+if not FERNET_SECRET_KEY:
+    # Gerar chave temporária para desenvolvimento
+    FERNET_SECRET_KEY = Fernet.generate_key().decode()
+    if not DEBUG:
+        raise ValueError(
+            "FERNET_SECRET_KEY deve ser definida em produção. "
+            "Gere uma com: python -c 'from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())'"
+        )
