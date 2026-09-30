@@ -1,0 +1,18 @@
+﻿BACKUP CRIADO EM: 2026-09-30 09:14:36
+PROJETO: MinhaCarteira (Django)
+BRANCH ATUAL: main
+ULTIMO COMMIT: e74b6a6 refa3
+
+CONTEUDO DO BACKUP:
+  - cal
+  - core
+  - templates
+  - static
+  - encrypted_model_fields
+  - manage.py
+  - requirements.txt
+  - .env.example
+  - .gitignore
+  - README.md
+
+PROPOSITO: Backup antes da refatoracao CSS iOS-style

@@ -1,124 +1,98 @@
 # ==============================================================================
-# BLOCO 0 - SCRIPT 2: CRIAÇÃO DE BACKUP COMPLETO
-# ==============================================================================
-# Descrição: Cria backup completo do projeto antes de qualquer modificação
-# Autor: Otimizzai
-# Data: 2026-09-29
+# BLOCO 0 - SCRIPT 1: BACKUP COMPLETO DO PROJETO
 # ==============================================================================
 
 $ErrorActionPreference = "Stop"
 
 Write-Host "===================================================" -ForegroundColor Cyan
-Write-Host "  CRIAÇÃO DE BACKUP COMPLETO" -ForegroundColor Cyan
+Write-Host "  BACKUP COMPLETO - MINHACARTEIRA" -ForegroundColor Cyan
 Write-Host "===================================================" -ForegroundColor Cyan
 Write-Host ""
 
-$PROJECT_NAME = "minhacarteira"
-$BASE_DIR = "$PSScriptRoot\$PROJECT_NAME"
-$BACKUP_DIR = "$PSScriptRoot\backups"
+$REPO_DIR = $PSScriptRoot
 $TIMESTAMP = Get-Date -Format "yyyyMMdd_HHmmss"
-$BACKUP_NAME = "backup_${PROJECT_NAME}_${TIMESTAMP}"
+$BACKUP_DIR = Join-Path $REPO_DIR "backups"
+$BACKUP_NAME = "backup_$TIMESTAMP"
 $BACKUP_PATH = Join-Path $BACKUP_DIR $BACKUP_NAME
 
-# ==============================================================================
-# VALIDAÇÕES INICIAIS
-# ==============================================================================
-
-if (-not (Test-Path $BASE_DIR)) {
-    Write-Host "✗ Projeto não encontrado em: $BASE_DIR" -ForegroundColor Red
-    Write-Host "Execute primeiro o script 00_setup_ambiente.ps1" -ForegroundColor Yellow
-    exit 1
-}
-
-# Criar diretório de backups se não existir
+# Criar diretorio de backups
 if (-not (Test-Path $BACKUP_DIR)) {
-    New-Item -Path $BACKUP_DIR -ItemType Directory | Out-Null
-    Write-Host "✓ Diretório de backups criado: $BACKUP_DIR" -ForegroundColor Green
+    New-Item -ItemType Directory -Path $BACKUP_DIR | Out-Null
+    Write-Host "Diretorio de backups criado: $BACKUP_DIR" -ForegroundColor Green
 }
 
-# ==============================================================================
-# CRIAÇÃO DO BACKUP
-# ==============================================================================
-
-Write-Host "Criando backup do projeto..." -ForegroundColor Cyan
-Write-Host "Origem: $BASE_DIR" -ForegroundColor White
-Write-Host "Destino: $BACKUP_PATH" -ForegroundColor White
+Write-Host "Criando backup em: $BACKUP_PATH" -ForegroundColor Yellow
 Write-Host ""
 
-try {
-    # Copiar projeto completo
-    Copy-Item -Path $BASE_DIR -Destination $BACKUP_PATH -Recurse -Force
-    
-    Write-Host "✓ Backup criado com sucesso" -ForegroundColor Green
-    
-    # Calcular tamanho do backup
-    $backupSize = (Get-ChildItem -Path $BACKUP_PATH -Recurse | Measure-Object -Property Length -Sum).Sum
-    $backupSizeMB = [math]::Round($backupSize / 1MB, 2)
-    
-    Write-Host "Tamanho do backup: $backupSizeMB MB" -ForegroundColor White
-    
-    # Criar arquivo de metadados
-    $metadataPath = Join-Path $BACKUP_DIR "${BACKUP_NAME}_metadata.txt"
-    
-    $metadata = @"
-BACKUP MINHACARTEIRA
-====================
-Data/Hora: $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
-Origem: $BASE_DIR
-Destino: $BACKUP_PATH
-Tamanho: $backupSizeMB MB
-Hash SHA256: Calculando...
-"@
-    
-    $metadata | Out-File -FilePath $metadataPath -Encoding UTF8
-    
-    Write-Host "✓ Metadados salvos em: $metadataPath" -ForegroundColor Green
-    
-} catch {
-    Write-Host "✗ Erro ao criar backup: $_" -ForegroundColor Red
-    exit 1
-}
+# Criar estrutura do backup
+New-Item -ItemType Directory -Path $BACKUP_PATH -Force | Out-Null
 
-Write-Host ""
+# Lista de diretorios/arquivos importantes para backup
+$itemsToBackup = @(
+    "cal",
+    "core",
+    "templates",
+    "static",
+    "encrypted_model_fields",
+    "manage.py",
+    "requirements.txt",
+    ".env.example",
+    ".gitignore",
+    "README.md"
+)
 
-# ==============================================================================
-# LISTAR BACKUPS EXISTENTES
-# ==============================================================================
+$totalItems = $itemsToBackup.Count
+$current = 0
 
-Write-Host "=== BACKUPS DISPONÍVEIS ===" -ForegroundColor Cyan
-Write-Host ""
-
-$backups = Get-ChildItem -Path $BACKUP_DIR -Directory | Sort-Object CreationTime -Descending
-
-if ($backups.Count -eq 0) {
-    Write-Host "Nenhum backup anterior encontrado" -ForegroundColor Yellow
-} else {
-    foreach ($backup in $backups) {
-        $size = (Get-ChildItem -Path $backup.FullName -Recurse | Measure-Object -Property Length -Sum).Sum
-        $sizeMB = [math]::Round($size / 1MB, 2)
+foreach ($item in $itemsToBackup) {
+    $current++
+    $sourcePath = Join-Path $REPO_DIR $item
+    
+    if (Test-Path $sourcePath) {
+        Write-Host "[$current/$totalItems] Copiando: $item" -ForegroundColor White
         
-        Write-Host "• $($backup.Name)" -ForegroundColor White
-        Write-Host "  Data: $($backup.CreationTime)" -ForegroundColor Gray
-        Write-Host "  Tamanho: $sizeMB MB" -ForegroundColor Gray
-        Write-Host ""
+        if (Test-Path $sourcePath -PathType Container) {
+            # É um diretório
+            Copy-Item -Path $sourcePath -Destination $BACKUP_PATH -Recurse -Force
+        } else {
+            # É um arquivo
+            Copy-Item -Path $sourcePath -Destination $BACKUP_PATH -Force
+        }
+        
+        Write-Host "  OK" -ForegroundColor Green
+    } else {
+        Write-Host "[$current/$totalItems] AVISO: $item nao encontrado, pulando" -ForegroundColor Yellow
     }
 }
 
-# ==============================================================================
-# INSTRUÇÕES DE RESTAURAÇÃO
-# ==============================================================================
+Write-Host ""
 
-Write-Host "=== COMO RESTAURAR ESTE BACKUP ===" -ForegroundColor Yellow
-Write-Host ""
-Write-Host "1. Navegue até: $BACKUP_DIR" -ForegroundColor White
-Write-Host "2. Copie a pasta: $BACKUP_NAME" -ForegroundColor White
-Write-Host "3. Substitua a pasta atual do projeto" -ForegroundColor White
-Write-Host ""
-Write-Host "Ou execute:" -ForegroundColor White
-Write-Host "Remove-Item -Path '$BASE_DIR' -Recurse -Force" -ForegroundColor Cyan
-Write-Host "Copy-Item -Path '$BACKUP_PATH' -Destination '$BASE_DIR' -Recurse" -ForegroundColor Cyan
+# Criar arquivo de informacoes do backup
+$backupInfo = @"
+BACKUP CRIADO EM: $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
+PROJETO: MinhaCarteira (Django)
+BRANCH ATUAL: $(git branch --show-current 2>&1)
+ULTIMO COMMIT: $(git log -1 --oneline 2>&1)
 
+CONTEUDO DO BACKUP:
+$(($itemsToBackup | ForEach-Object { "  - $_" }) -join "`n")
+
+PROPOSITO: Backup antes da refatoracao CSS iOS-style
+"@
+
+$backupInfo | Out-File -FilePath (Join-Path $BACKUP_PATH "BACKUP_INFO.txt") -Encoding UTF8
+
+# Verificar tamanho do backup
+$backupSize = (Get-ChildItem -Path $BACKUP_PATH -Recurse | Measure-Object -Property Length -Sum).Sum
+$backupSizeMB = [math]::Round($backupSize / 1MB, 2)
+
+Write-Host "===================================================" -ForegroundColor Cyan
+Write-Host "  BACKUP CONCLUIDO COM SUCESSO" -ForegroundColor Green
+Write-Host "===================================================" -ForegroundColor Cyan
 Write-Host ""
-Write-Host "===================================================" -ForegroundColor Cyan
-Write-Host "  BACKUP CONCLUÍDO" -ForegroundColor Cyan
-Write-Host "===================================================" -ForegroundColor Cyan
+Write-Host "Local: $BACKUP_PATH" -ForegroundColor White
+Write-Host "Tamanho: $backupSizeMB MB" -ForegroundColor White
+Write-Host ""
+Write-Host "Para restaurar este backup:" -ForegroundColor Yellow
+Write-Host "  Copy-Item -Path '$BACKUP_PATH\*' -Destination '$REPO_DIR' -Recurse -Force" -ForegroundColor Gray
+Write-Host ""

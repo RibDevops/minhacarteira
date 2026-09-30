@@ -1,0 +1,72 @@
+[
+  {
+    "model": "cal.categoria",
+    "pk": 1,
+    "fields": {
+      "user": null,
+      "nome": "Alimentação",
+      "is_global": true,
+      "is_active": true
+    }
+  },
+  {
+    "model": "cal.categoria",
+    "pk": 2,
+    "fields": {
+      "user": null,
+      "nome": "Transporte",
+      "is_global": true,
+      "is_active": true
+    }
+  },
+  {
+    "model": "cal.categoria",
+    "pk": 3,
+    "fields": {
+      "user": null,
+      "nome": "Moradia",
+      "is_global": true,
+      "is_active": true
+    }
+  },
+  {
+    "model": "cal.categoria",
+    "pk": 4,
+    "fields": {
+      "user": null,
+      "nome": "Saúde",
+      "is_global": true,
+      "is_active": true
+    }
+  },
+  {
+    "model": "cal.categoria",
+    "pk": 5,
+    "fields": {
+      "user": null,
+      "nome": "Lazer",
+      "is_global": true,
+      "is_active": true
+    }
+  },
+  {
+    "model": "cal.categoria",
+    "pk": 6,
+    "fields": {
+      "user": null,
+      "nome": "Educação",
+      "is_global": true,
+      "is_active": true
+    }
+  },
+  {
+    "model": "cal.categoria",
+    "pk": 7,
+    "fields": {
+      "user": null,
+      "nome": "Outros",
+      "is_global": true,
+      "is_active": true
+    }
+  }
+]

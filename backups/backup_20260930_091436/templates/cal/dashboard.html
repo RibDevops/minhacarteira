@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+<div class="container mt-4">
+    <!-- Seletor de Ano -->
+    <div class="d-flex flex-column mb-4 p-3 bg-white rounded-3 shadow-sm border-start border-4 border-primary gap-3">
+        <h2 class="fw-bold mb-0 text-primary d-flex align-items-center gap-2">
+            <i class="bi bi-graph-up-arrow"></i> Balanço Anual
+        </h2>
+        <form method="GET" class="d-flex align-items-center gap-2">
+            <div class="input-group input-group-sm" style="max-width: 200px;">
+                <span class="input-group-text bg-primary text-white border-primary"><i class="bi bi-calendar3"></i></span>
+                <select name="ano" id="ano" class="form-select border-primary" onchange="this.form.submit()">
+                    {% for a in anos_disponiveis %}
+                    <option value="{{ a }}" {% if a == ano_selecionado %}selected{% endif %}>{{ a|stringformat:"d" }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </form>
+    </div>
+
+    <!-- Resumo Anual (Flashcards do Ano) -->
+    <div class="row g-3 mb-5">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm bg-success text-white h-100">
+                <div class="card-body py-4 text-center">
+                    <h6 class="opacity-75 mb-1">Créditos Anuais ({{ ano_selecionado|stringformat:"d" }})</h6>
+                    <h3 class="fw-bold mb-0">R$ {{ credito_anual|floatformat:2|intcomma }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm bg-danger text-white h-100">
+                <div class="card-body py-4 text-center">
+                    <h6 class="opacity-75 mb-1">Débitos Anuais ({{ ano_selecionado|stringformat:"d" }})</h6>
+                    <h3 class="fw-bold mb-0">R$ {{ debito_anual|floatformat:2|intcomma }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm {% if saldo_anual >= 0 %}bg-primary{% else %}bg-warning text-dark{% endif %} text-white h-100">
+                <div class="card-body py-4 text-center">
+                    <h6 class="opacity-75 mb-1">Saldo Anual ({{ ano_selecionado|stringformat:"d" }})</h6>
+                    <h3 class="fw-bold mb-0">R$ {{ saldo_anual|floatformat:2|intcomma }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="mb-5 opacity-25">
+
+    <!-- Listagem Sequencial por Mês -->
+    <div class="row">
+        {% for num, dados in meses_detalhe.items %}
+        <div class="col-12 mb-5">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <div class="card-header bg-dark text-white py-3">
+                    <h4 class="mb-0 fw-bold">{{ dados.nome }}</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <!-- Flashcards do Mês -->
+                        <div class="col-lg-6">
+                            <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                    <div class="p-3 bg-success bg-opacity-10 rounded-3 text-center border border-success border-opacity-25 h-100">
+                                        <small class="text-success d-block fw-bold mb-1">CRÉDITOS</small>
+                                        <span class="h5 fw-bold text-success mb-0">R$ {{ dados.credito|floatformat:2|intcomma }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="p-3 bg-danger bg-opacity-10 rounded-3 text-center border border-danger border-opacity-25 h-100">
+                                        <small class="text-danger d-block fw-bold mb-1">DÉBITOS</small>
+                                        <span class="h5 fw-bold text-danger mb-0">R$ {{ dados.debito|floatformat:2|intcomma }}</span>
+                                    </div>
+                                </div>
+                                <div class="col-12 mt-2">
+                                    <div class="p-3 {% if dados.saldo >= 0 %}bg-primary bg-opacity-10 border-primary{% else %}bg-warning bg-opacity-10 border-warning{% endif %} rounded-3 text-center border border-opacity-25">
+                                        <small class="{% if dados.saldo >= 0 %}text-primary{% else %}text-dark{% endif %} d-block fw-bold mb-1">SALDO MENSAL</small>
+                                        <span class="h4 fw-bold {% if dados.saldo >= 0 %}text-primary{% else %}text-dark{% endif %} mb-0">R$ {{ dados.saldo|floatformat:2|intcomma }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center mt-3">
+                                <a href="{% url 'cal:listar_transacoes' %}?mes={{ num }}&ano={{ ano_selecionado|stringformat:'d' }}" class="btn btn-sm btn-outline-secondary">
+                                    <i class="bi bi-list-task"></i> Detalhes do Mês
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Gráfico do Mês -->
+                        <div class="col-lg-6 mt-4 mt-lg-0">
+                            {% if dados.tem_dados %}
+                                <div style="max-height: 250px;">
+                                    <canvas id="chart-{{ num }}" height="200"></canvas>
+                                </div>
+                            {% else %}
+                                <div class="text-center py-5 text-muted bg-light rounded-3 border border-dashed">
+                                    <i class="bi bi-pie-chart fs-1 opacity-25 d-block mb-2"></i>
+                                    Nenhum gasto registrado em {{ dados.nome }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script src="{% static 'vendor/chartjs/chart.umd.min.js' %}"></script>
+
+{% for num, dados in meses_detalhe.items %}
+{% if dados.tem_dados %}
+    {% with num_str=num|stringformat:"s" %}
+    {% with id_labels="dashboard_labels_"|add:num_str id_valores="dashboard_valores_"|add:num_str %}
+    {{ dados.grafico_labels|json_script:id_labels }}
+    {{ dados.grafico_valores|json_script:id_valores }}
+    {% endwith %}
+    {% endwith %}
+{% endif %}
+{% endfor %}
+
+<script>
+    const COLORS = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#C9CBCF'];
+
+    {% for num, dados in meses_detalhe.items %}
+    {% if dados.tem_dados %}
+    const labelsDashboard{{ num }} = JSON.parse(document.getElementById('dashboard_labels_{{ num }}').textContent);
+    const valoresDashboard{{ num }} = JSON.parse(document.getElementById('dashboard_valores_{{ num }}').textContent);
+    new Chart(document.getElementById('chart-{{ num }}'), {
+        type: 'doughnut',
+        data: {
+            labels: labelsDashboard{{ num }},
+            datasets: [{
+                data: valoresDashboard{{ num }},
+                backgroundColor: COLORS,
+                borderWidth: 2,
+                borderColor: '#ffffff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'right',
+                    labels: { boxWidth: 12, font: { size: 10 } }
+                }
+            }
+        }
+    });
+    {% endif %}
+    {% endfor %}
+</script>
+
+<style>
+    .border-dashed { border-style: dashed !important; }
+    .card { transition: transform 0.2s; }
+    .card:hover { transform: translateY(-3px); }
+</style>
+{% endblock %}

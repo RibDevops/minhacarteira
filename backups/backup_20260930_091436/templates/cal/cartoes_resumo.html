@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Resumo de Cartões{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-primary"><i class="bi bi-credit-card-2-back"></i> Meus Cartões</h2>
+        <div>
+            <a href="{% url 'cal:cartao_novo' %}" class="btn btn-success btn-sm"><i class="bi bi-plus-circle"></i> Novo Cartão</a>
+            <a href="{% url 'cal:calendar' %}" class="btn btn-outline-secondary btn-sm">Voltar</a>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center mb-4">
+        <div class="btn-group shadow-sm">
+            <a href="?mes={{ mes_anterior.month }}&ano={{ mes_anterior.year }}" class="btn btn-outline-primary border-2 btn-sm">
+                <i class="bi bi-chevron-left"></i> {{ mes_anterior|date:"M/Y" }}
+            </a>
+            <span class="btn btn-primary fw-bold px-4 d-flex align-items-center btn-sm">
+                {{ mes_atual|date:"F Y"|upper }}
+            </span>
+            <a href="?mes={{ mes_proximo.month }}&ano={{ mes_proximo.year }}" class="btn btn-outline-primary border-2 btn-sm">
+                {{ mes_proximo|date:"M/Y" }} <i class="bi bi-chevron-right"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="mt-2">
+                <h5 class="mb-3">Meus Cartões</h5>
+                {% for c in cartoes %}
+                <div class="card border-0 shadow-sm mb-3 p-3 {% if not c.is_active %}opacity-50 bg-light{% endif %}">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <h6 class="fw-bold mb-1">{{ c.nome }}</h6>
+                            <small class="text-muted d-block">
+                                <i class="bi bi-calendar-event"></i> Fecha dia: {{ c.dia_fechamento }}
+                                | <i class="bi bi-credit-card"></i> {{ c.get_is_credito_display }}
+                            </small>
+                            <span class="d-block small text-muted mt-1">Limite: R$ {{ c.limite|floatformat:2 }}</span>
+                        </div>
+                        <div class="text-end">
+                            <div class="btn-group btn-group-sm">
+                                <a href="{% url 'cal:cartao_editar' c.id %}" class="btn btn-outline-primary" title="Editar">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <form action="{% url 'cal:cartao_alternar_status' c.id %}" method="post" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn {% if c.is_active %}btn-outline-warning{% else %}btn-outline-success{% endif %}" title="{% if c.is_active %}Desativar{% else %}Ativar{% endif %}">
+                                        <i class="bi {% if c.is_active %}bi-eye-slash{% else %}bi-eye{% endif %}"></i>
+                                    </button>
+                                </form>
+                                <form action="{% url 'cal:cartao_excluir' c.id %}" method="post" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Excluir este cartão apagará o vínculo com as transações. Confirma?');" title="Excluir">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Mini Gráfico Individual -->
+                    <div class="mt-2" style="height: 100px;">
+                        <canvas id="chart-{{ c.id }}"></canvas>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-center text-muted py-4">Nenhum cartão cadastrado.</p>
+                {% endfor %}
+            </div>
+
+            <!-- Dashboard consolidado movido para baixo ou removido se preferir individual -->
+            <div class="card border-0 shadow-sm p-4 mt-4">
+                <h5 class="card-title text-center mb-4">Dashboard Consolidado: Consumo vs Limite</h5>
+                <canvas id="chartCartoes" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{ labels|json_script:"cartoes_labels_json" }}
+    {{ consumo|json_script:"cartoes_consumo_json" }}
+    {{ limites|json_script:"cartoes_limites_json" }}
+
+    <script src="{% static 'vendor/chartjs/chart.umd.min.js' %}"></script>
+    <script>
+    // Gráficos Individuais
+    {% for c in cartoes %}
+    (function() {
+        const ctx = document.getElementById('chart-{{ c.id }}').getContext('2d');
+        const labels = JSON.parse(document.getElementById('cartoes_labels_json').textContent);
+        const idx = labels.indexOf('{{ c.nome|escapejs }}');
+        const consumo = JSON.parse(document.getElementById('cartoes_consumo_json').textContent)[idx];
+        const limite = JSON.parse(document.getElementById('cartoes_limites_json').textContent)[idx];
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Consumo'],
+                datasets: [
+                    {
+                        label: 'Gasto',
+                        data: [consumo],
+                        backgroundColor: '#F44336',
+                        borderRadius: 5,
+                        barThickness: 20
+                    },
+                    {
+                        label: 'Limite',
+                        data: [limite],
+                        backgroundColor: '#e9ecef',
+                        borderRadius: 5,
+                        barThickness: 20
+                    }
+                ]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { beginAtZero: true, display: false },
+                    y: { display: false, stacked: true }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': R$ ' + context.raw.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    })();
+    {% endfor %}
+
+    // Dashboard Consolidado
+    const ctxConsolidado = document.getElementById('chartCartoes').getContext('2d');
+    const labels = JSON.parse(document.getElementById('cartoes_labels_json').textContent);
+    const consumoData = JSON.parse(document.getElementById('cartoes_consumo_json').textContent);
+    const limitesData = JSON.parse(document.getElementById('cartoes_limites_json').textContent);
+
+    new Chart(ctxConsolidado, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Consumo Atual',
+                    data: consumoData,
+                    backgroundColor: '#F44336',
+                    borderRadius: 5
+                },
+                {
+                    label: 'Limite Total',
+                    data: limitesData,
+                    backgroundColor: '#e9ecef',
+                    borderRadius: 5
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true },
+                x: { stacked: false }
+            },
+            plugins: {
+                legend: { position: 'bottom' }
+            }
+        }
+    });
+</script>
+{% endblock %}

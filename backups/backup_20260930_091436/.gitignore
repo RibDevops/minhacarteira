@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtualenv
+venv/
+.venv/
+env/
+
+# Django
+db.sqlite3
+logs/
+media/
+staticfiles/
+
+# Segredos — nunca comitar
+.env
+.env.local
+.replit
+
+# OS
+.DS_Store

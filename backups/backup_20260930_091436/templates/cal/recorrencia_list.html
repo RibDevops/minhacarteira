@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}Assinaturas e Recorrências{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-primary"><i class="bi bi-arrow-repeat"></i> Assinaturas e Recorrências</h2>
+        <div>
+            <a href="{% url 'cal:recorrencia_nova' %}" class="btn btn-success btn-sm"><i class="bi bi-plus-circle"></i> Nova Recorrência</a>
+            <a href="{% url 'cal:calendar' %}" class="btn btn-outline-secondary btn-sm">Voltar</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            {% if not recorrencias %}
+            <div class="text-center text-muted py-5">
+                <i class="bi bi-arrow-repeat" style="font-size: 2.5rem;"></i>
+                <p class="mt-3">Você ainda não tem nenhuma recorrência cadastrada.</p>
+                <p class="small">Cadastre assinaturas, aluguel ou mensalidades e o sistema lança automaticamente todo mês — sem precisar registrar manualmente de novo.</p>
+                <a href="{% url 'cal:recorrencia_nova' %}" class="btn btn-primary btn-sm mt-2"><i class="bi bi-plus-circle"></i> Cadastrar a primeira</a>
+            </div>
+            {% endif %}
+
+            {% for r in recorrencias %}
+            <div class="card border-0 shadow-sm mb-3 p-3 {% if not r.ativa %}opacity-50 bg-light{% endif %}">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="fw-bold mb-1">
+                            {{ r.titulo }}
+                            {% if not r.ativa %}<span class="badge bg-secondary">Pausada</span>{% endif %}
+                        </h6>
+                        <small class="text-muted d-block">
+                            <i class="bi bi-cash-coin"></i> R$ {{ r.valor|floatformat:2 }}/mês
+                            | <i class="bi bi-calendar-event"></i> todo dia {{ r.dia_cobranca }}
+                            {% if r.categoria %} | <i class="bi bi-tag"></i> {{ r.categoria.nome }}{% endif %}
+                            {% if r.cartao %} | <i class="bi bi-credit-card"></i> {{ r.cartao.nome }}{% endif %}
+                        </small>
+                        {% if r.data_fim %}
+                        <small class="text-muted d-block mt-1"><i class="bi bi-flag"></i> Termina em {{ r.data_fim|date:"d/m/Y" }}</small>
+                        {% endif %}
+                    </div>
+                    <div class="text-end">
+                        <div class="btn-group btn-group-sm">
+                            <a href="{% url 'cal:recorrencia_editar' r.id %}" class="btn btn-outline-primary" title="Editar">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <form action="{% url 'cal:recorrencia_alternar_status' r.id %}" method="post" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn {% if r.ativa %}btn-outline-warning{% else %}btn-outline-success{% endif %}" title="{% if r.ativa %}Pausar{% else %}Reativar{% endif %}">
+                                    <i class="bi {% if r.ativa %}bi-pause-fill{% else %}bi-play-fill{% endif %}"></i>
+                                </button>
+                            </form>
+                            <form action="{% url 'cal:recorrencia_excluir' r.id %}" method="post" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Excluir esta recorrência? As transações já lançadas no passado serão mantidas.');" title="Excluir">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
