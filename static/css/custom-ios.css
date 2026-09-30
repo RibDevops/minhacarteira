@@ -599,3 +599,54 @@ UTILITARIOS
 .shadow-ios-sm { box-shadow: var(--shadow-sm); }
 .shadow-ios-md { box-shadow: var(--shadow-md); }
 .shadow-ios-lg { box-shadow: var(--shadow-lg); }
+
+/*
+=============================================================================
+iOS SAFE-AREA + OVERFLOW GUARDS (validacao 30/09/2026)
+Aditivo, sem alterar regras existentes: evita overflow horizontal no iPhone,
+respeita o notch (viewport-fit=cover ja ativo no base.html) e garante
+rolagem suave em tabelas/calendario. Nao altera logica nem Python/Django.
+=============================================================================
+*/
+
+/* Evita scroll horizontal acidental em telas pequenas (iPhone 390/430px) */
+html,
+body {
+  overflow-x: clip;
+}
+
+/* Midias nunca estouram a largura da tela */
+img,
+canvas,
+svg,
+video {
+  max-width: 100%;
+}
+
+/* Respiro inferior considerando a barra de gestos do iPhone */
+main.container {
+  padding-bottom: calc(var(--spacing-8) + env(safe-area-inset-bottom, 0px));
+}
+
+/* FAB respeita a area segura inferior */
+#fab-container {
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px)) !important;
+}
+
+@media (max-width: 576px) {
+  #fab-container {
+    bottom: calc(15px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* Tabelas e calendario com rolagem por toque no iOS */
+  .table-responsive {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+  }
+
+  /* Modal de registro rapido usa altura dinamica da viewport (iOS Safari) */
+  #modalRegistroRapido .modal-dialog-scrollable .modal-content {
+    max-height: calc(100vh - 3.5rem);
+    max-height: calc(100dvh - 3.5rem);
+  }
+}

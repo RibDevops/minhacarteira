@@ -248,4 +248,36 @@
         });
     });
 </script>
+
+<style>
+    /* Refinos iOS — lista de transações (somente visual; lógica e FAB intactos) */
+    @media (max-width: 576px) {
+        /* Alvos de toque de 44px no iPhone */
+        .btn-group .btn {
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        /* main exclui o modal de registro rápido (fora do <main>) */
+        main form select.form-select,
+        main form .btn[type="submit"] {
+            min-height: 44px;
+            font-size: 16px; /* evita zoom automático ao focar no iPhone */
+        }
+        /* Feedback de toque nos cartões mobile */
+        .d-md-none .card:active {
+            transform: scale(0.98);
+        }
+        /* Gráfico com altura confortável no celular */
+        #chartCategoria {
+            max-height: 260px;
+        }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .d-md-none .card:active {
+            transform: none;
+        }
+    }
+</style>
 {% endblock %}

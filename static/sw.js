@@ -1,6 +1,9 @@
-const CACHE_NAME = 'minha-carteira-v2';
+const CACHE_NAME = 'minha-carteira-v3';
 const STATIC_CACHE = [
   '/static/css/custom.css',
+  '/static/css/custom-ios.css',
+  '/static/css/components.css',
+  '/static/css/design-tokens.css',
   '/static/css/dark-mode.css',
   '/static/css/fab.css',
   '/static/vendor/bootstrap/css/bootstrap.min.css',
