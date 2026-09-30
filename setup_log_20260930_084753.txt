@@ -1,2 +1,0 @@
-﻿[2026-09-30 08:47:53] [INFO] ETAPA 1: VERIFICACAO DE REQUISITOS
-[2026-09-30 08:47:53] [SUCCESS] OK: Git encontrado: git version 2.54.0.windows.1

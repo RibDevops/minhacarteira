@@ -33,7 +33,7 @@
 
     
     <link rel="stylesheet" type="text/css" href="{% static 'css/fab.css' %}">
-    <link rel="stylesheet" href="{% static 'css/design-tokens.css' %}">`n    <link rel="stylesheet" href="{% static 'css/components.css' %}">`n    <link rel="stylesheet" type="text/css" href="{% static 'css/custom-ios.css' %}">
+    <link rel="stylesheet" href="{% static 'css/design-tokens.css' %}">`n    <link rel="stylesheet" href="{% static 'css/components.css' %}">`n    <link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}">
     <style>
         /* Ajuste fino para o FAB em telas menores */
         @media (max-width: 576px) {
@@ -536,6 +536,5 @@ $(document).ready(function () {
 
 </body>
 </html>
-
 
 

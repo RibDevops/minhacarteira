@@ -1,0 +1,308 @@
+﻿/*
+==============================================================================
+DESIGN TOKENS - iOS-STYLE
+==============================================================================
+
+Sistema de design inspirado no iOS/iPadOS da Apple.
+Todas as variaveis CSS estao centralizadas aqui para facilitar manutencao.
+
+Uso:
+  color: var(--color-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-4);
+
+Ultima atualizacao: 30/09/2026
+==============================================================================
+*/
+
+:root {
+  /* ==========================================================================
+     CORES - PALETA iOS-STYLE
+     ========================================================================== */
+  
+  /* Cores principais */
+  --color-primary: #007AFF;           /* Azul iOS padrao */
+  --color-primary-hover: #0051D5;     /* Azul hover */
+  --color-primary-light: #E5F2FF;     /* Azul claro (backgrounds) */
+  
+  --color-secondary: #5856D6;         /* Roxo iOS */
+  --color-secondary-hover: #4745B8;
+  --color-secondary-light: #EDEDFF;
+  
+  --color-success: #34C759;           /* Verde iOS */
+  --color-success-hover: #2DA84E;
+  --color-success-light: #E8F7ED;
+  
+  --color-warning: #FF9500;           /* Laranja iOS */
+  --color-warning-hover: #E08600;
+  --color-warning-light: #FFF4E5;
+  
+  --color-danger: #FF3B30;            /* Vermelho iOS */
+  --color-danger-hover: #D32F2F;
+  --color-danger-light: #FFE8E6;
+  
+  --color-info: #5AC8FA;              /* Azul claro iOS */
+  --color-info-hover: #32B5E8;
+  --color-info-light: #E8F9FF;
+  
+  /* Tons de cinza (light mode) */
+  --color-gray-50: #F9F9F9;
+  --color-gray-100: #F2F2F7;          /* Background iOS padrao */
+  --color-gray-200: #E5E5EA;
+  --color-gray-300: #D1D1D6;
+  --color-gray-400: #C7C7CC;
+  --color-gray-500: #AEAEB2;
+  --color-gray-600: #8E8E93;
+  --color-gray-700: #636366;
+  --color-gray-800: #48484A;
+  --color-gray-900: #1C1C1E;
+  
+  /* Backgrounds */
+  --bg-primary: #FFFFFF;              /* Branco puro */
+  --bg-secondary: #F9F9F9;            /* Cinza muito claro */
+  --bg-tertiary: #F2F2F7;             /* Cinza iOS padrao */
+  --bg-card: #FFFFFF;
+  --bg-hover: #F2F2F7;
+  --bg-active: #E5E5EA;
+  
+  /* Textos */
+  --text-primary: #000000;            /* Preto puro */
+  --text-secondary: #3C3C43;          /* Cinza escuro iOS */
+  --text-tertiary: #8E8E93;           /* Cinza medio iOS */
+  --text-quaternary: #C7C7CC;         /* Cinza claro */
+  --text-inverse: #FFFFFF;
+  
+  /* Bordas */
+  --border-color: #E5E5EA;
+  --border-color-hover: #D1D1D6;
+  --border-color-focus: var(--color-primary);
+  
+  /* Sombras iOS-style (suaves e discretas) */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.10);
+  --shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.12);
+  
+  /* ==========================================================================
+     TIPOGRAFIA iOS-STYLE
+     ========================================================================== */
+  
+  /* Familias de fonte */
+  --font-primary: -apple-system, BlinkMacSystemFont, "SF Pro Display", 
+                  "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "SF Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
+  
+  /* Tamanhos de fonte (escala iOS) */
+  --font-size-xs: 0.75rem;      /* 12px */
+  --font-size-sm: 0.875rem;     /* 14px */
+  --font-size-base: 1rem;       /* 16px */
+  --font-size-lg: 1.125rem;     /* 18px */
+  --font-size-xl: 1.25rem;      /* 20px */
+  --font-size-2xl: 1.5rem;      /* 24px */
+  --font-size-3xl: 1.875rem;    /* 30px */
+  --font-size-4xl: 2.25rem;     /* 36px */
+  
+  /* Pesos de fonte */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* Altura de linha */
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+  
+  /* ==========================================================================
+     ESPACAMENTOS (escala 4px base)
+     ========================================================================== */
+  
+  --spacing-0: 0;
+  --spacing-1: 0.25rem;     /* 4px */
+  --spacing-2: 0.5rem;      /* 8px */
+  --spacing-3: 0.75rem;     /* 12px */
+  --spacing-4: 1rem;        /* 16px */
+  --spacing-5: 1.25rem;     /* 20px */
+  --spacing-6: 1.5rem;      /* 24px */
+  --spacing-8: 2rem;        /* 32px */
+  --spacing-10: 2.5rem;     /* 40px */
+  --spacing-12: 3rem;       /* 48px */
+  --spacing-16: 4rem;       /* 64px */
+  
+  /* ==========================================================================
+     BORDER-RADIUS (iOS-style)
+     ========================================================================== */
+  
+  --radius-none: 0;
+  --radius-sm: 0.375rem;    /* 6px */
+  --radius-md: 0.5rem;      /* 8px */
+  --radius-lg: 0.75rem;     /* 12px */
+  --radius-xl: 1rem;        /* 16px */
+  --radius-2xl: 1.5rem;     /* 24px */
+  --radius-full: 9999px;    /* Circular */
+  
+  /* ==========================================================================
+     TRANSICOES
+     ========================================================================== */
+  
+  --transition-fast: 150ms ease;
+  --transition-base: 200ms ease;
+  --transition-slow: 300ms ease;
+  
+  /* ==========================================================================
+     Z-INDEX
+     ========================================================================== */
+  
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+  
+  /* ==========================================================================
+     LARGURAS E ALTURAS
+     ========================================================================== */
+  
+  --container-max-width: 1200px;
+  --input-height: 44px;           /* Altura minima iOS para toque */
+  --button-height: 44px;
+  --navbar-height: 56px;
+}
+
+/*
+==============================================================================
+DARK MODE - VARIAVEIS
+==============================================================================
+*/
+
+[data-theme="dark"] {
+  /* Cores principais (ajustadas para dark mode) */
+  --color-primary: #0A84FF;           /* Azul mais claro no dark */
+  --color-primary-hover: #409CFF;
+  --color-primary-light: #1C2A3A;
+  
+  --color-secondary: #5E5CE6;
+  --color-secondary-hover: #7D7AFF;
+  --color-secondary-light: #2A2A3E;
+  
+  --color-success: #30D158;
+  --color-success-hover: #4ADB6E;
+  --color-success-light: #1E3A27;
+  
+  --color-warning: #FF9F0A;
+  --color-warning-hover: #FFAA2C;
+  --color-warning-light: #3A2E1A;
+  
+  --color-danger: #FF453A;
+  --color-danger-hover: #FF6259;
+  --color-danger-light: #3A2021;
+  
+  --color-info: #64D2FF;
+  --color-info-hover: #7EDAFF;
+  --color-info-light: #1C2F3A;
+  
+  /* Tons de cinza (dark mode) */
+  --color-gray-50: #1C1C1E;
+  --color-gray-100: #2C2C2E;
+  --color-gray-200: #3A3A3C;
+  --color-gray-300: #48484A;
+  --color-gray-400: #636366;
+  --color-gray-500: #8E8E93;
+  --color-gray-600: #AEAEB2;
+  --color-gray-700: #C7C7CC;
+  --color-gray-800: #D1D1D6;
+  --color-gray-900: #E5E5EA;
+  
+  /* Backgrounds */
+  --bg-primary: #000000;
+  --bg-secondary: #1C1C1E;
+  --bg-tertiary: #2C2C2E;
+  --bg-card: #1C1C1E;
+  --bg-hover: #2C2C2E;
+  --bg-active: #3A3A3C;
+  
+  /* Textos */
+  --text-primary: #FFFFFF;
+  --text-secondary: #E5E5EA;
+  --text-tertiary: #AEAEB2;
+  --text-quaternary: #8E8E93;
+  --text-inverse: #000000;
+  
+  /* Bordas */
+  --border-color: #3A3A3C;
+  --border-color-hover: #48484A;
+  --border-color-focus: var(--color-primary);
+  
+  /* Sombras (mais intensas no dark) */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.6);
+  --shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.7);
+}
+
+/*
+==============================================================================
+RESET BASICO iOS-STYLE
+==============================================================================
+*/
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-primary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--text-primary);
+  background-color: var(--bg-secondary);
+  min-height: 100vh;
+}
+
+/* Links */
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+/* Selecao de texto */
+::selection {
+  background-color: var(--color-primary-light);
+  color: var(--text-primary);
+}
+
+/* Scrollbar customizado (webkit) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-gray-400);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gray-500);
+}
