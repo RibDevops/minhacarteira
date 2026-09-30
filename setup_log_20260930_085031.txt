@@ -1,0 +1,4 @@
+﻿[2026-09-30 08:50:31] [INFO] ETAPA 1: VERIFICACAO DE REQUISITOS
+[2026-09-30 08:50:31] [SUCCESS] OK: Git encontrado: git version 2.54.0.windows.1
+[2026-09-30 08:50:32] [SUCCESS] OK: Java encontrado: java.exe : openjdk version "25.0.4.1" 2026-08-18 LTS
+[2026-09-30 08:50:32] [ERROR] ERRO: Maven nao encontrado. Instale em https://maven.apache.org/download.cgi

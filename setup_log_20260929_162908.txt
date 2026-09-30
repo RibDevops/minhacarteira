@@ -1,0 +1,3 @@
+﻿[2026-09-29 16:29:08] [INFO] ETAPA 1: VERIFICACAO DE REQUISITOS
+[2026-09-29 16:29:08] [SUCCESS] OK: Git encontrado: git version 2.54.0.windows.1
+[2026-09-29 16:29:08] [ERROR] ERRO: Java nao encontrado. Instale Java 17+ em https://adoptium.net/
