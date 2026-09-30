@@ -143,13 +143,7 @@
         }
     </style>
     <title>{% block title %}{% endblock %} | Carteira Digital</title>
-
-    <!-- CSS iOS-Style (ordem importa) -->
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/design-tokens.css' %}">
-    <link rel="stylesheet" href="{% static 'css/components.css' %}">
-    <link rel="stylesheet" href="{% static 'css/custom-ios.css' %}">
-    </head>
+</head>
 <body class="loading">
     <!-- Preloader -->
     <div id="preloader">
@@ -542,7 +536,6 @@ $(document).ready(function () {
 
 </body>
 </html>
-
 
 
 
